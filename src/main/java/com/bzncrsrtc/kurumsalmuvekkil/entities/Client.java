@@ -41,7 +41,7 @@ public class Client {
 	@Column(name="phone")
 	private String phone;
 	
-	@ManyToMany(cascade = { CascadeType.ALL })
+	@ManyToMany()
     @JoinTable(
         name = "client_file", 
         joinColumns = { @JoinColumn(name = "client_id") }, 
@@ -49,10 +49,19 @@ public class Client {
     )
 	private List<File> files;
 	
+	@Column(name="deleted")
+	private boolean deleted = false;
+	
+	@Column(name="active")
+	private boolean active = true;
+	
 	@Column(name="created_at")
 	private LocalDateTime createdAt;
 	
 	@Column(name="updated_at")
 	private LocalDateTime updatedAt;
+	
+	@Column(name="deleted_at")
+	private LocalDateTime deletedAt;
 
 }

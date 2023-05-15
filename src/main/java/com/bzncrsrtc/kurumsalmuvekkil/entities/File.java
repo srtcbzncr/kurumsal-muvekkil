@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,12 +27,12 @@ public class File {
 	private Company company;
 	
 	@ManyToMany(mappedBy="files")
-	private Lawyer lawyer;
+	private List<Lawyer> lawyers;
 	
 	@ManyToMany(mappedBy="files")
-	private Client client;
+	private List<Client> clients;
 	
-	@OneToMany(mappedBy="file")
+	@OneToMany(mappedBy="file", cascade=CascadeType.ALL)
 	private List<Update> updates;
 	
 	@ManyToOne()
@@ -41,10 +42,19 @@ public class File {
 	@Column(name="court_detail")
 	private String courtDetail;
 	
+	@Column(name="deleted")
+	private boolean deleted = false;
+	
+	@Column(name="active")
+	private boolean active = true;
+	
 	@Column(name="created_at")
 	private LocalDateTime createdAt;
 	
 	@Column(name="updated_at")
 	private LocalDateTime updatedAt;
+	
+	@Column(name="deleted_at")
+	private LocalDateTime deletedAt;
 	
 }

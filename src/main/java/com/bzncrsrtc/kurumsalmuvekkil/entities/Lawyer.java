@@ -49,7 +49,7 @@ public class Lawyer {
 	@Column(name="phone")
 	private String phone;
 	
-	@ManyToMany(cascade = { CascadeType.ALL })
+	@ManyToMany()
     @JoinTable(
         name = "lawyer_file", 
         joinColumns = { @JoinColumn(name = "lawyer_id") }, 
@@ -60,10 +60,19 @@ public class Lawyer {
 	@OneToMany(mappedBy="lawyer")
 	private List<Update> updates;
 	
+	@Column(name="deleted")
+	private boolean deleted = false;
+	
+	@Column(name="active")
+	private boolean active = true;
+	
 	@Column(name="created_at")
 	private LocalDateTime createdAt;
 	
 	@Column(name="updated_at")
 	private LocalDateTime updatedAt;
+	
+	@Column(name="deleted_at")
+	private LocalDateTime deletedAt;
 
 }
