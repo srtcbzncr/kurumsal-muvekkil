@@ -28,6 +28,12 @@ public class File {
 	@JoinColumn(name="company_id", referencedColumnName="id")
 	private Company company;
 	
+	@Column(name="title")
+	private String title;
+	
+	@Column(name="description")
+	private String description;
+	
 	@ManyToMany(mappedBy="files")
 	private List<Lawyer> lawyers;
 	

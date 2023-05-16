@@ -1,11 +1,16 @@
 package com.bzncrsrtc.kurumsalmuvekkil.models;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import com.bzncrsrtc.kurumsalmuvekkil.models.enums.SubscriptionType;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,11 +35,21 @@ public class Subscription {
 	@JoinColumn(name="plan_id", referencedColumnName="id")
 	private Plan plan;
 	
+	@Column(name="type")
+	@Enumerated(EnumType.STRING)
+	private SubscriptionType type;
+	
+	@Column(name="fee")
+	private BigDecimal fee;
+	
 	@Column(name="start_date")
 	private LocalDate startDate;
 	
 	@Column(name="end_date")
 	private LocalDate endDate;
+	
+	@Column(name="auto_renew")
+	private boolean autoRenew;
 	
 	@Column(name="deleted")
 	private boolean deleted = false;

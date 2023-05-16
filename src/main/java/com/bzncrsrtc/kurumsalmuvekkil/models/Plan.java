@@ -1,5 +1,6 @@
 package com.bzncrsrtc.kurumsalmuvekkil.models;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -27,10 +28,10 @@ public class Plan {
 	private String description;
 	
 	@Column(name="monthly_price")
-	private double monthlyPrice;
+	private BigDecimal monthlyPrice;
 	
 	@Column(name="annual_price")
-	private double annualPrice;
+	private BigDecimal annualPrice;
 	
 	@Column(name="client_quota")
 	private int clientQuota;

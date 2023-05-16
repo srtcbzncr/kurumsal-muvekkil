@@ -26,47 +26,52 @@ public class CompanyService {
 	}
 	
 	public List<Company> findAll(){
-		return companyRepository.findAll();
+		return companyRepository.findAllByDeletedAndActive(false, true);
 	}
 	
 	public Company findById(UUID id) {
-		Optional<Company> company = companyRepository.findById(id);
+		Optional<Company> company = companyRepository.findByIdAndDeletedAndActive(id, false, true);
 		companyRules.isNull(company);
 		return company.get();
 	}
 	
 	public Company create(Company company) {
+		company.setCreatedAt(LocalDateTime.now());
+		company.setUpdatedAt(LocalDateTime.now());
 		Company savedCompany = companyRepository.save(company);
 		return savedCompany;
 	}
 	
 	public Company update(Company company) {
 		companyRules.isThere(company.getId());
+		company.setUpdatedAt(LocalDateTime.now());
 		Company savedCompany = companyRepository.save(company);
 		return savedCompany;
 	}
 	
-	public void delete(Company company) {
-		companyRules.isThere(company.getId());
+	public void delete(UUID id) {
+		Optional<Company> optionalCompany = companyRepository.findById(id);
+		companyRules.isNull(optionalCompany);
+		Company company = optionalCompany.get();
 		company.setDeleted(true);
 		company.setDeletedAt(LocalDateTime.now());
 		companyRepository.save(company);
 	}
 	
 	public Subscription getSubscription(UUID companyId) {
-		Optional<Company> company = companyRepository.findById(companyId);
+		Optional<Company> company = companyRepository.findByIdAndDeletedAndActive(companyId, false, true);
 		companyRules.isNull(company);
 		return company.get().getSubscription();
 	}
 	
 	public List<Lawyer> getLawyers(UUID companyId){
-		Optional<Company> company = companyRepository.findById(companyId);
+		Optional<Company> company = companyRepository.findByIdAndDeletedAndActive(companyId, false, true);
 		companyRules.isNull(company);
 		return company.get().getLawyers();
 	}
 	
 	public List<File> getFiles(UUID companyId){
-		Optional<Company> company = companyRepository.findById(companyId);
+		Optional<Company> company = companyRepository.findByIdAndDeletedAndActive(companyId, false, true);
 		companyRules.isNull(company);
 		return company.get().getFiles();
 	}

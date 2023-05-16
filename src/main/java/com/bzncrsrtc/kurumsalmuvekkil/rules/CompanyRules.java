@@ -44,4 +44,18 @@ public class CompanyRules {
 		}
 	}
 	
+	public void isDeleted(Company company) {
+		if(company.isDeleted()) {
+			Locale locale = LocaleContextHolder.getLocale();
+			throw new CompanyNotFoundException(messageSource.getMessage("company.not.found.message", null, "An error occured", locale));
+		}
+	}
+	
+	public void isPassive(Company company) {
+		if(!company.isActive()) {
+			Locale locale = LocaleContextHolder.getLocale();
+			throw new CompanyNotFoundException(messageSource.getMessage("company.not.found.message", null, "An error occured", locale));
+		}
+	}
+	
 }
