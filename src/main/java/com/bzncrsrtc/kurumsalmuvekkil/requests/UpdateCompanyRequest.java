@@ -9,10 +9,10 @@ import lombok.Data;
 @Data
 public class UpdateCompanyRequest {
 	
-	@NotNull(message = "ID can not be null")
+	@NotNull(message = "{id.notNull}")
 	private UUID id;
 	
-	@NotEmpty(message = "Name can not be null")
+	@NotEmpty(message = "{name.notNull}")
 	private String name;
 	
 }
