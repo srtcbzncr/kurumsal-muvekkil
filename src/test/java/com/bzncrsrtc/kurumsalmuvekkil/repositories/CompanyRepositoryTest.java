@@ -25,7 +25,7 @@ public class CompanyRepositoryTest {
 	Company activeCompany2 = new Company("Company 5");
 	
 	@BeforeEach
-	public void setUp() {
+	public void init() {
 		passiveCompany.setActive(false);
 		passiveCompany = companyRepository.save(passiveCompany);
 		
