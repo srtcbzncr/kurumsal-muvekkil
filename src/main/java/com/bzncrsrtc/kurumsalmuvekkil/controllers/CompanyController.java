@@ -29,7 +29,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCompanyResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetFileResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetLawyerResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetSubscriptionResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.services.concretes.CompanyService;
+import com.bzncrsrtc.kurumsalmuvekkil.services.CompanyService;
 
 import jakarta.validation.Valid;
 

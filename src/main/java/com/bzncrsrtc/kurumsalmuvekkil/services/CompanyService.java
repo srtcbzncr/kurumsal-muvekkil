@@ -1,4 +1,4 @@
-package com.bzncrsrtc.kurumsalmuvekkil.services.concretes;
+package com.bzncrsrtc.kurumsalmuvekkil.services;
 
 import java.time.LocalDateTime;
 import java.util.List;

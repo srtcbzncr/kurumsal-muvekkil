@@ -5,6 +5,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -52,9 +55,11 @@ public class Plan {
 	private boolean active = true;
 	
 	@Column(name="created_at")
+	@CreationTimestamp
 	private LocalDateTime createdAt;
 	
 	@Column(name="updated_at")
+	@UpdateTimestamp
 	private LocalDateTime updatedAt;
 	
 	@Column(name="deleted_at")

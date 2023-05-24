@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,7 +15,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 @Data
 @Entity(name="companies")
@@ -22,6 +29,7 @@ public class Company {
 	@GeneratedValue(strategy=GenerationType.UUID)
 	private UUID id;
 	
+	@NonNull
 	@Column(name="name")
 	private String name;
 	
@@ -41,9 +49,11 @@ public class Company {
 	private boolean active = true;
 	
 	@Column(name="created_at")
+	@CreationTimestamp
 	private LocalDateTime createdAt;
 	
 	@Column(name="updated_at")
+	@UpdateTimestamp
 	private LocalDateTime updatedAt;
 	
 	@Column(name="deleted_at")
