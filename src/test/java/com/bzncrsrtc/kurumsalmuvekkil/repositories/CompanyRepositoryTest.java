@@ -18,6 +18,7 @@ public class CompanyRepositoryTest {
 	
 	@Autowired
 	private CompanyRepository companyRepository;
+	
 	Company passiveCompany = new Company("Company 1");
 	Company deletedCompany = new Company("Company 2");
 	Company deletedAndPassiveCompany = new Company("Company 3");
