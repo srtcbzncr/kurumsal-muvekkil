@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +24,8 @@ public class CompanyRepositoryTest {
 	Company activeCompany1 = new Company("Company 4");
 	Company activeCompany2 = new Company("Company 5");
 	
-	@BeforeAll
-	public void setup() {
+	@BeforeEach
+	public void setUp() {
 		passiveCompany.setActive(false);
 		passiveCompany = companyRepository.save(passiveCompany);
 		
