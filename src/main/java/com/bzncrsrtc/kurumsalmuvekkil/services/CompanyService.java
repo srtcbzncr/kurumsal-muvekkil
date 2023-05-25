@@ -6,26 +6,24 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import com.bzncrsrtc.kurumsalmuvekkil.exceptions.CompanyNotFoundException;
-import com.bzncrsrtc.kurumsalmuvekkil.exceptions.ThereIsNoCompanyException;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Company;
 import com.bzncrsrtc.kurumsalmuvekkil.models.File;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Lawyer;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Subscription;
 import com.bzncrsrtc.kurumsalmuvekkil.repositories.CompanyRepository;
-import com.bzncrsrtc.kurumsalmuvekkil.rules.CompanyRules;
-import com.bzncrsrtc.kurumsalmuvekkil.rules.FileRules;
-import com.bzncrsrtc.kurumsalmuvekkil.rules.LawyerRules;
-import com.bzncrsrtc.kurumsalmuvekkil.rules.SubscriptionRules;
 
 @Service
 public class CompanyService {
 
 	private final CompanyRepository companyRepository;
 	private final MessageSource messageSource;
+	private Logger logger = LoggerFactory.getLogger(CompanyService.class);
 	
 	public CompanyService(CompanyRepository companyRepository, MessageSource messageSource) {
 		this.companyRepository = companyRepository;
@@ -33,13 +31,7 @@ public class CompanyService {
 	}
 	
 	public List<Company> findAll(Locale locale){
-		List<Company> companies = companyRepository.findAllByDeletedAndActive(false, true);
-
-		if(companies.isEmpty()) {
-			throw new ThereIsNoCompanyException(messageSource.getMessage("there.is.no.company.message", null, locale));
-		}
-
-		return companies;
+		return companyRepository.findAllByDeletedAndActive(false, true);
 	}
 	
 	public Company findById(UUID id, Locale locale) {
@@ -52,9 +44,15 @@ public class CompanyService {
 		return company.get();
 	}
 	
+	public List<Company> findAllDeleted(){
+		return companyRepository.findAllByDeleted(true);
+	}
+	
+	public List<Company> findAllPassive(){
+		return companyRepository.findAllByDeletedAndActive(false, true);
+	}
+	
 	public Company create(Company company, Locale locale) {
-		company.setCreatedAt(LocalDateTime.now());
-		company.setUpdatedAt(LocalDateTime.now());
 		Company savedCompany = companyRepository.save(company);
 		return savedCompany;
 	}
@@ -65,13 +63,12 @@ public class CompanyService {
 			throw new CompanyNotFoundException(messageSource.getMessage("company.not.found.message", null, locale));
 		}
 		
-		company.setUpdatedAt(LocalDateTime.now());
 		companyRepository.save(company);
 	}
 	
 	public void delete(UUID id, Locale locale) {
 		Optional<Company> optionalCompany = companyRepository.findById(id);
-
+		
 		if(optionalCompany.isEmpty()) {
 			throw new CompanyNotFoundException(messageSource.getMessage("company.not.found.message", null, locale));
 		}
