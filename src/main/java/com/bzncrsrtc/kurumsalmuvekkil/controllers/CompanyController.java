@@ -48,60 +48,84 @@ public class CompanyController {
 	}
 
 	@GetMapping("")
-	public ResponseEntity<List<GetCompanyResponse>> findAll(@RequestHeader(name="Accept-Language", required=true) Locale locale){
+	public ResponseEntity<List<GetCompanyResponse>> findAll(@RequestHeader(name = "Accept-Language", required = false) String localeStr){
+		Locale locale = localeStr.equals("en") ? new Locale("en") : new Locale("tr");
+		
 		List<Company> companies = companyService.findAll(locale);
 		List<GetCompanyResponse> response = responseMapper.getCompanyListResponse(companies);
+		
 		return ResponseEntity.ok(response);
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<GetCompanyResponse> findById(@PathVariable UUID id, @RequestHeader(name="Accept-Language", required=true) Locale locale){
+	public ResponseEntity<GetCompanyResponse> findById(@PathVariable UUID id, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
+		Locale locale = localeStr.equals("en") ? new Locale("en") : new Locale("tr");
+		
 		Company company = companyService.findById(id, locale);
 		GetCompanyResponse response = responseMapper.getCompanyResponse(company);
+		
 		return ResponseEntity.ok(response);
 	}
 	
 	@PostMapping("")
-	public ResponseEntity<GetCompanyResponse> create(@Valid @RequestBody CreateCompanyRequest createCompanyRequest, @RequestHeader(name="Accept-Language", required=true) Locale locale){
+	public ResponseEntity<GetCompanyResponse> create(@Valid @RequestBody CreateCompanyRequest createCompanyRequest, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
+		Locale locale = localeStr.equals("en") ? new Locale("en") : new Locale("tr");
+		
 		Company company = requestMapper.fromCreateCompanyRequest(createCompanyRequest);
 		Company savedCompany = companyService.create(company, locale);
 		URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
                 .buildAndExpand(savedCompany.getId()).toUri();
+		
 		return ResponseEntity.created(location).build();
 	}
 	
 	@PutMapping("")
-	public ResponseEntity<Object> update(@Valid @RequestBody UpdateCompanyRequest updateCompanyRequest, @RequestHeader(name="Accept-Language", required=true) Locale locale){
+	public ResponseEntity<Object> update(@Valid @RequestBody UpdateCompanyRequest updateCompanyRequest, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
+		Locale locale = localeStr.equals("en") ? new Locale("en") : new Locale("tr");
+		
 		Company company = requestMapper.fromUpdateCompanyRequest(updateCompanyRequest);
 		companyService.update(company, locale);
+		
 		return ResponseEntity.noContent().build();
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Object> delete(@PathVariable UUID id, @RequestHeader(name="Accept-Language", required=true) Locale locale){
+	public ResponseEntity<Object> delete(@PathVariable UUID id, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
+		Locale locale = localeStr.equals("en") ? new Locale("en") : new Locale("tr");
+		
 		companyService.delete(id, locale);
+		
 		return ResponseEntity.noContent().build();
 	}
 	
 	@GetMapping("/{id}/subscription")
-	public ResponseEntity<GetSubscriptionResponse> getSubscription(@PathVariable UUID id, @RequestHeader(name="Accept-Language", required=true) Locale locale){
+	public ResponseEntity<GetSubscriptionResponse> getSubscription(@PathVariable UUID id, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
+		Locale locale = localeStr.equals("en") ? new Locale("en") : new Locale("tr");
+		
 		Subscription subscription = companyService.getSubscription(id, locale);
 		GetSubscriptionResponse response = responseMapper.getSubscriptionResponse(subscription);
+		
 		return ResponseEntity.ok(response);
 	}
 	
 	@GetMapping("/{id}/lawyers")
-	public ResponseEntity<List<GetLawyerResponse>> getLawyers(@PathVariable UUID id, @RequestHeader(name="Accept-Language", required=true) Locale locale){
+	public ResponseEntity<List<GetLawyerResponse>> getLawyers(@PathVariable UUID id, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
+		Locale locale = localeStr.equals("en") ? new Locale("en") : new Locale("tr");
+		
 		List<Lawyer> lawyers = companyService.getLawyers(id, locale);
 		List<GetLawyerResponse> response = responseMapper.getLawyerListResponse(lawyers);
+		
 		return ResponseEntity.ok(response);
 	}
 	
 	@GetMapping("/{id}/files")
-	public ResponseEntity<List<GetFileResponse>> getFiles(@PathVariable UUID id, @RequestHeader(name="Accept-Language", required=true) Locale locale){
+	public ResponseEntity<List<GetFileResponse>> getFiles(@PathVariable UUID id, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
+		Locale locale = localeStr.equals("en") ? new Locale("en") : new Locale("tr");
+		
 		List<File> files = companyService.getFiles(id, locale);
 		List<GetFileResponse> response = responseMapper.getFileListResponse(files);
+		
 		return ResponseEntity.ok(response);
 	}
 	
