@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -87,11 +88,214 @@ public class CompanyServiceTest {
 	}
 	
 	@Test
-	public void findAllDeleted() {
+	public void findAllDeletedTest() {
 		// Mock the repository
-		when(companyRepository.findAllByDeletedAndActive(true, true)).thenReturn(List.of(new Company(), new Company()));
+		when(companyRepository.findAllByDeleted(true)).thenReturn(List.of(new Company(), new Company()));
 		
+		// Service call
+		List<Company> companies = companyService.findAllDeleted();
 		
+		// Assertions
+		assertEquals(2, companies.size());
+		
+		// Verifications
+		verify(companyRepository, times(1)).findAllByDeleted(true);
+	}
+	
+	@Test
+	public void findAllPassiveTest() {
+		// Mock the repository
+		when(companyRepository.findAllByDeletedAndActive(false, false)).thenReturn(List.of(new Company(), new Company()));
+		
+		// Service call
+		List<Company> companies = companyService.findAllPassive();
+		
+		// Assertions
+		assertEquals(2, companies.size());
+		
+		// Verifications
+		verify(companyRepository, times(1)).findAllByDeletedAndActive(false, false);
+	}
+	
+	@Test
+	public void createTest() {
+		// Create a company
+		Company company = new Company();
+		company.setId(UUID.randomUUID());
+		
+		// Mock the repository
+		when(companyRepository.save(any(Company.class))).thenReturn(company);
+		
+		// Service call
+		Company savedCompany = companyService.create(company, Locale.US);
+		
+		// Assertions
+		assertEquals(company.hashCode(), savedCompany.hashCode());
+		
+		// Verifications
+		verify(companyRepository, times(1)).save(any(Company.class));
+	}
+	
+	@Test
+	public void updateTest_ExistingCompany_ShouldNotCauseCompanyNotFoundException() {
+		// Create a random id
+		UUID id = UUID.randomUUID();
+		
+		// Create a company
+		Company company = new Company();
+		company.setId(id);
+		
+		// Mock the repository
+		when(companyRepository.existsById(id)).thenReturn(true);
+		
+		// Assertions
+		assertDoesNotThrow(() -> companyService.update(company, Locale.US));
+		
+		// Verifications
+		verify(companyRepository, times(1)).existsById(id);
+		verify(companyRepository, times(1)).save(company);	
+	}
+	
+	@Test
+	public void updateTest_NotExistingCompany_ShouldCauseCompanyNotFoundException() {
+		// Create a random id
+		UUID id = UUID.randomUUID();
+		
+		// Create a company
+		Company company = new Company();
+		company.setId(id);
+		
+		// Mock the repository
+		when(companyRepository.existsById(id)).thenReturn(false);
+		
+		// Assertions
+		assertThrows(CompanyNotFoundException.class, () -> companyService.update(company, Locale.US));
+		
+		// Verifications
+		verify(companyRepository, times(1)).existsById(id);
+		verify(companyRepository, times(0)).save(company);	
+	}
+	
+	@Test
+	public void deleteTest_ExistingCompany_ShouldNotCauseNotFoundException() {
+		// Create a random id
+		UUID id = UUID.randomUUID();
+		
+		// Mock the repository
+		when(companyRepository.findById(id)).thenReturn(Optional.of(new Company()));
+		
+		// Assertions
+		assertDoesNotThrow(() -> companyService.delete(id, Locale.US));
+		
+		// Verifications
+		verify(companyRepository, times(1)).findById(id);
+		verify(companyRepository, times(1)).save(any(Company.class));	
+	}
+	
+	@Test
+	public void deleteTest_NotExistingCompany_ShouldCauseNotFoundException() {
+		// Create a random id
+		UUID id = UUID.randomUUID();
+		
+		// Mock the repository
+		when(companyRepository.findById(id)).thenReturn(Optional.empty());
+		
+		// Assertions
+		assertThrows(CompanyNotFoundException.class, () -> companyService.delete(id, Locale.US));
+		
+		// Verifications
+		verify(companyRepository, times(1)).findById(id);
+		verify(companyRepository, times(0)).save(any(Company.class));	
+	}
+	
+	@Test
+	public void getSubscriptionTest_ExistingCompany_ShouldNotCauseCompanyNotFoundException() {
+		// Create a random UUID
+		UUID id = UUID.randomUUID();
+		
+		// Mock the repository
+		when(companyRepository.findByIdAndDeletedAndActive(id, false, true)).thenReturn(Optional.of(new Company()));
+		
+		// Assertions
+		assertDoesNotThrow(() -> companyService.getSubscription(id, Locale.US));
+		
+		// Verifications
+		verify(companyRepository, times(1)).findByIdAndDeletedAndActive(id, false, true);
+	}
+	
+	@Test
+	public void getSubscriptionTest_NotExistingCompany_ShouldCauseCompanyNotFoundException() {
+		// Create a random UUID
+		UUID id = UUID.randomUUID();
+		
+		// Mock the repository
+		when(companyRepository.findByIdAndDeletedAndActive(id, false, true)).thenReturn(Optional.empty());
+		
+		// Assertions
+		assertThrows(CompanyNotFoundException.class, () -> companyService.getSubscription(id, Locale.US));
+		
+		// Verifications
+		verify(companyRepository, times(1)).findByIdAndDeletedAndActive(id, false, true);
+	}
+	
+	@Test
+	public void getLawyersTest_ExistingCompany_ShouldNotCauseCompanyNotFoundException() {
+		// Create a random UUID
+		UUID id = UUID.randomUUID();
+		
+		// Mock the repository
+		when(companyRepository.findByIdAndDeletedAndActive(id, false, true)).thenReturn(Optional.of(new Company()));
+		
+		// Assertions
+		assertDoesNotThrow(() -> companyService.getLawyers(id, Locale.US));
+		
+		// Verifications
+		verify(companyRepository, times(1)).findByIdAndDeletedAndActive(id, false, true);
+	}
+	
+	@Test
+	public void getLawyersTest_NotExistingCompany_ShouldCauseCompanyNotFoundException() {
+		// Create a random UUID
+		UUID id = UUID.randomUUID();
+		
+		// Mock the repository
+		when(companyRepository.findByIdAndDeletedAndActive(id, false, true)).thenReturn(Optional.empty());
+		
+		// Assertions
+		assertThrows(CompanyNotFoundException.class, () -> companyService.getLawyers(id, Locale.US));
+		
+		// Verifications
+		verify(companyRepository, times(1)).findByIdAndDeletedAndActive(id, false, true);
+	}
+	
+	@Test
+	public void getFilesTest_ExistingCompany_ShouldNotCauseCompanyNotFoundException() {
+		// Create a random UUID
+		UUID id = UUID.randomUUID();
+		
+		// Mock the repository
+		when(companyRepository.findByIdAndDeletedAndActive(id, false, true)).thenReturn(Optional.of(new Company()));
+		
+		// Assertions
+		assertDoesNotThrow(() -> companyService.getFiles(id, Locale.US));
+		
+		// Verifications
+		verify(companyRepository, times(1)).findByIdAndDeletedAndActive(id, false, true);
+	}
+	
+	@Test
+	public void getFilesTest_NotExistingCompany_ShouldCauseCompanyNotFoundException() {
+		// Create a random UUID
+		UUID id = UUID.randomUUID();
+		
+		// Mock the repository
+		when(companyRepository.findByIdAndDeletedAndActive(id, false, true)).thenReturn(Optional.empty());
+		
+		// Assertions
+		assertThrows(CompanyNotFoundException.class, () -> companyService.getFiles(id, Locale.US));
+		
+		// Verifications
+		verify(companyRepository, times(1)).findByIdAndDeletedAndActive(id, false, true);
 	}
 	
 }

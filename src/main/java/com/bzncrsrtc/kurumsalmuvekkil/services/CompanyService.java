@@ -49,7 +49,7 @@ public class CompanyService {
 	}
 	
 	public List<Company> findAllPassive(){
-		return companyRepository.findAllByDeletedAndActive(false, true);
+		return companyRepository.findAllByDeletedAndActive(false, false);
 	}
 	
 	public Company create(Company company, Locale locale) {
