@@ -202,13 +202,13 @@ public class CompanyServiceTest {
 		UUID id = UUID.randomUUID();
 		
 		// Mock the repository
-		when(companyRepository.findById(id)).thenReturn(Optional.of(new Company()));
+		when(companyRepository.findByIdAndDeleted(id, false)).thenReturn(Optional.of(new Company()));
 		
 		// Assertions
 		assertDoesNotThrow(() -> companyService.delete(id, Locale.US));
 		
 		// Verifications
-		verify(companyRepository, times(1)).findById(id);
+		verify(companyRepository, times(1)).findByIdAndDeleted(id, false);
 		verify(companyRepository, times(1)).save(any(Company.class));	
 	}
 	
@@ -218,13 +218,13 @@ public class CompanyServiceTest {
 		UUID id = UUID.randomUUID();
 		
 		// Mock the repository
-		when(companyRepository.findById(id)).thenReturn(Optional.empty());
+		when(companyRepository.findByIdAndDeleted(id, false)).thenReturn(Optional.empty());
 		
 		// Assertions
 		assertThrows(CompanyNotFoundException.class, () -> companyService.delete(id, Locale.US));
 		
 		// Verifications
-		verify(companyRepository, times(1)).findById(id);
+		verify(companyRepository, times(1)).findByIdAndDeleted(id, false);
 		verify(companyRepository, times(0)).save(any(Company.class));	
 	}
 	
