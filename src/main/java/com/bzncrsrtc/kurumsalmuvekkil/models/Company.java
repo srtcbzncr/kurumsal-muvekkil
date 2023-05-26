@@ -32,7 +32,7 @@ public class Company {
 	private UUID id;
 	
 	@NonNull
-	@Column(name="name")
+	@Column(name="name", unique=true)
 	private String name;
 	
 	@OneToOne(mappedBy="company", cascade=CascadeType.ALL)

@@ -39,7 +39,7 @@ public class Lawyer {
 	@Column(name="title")
 	private String title;
 	
-	@Column(name="identification_number", length=11)
+	@Column(name="identification_number", length=11, unique=true)
 	private String identificationNumber;
 	
 	@Column(name="first_name")
@@ -48,10 +48,10 @@ public class Lawyer {
 	@Column(name="last_name")
 	private String lastName;
 
-	@Column(name="email")
+	@Column(name="email", unique=true)
 	private String email;
 	
-	@Column(name="phone")
+	@Column(name="phone", unique=true)
 	private String phone;
 	
 	@ManyToMany()

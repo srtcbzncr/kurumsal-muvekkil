@@ -9,7 +9,8 @@ import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateCompanyRequest;
 @Mapper(componentModel = "spring")
 public interface RequestMapper {
 
-	Company fromCreateCompanyRequest(CreateCompanyRequest createCompanyRequest);
-	Company fromUpdateCompanyRequest(UpdateCompanyRequest updateCompanyRequest);
-	
+	Company fromCreateCompanyRequestToCompany(CreateCompanyRequest createCompanyRequest);
+	Company fromUpdateCompanyRequestToCompany(UpdateCompanyRequest updateCompanyRequest);
+	CreateCompanyRequest fromCompanyToCreateCompanyRequest(Company company);
+	UpdateCompanyRequest fromCompanyToUpdateCompanyRequest(Company company);
 }

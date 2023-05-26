@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 /*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-05-25T22:05:55+0300",
+    date = "2023-05-26T13:50:01+0300",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.33.0.v20230218-1114, environment: Java 17.0.6 (Eclipse Adoptium)"
 )
 */
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class RequestMapperImpl implements RequestMapper {
 
     @Override
-    public Company fromCreateCompanyRequest(CreateCompanyRequest createCompanyRequest) {
+    public Company fromCreateCompanyRequestToCompany(CreateCompanyRequest createCompanyRequest) {
         if ( createCompanyRequest == null ) {
             return null;
         }
@@ -29,7 +29,7 @@ public class RequestMapperImpl implements RequestMapper {
     }
 
     @Override
-    public Company fromUpdateCompanyRequest(UpdateCompanyRequest updateCompanyRequest) {
+    public Company fromUpdateCompanyRequestToCompany(UpdateCompanyRequest updateCompanyRequest) {
         if ( updateCompanyRequest == null ) {
             return null;
         }
@@ -40,5 +40,32 @@ public class RequestMapperImpl implements RequestMapper {
         company.setName( updateCompanyRequest.getName() );
 
         return company;
+    }
+
+    @Override
+    public CreateCompanyRequest fromCompanyToCreateCompanyRequest(Company company) {
+        if ( company == null ) {
+            return null;
+        }
+
+        CreateCompanyRequest createCompanyRequest = new CreateCompanyRequest();
+
+        createCompanyRequest.setName( company.getName() );
+
+        return createCompanyRequest;
+    }
+
+    @Override
+    public UpdateCompanyRequest fromCompanyToUpdateCompanyRequest(Company company) {
+        if ( company == null ) {
+            return null;
+        }
+
+        UpdateCompanyRequest updateCompanyRequest = new UpdateCompanyRequest();
+
+        updateCompanyRequest.setId( company.getId() );
+        updateCompanyRequest.setName( company.getName() );
+
+        return updateCompanyRequest;
     }
 }

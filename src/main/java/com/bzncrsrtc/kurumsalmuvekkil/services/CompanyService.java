@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
+import com.bzncrsrtc.kurumsalmuvekkil.exceptions.CompanyExistsException;
 import com.bzncrsrtc.kurumsalmuvekkil.exceptions.CompanyNotFoundException;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Company;
 import com.bzncrsrtc.kurumsalmuvekkil.models.File;
@@ -53,13 +54,16 @@ public class CompanyService {
 	}
 	
 	public Company create(Company company, Locale locale) {
+		if(companyRepository.existsByNameAndDeleted(company.getName(), false)) {
+			throw new CompanyExistsException(messageSource.getMessage("company.exist.message", null, locale));
+		}
+		
 		Company savedCompany = companyRepository.save(company);
 		return savedCompany;
 	}
 	
 	public void update(Company company, Locale locale) {
-
-		if(!companyRepository.existsById(company.getId())) {
+		if(!companyRepository.existsByIdAndDeleted(company.getId(), false)) {
 			throw new CompanyNotFoundException(messageSource.getMessage("company.not.found.message", null, locale));
 		}
 		
@@ -67,7 +71,7 @@ public class CompanyService {
 	}
 	
 	public void delete(UUID id, Locale locale) {
-		Optional<Company> optionalCompany = companyRepository.findById(id);
+		Optional<Company> optionalCompany = companyRepository.findByIdAndDeleted(id, false);
 		
 		if(optionalCompany.isEmpty()) {
 			throw new CompanyNotFoundException(messageSource.getMessage("company.not.found.message", null, locale));

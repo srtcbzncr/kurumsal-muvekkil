@@ -15,4 +15,6 @@ public interface CompanyRepository extends JpaRepository<Company, UUID>{
 	Optional<Company> findByIdAndDeleted(UUID id, boolean deleted);
 	Optional<Company> findByIdAndActive(UUID id, boolean active);
 	Optional<Company> findByIdAndDeletedAndActive(UUID id, boolean deleted, boolean active);
+	boolean existsByNameAndDeleted(String name, boolean deleted);
+	boolean existsByIdAndDeleted(UUID id, boolean deleted);
 }

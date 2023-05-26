@@ -34,7 +34,7 @@ public class Client {
 	@JoinColumn(name="user_id", referencedColumnName="id")
 	private User user;
 	
-	@Column(name="identification_number")
+	@Column(name="identification_number", unique=true)
 	private String identificationNumber;
 	
 	@Column(name="first_name")
@@ -43,10 +43,10 @@ public class Client {
 	@Column(name="last_name")
 	private String lastName;
 	
-	@Column(name="email")
+	@Column(name="email", unique=true)
 	private String email;
 	
-	@Column(name="phone")
+	@Column(name="phone", unique=true)
 	private String phone;
 	
 	@ManyToMany()
