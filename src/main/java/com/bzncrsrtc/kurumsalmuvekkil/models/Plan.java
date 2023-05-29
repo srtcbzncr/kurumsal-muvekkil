@@ -16,8 +16,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@RequiredArgsConstructor
 @Entity(name="plans")
 public class Plan {
 	
@@ -25,25 +30,32 @@ public class Plan {
 	@GeneratedValue(strategy=GenerationType.UUID)
 	private UUID id;
 	
-	@Column(name="name")
+	@NonNull
+	@Column(name="name", nullable=false)
 	private String name;
 	
-	@Column(name="description")
+	@NonNull
+	@Column(name="description", nullable=false)
 	private String description;
 	
-	@Column(name="monthly_price")
+	@NonNull
+	@Column(name="monthly_price", nullable=false)
 	private BigDecimal monthlyPrice;
 	
-	@Column(name="annual_price")
+	@NonNull
+	@Column(name="annual_price", nullable=false)
 	private BigDecimal annualPrice;
 	
-	@Column(name="client_quota")
+	@NonNull
+	@Column(name="client_quota", nullable=false)
 	private int clientQuota;
 	
-	@Column(name="lawyer_quota")
+	@NonNull
+	@Column(name="lawyer_quota", nullable=false)
 	private int lawyerQuota;
 	
-	@Column(name="file_quota_per_client")
+	@NonNull
+	@Column(name="file_quota_per_client", nullable=false)
 	private int fileQuotaPerClient;
 	
 	@OneToMany(mappedBy="plan")
