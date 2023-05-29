@@ -48,15 +48,15 @@ public class Plan {
 	
 	@NonNull
 	@Column(name="client_quota", nullable=false)
-	private int clientQuota;
+	private Integer clientQuota;
 	
 	@NonNull
 	@Column(name="lawyer_quota", nullable=false)
-	private int lawyerQuota;
+	private Integer lawyerQuota;
 	
 	@NonNull
 	@Column(name="file_quota_per_client", nullable=false)
-	private int fileQuotaPerClient;
+	private Integer fileQuotaPerClient;
 	
 	@OneToMany(mappedBy="plan")
 	private List<Subscription> subscriptions;

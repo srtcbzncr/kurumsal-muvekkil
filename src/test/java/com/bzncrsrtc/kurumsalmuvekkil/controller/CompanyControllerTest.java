@@ -208,7 +208,7 @@ class CompanyControllerTest {
 	}
 	
 	@Test
-	public void updateTest_ExistingCompany_ShouldReturn204() throws Exception {
+	public void updateTest_ExistingCompany_ShouldReturn200() throws Exception {
 		// Create a company
 		Company company = new Company("Company 1");
 		UUID id = UUID.randomUUID();
@@ -263,7 +263,7 @@ class CompanyControllerTest {
 	}
 	
 	@Test
-	public void deleteTest_ExistingCompany_ShouldReturn204() throws Exception {
+	public void deleteTest_ExistingCompany_ShouldReturn200() throws Exception {
 		// Create random id
 		UUID id = UUID.randomUUID();
 		

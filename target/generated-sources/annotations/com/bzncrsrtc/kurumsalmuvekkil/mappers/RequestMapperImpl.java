@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 /*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-05-29T14:00:18+0300",
+    date = "2023-05-29T16:06:56+0300",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.33.0.v20230218-1114, environment: Java 17.0.6 (Eclipse Adoptium)"
 )
 */
@@ -81,6 +81,7 @@ public class RequestMapperImpl implements RequestMapper {
         Plan plan = new Plan();
 
         plan.setAnnualPrice( createPlanRequest.getAnnualPrice() );
+        plan.setClientQuota( createPlanRequest.getClientQuota() );
         plan.setDescription( createPlanRequest.getDescription() );
         plan.setFileQuotaPerClient( createPlanRequest.getFileQuotaPerClient() );
         plan.setLawyerQuota( createPlanRequest.getLawyerQuota() );
@@ -98,6 +99,15 @@ public class RequestMapperImpl implements RequestMapper {
 
         Plan plan = new Plan();
 
+        plan.setAnnualPrice( updatePlanRequest.getAnnualPrice() );
+        plan.setClientQuota( updatePlanRequest.getClientQuota() );
+        plan.setDescription( updatePlanRequest.getDescription() );
+        plan.setFileQuotaPerClient( updatePlanRequest.getFileQuotaPerClient() );
+        plan.setId( updatePlanRequest.getId() );
+        plan.setLawyerQuota( updatePlanRequest.getLawyerQuota() );
+        plan.setMonthlyPrice( updatePlanRequest.getMonthlyPrice() );
+        plan.setName( updatePlanRequest.getName() );
+
         return plan;
     }
 
@@ -110,6 +120,7 @@ public class RequestMapperImpl implements RequestMapper {
         CreatePlanRequest createPlanRequest = new CreatePlanRequest();
 
         createPlanRequest.setAnnualPrice( plan.getAnnualPrice() );
+        createPlanRequest.setClientQuota( plan.getClientQuota() );
         createPlanRequest.setDescription( plan.getDescription() );
         createPlanRequest.setFileQuotaPerClient( plan.getFileQuotaPerClient() );
         createPlanRequest.setLawyerQuota( plan.getLawyerQuota() );
@@ -126,6 +137,15 @@ public class RequestMapperImpl implements RequestMapper {
         }
 
         UpdatePlanRequest updatePlanRequest = new UpdatePlanRequest();
+
+        updatePlanRequest.setAnnualPrice( plan.getAnnualPrice() );
+        updatePlanRequest.setClientQuota( plan.getClientQuota() );
+        updatePlanRequest.setDescription( plan.getDescription() );
+        updatePlanRequest.setFileQuotaPerClient( plan.getFileQuotaPerClient() );
+        updatePlanRequest.setId( plan.getId() );
+        updatePlanRequest.setLawyerQuota( plan.getLawyerQuota() );
+        updatePlanRequest.setMonthlyPrice( plan.getMonthlyPrice() );
+        updatePlanRequest.setName( plan.getName() );
 
         return updatePlanRequest;
     }

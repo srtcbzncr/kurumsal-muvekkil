@@ -3,6 +3,7 @@ package com.bzncrsrtc.kurumsalmuvekkil.requests;
 import java.math.BigDecimal;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
@@ -14,19 +15,19 @@ public class CreatePlanRequest {
 	@NotEmpty(message="{description.notNull}")
 	private String description;
 	
-	@NotEmpty(message="{monthlyPrice.notNull}")
+	@NotNull(message="{monthlyPrice.notNull}")
 	private BigDecimal monthlyPrice;
 	
-	@NotEmpty(message="{annual.notNull}")
+	@NotNull(message="{annual.notNull}")
 	private BigDecimal annualPrice;
 	
-	@NotEmpty(message="{clientQuota.notNull}")
-	private int clienQuota;
+	@NotNull(message="{clientQuota.notNull}")
+	private Integer clientQuota;
 	
-	@NotEmpty(message="{lawyerQuota.notNull}")
-	private int lawyerQuota;
+	@NotNull(message="{lawyerQuota.notNull}")
+	private Integer lawyerQuota;
 	
-	@NotEmpty(message="{fileQuotaPerClient.notNull}")
-	private int fileQuotaPerClient;
+	@NotNull(message="{fileQuotaPerClient.notNull}")
+	private Integer fileQuotaPerClient;
 	
 }

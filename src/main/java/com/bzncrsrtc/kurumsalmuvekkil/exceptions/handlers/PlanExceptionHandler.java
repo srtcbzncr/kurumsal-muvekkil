@@ -16,7 +16,7 @@ public class PlanExceptionHandler {
 	public ResponseEntity<Object> handlePlanNotFoundException(PlanNotFoundException exception){
 		ErrorResponse response = new ErrorResponse(HttpStatus.NOT_FOUND.name(), exception.getMessage());
 		
-		return ResponseHandler.generateResponse(response, HttpStatus.NOT_FOUND, null);
+		return ResponseHandler.generateResponse(null, HttpStatus.NOT_FOUND, response);
 	}
 	
 }

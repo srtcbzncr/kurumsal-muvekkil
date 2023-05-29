@@ -101,8 +101,7 @@ public class PlanController {
 	public ResponseEntity<Object> getSubscriptions(@PathVariable UUID id, @RequestHeader(name = "Accept_Language", required = false) String localeStr){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
-		Plan plan = planService.findById(id, locale);
-		List<Subscription> subscriptions = plan.getSubscriptions();
+		List<Subscription> subscriptions = planService.getSubscriptions(id, locale);
 		List<GetSubscriptionResponse> response = responseMapper.getSubscriptionListResponse(subscriptions);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
