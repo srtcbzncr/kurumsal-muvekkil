@@ -168,22 +168,56 @@ class PlanRepositoryTest {
 	
 	@Test
 	public void findByIdAndDeletedTest() {
+		// Repository calls
+		Optional<Plan> passive = planRepository.findByIdAndDeleted(passivePlan.getId(), false);
+		Optional<Plan> active = planRepository.findByIdAndDeleted(activePlan.getId(), false);
+		Optional<Plan> deleted = planRepository.findByIdAndDeleted(deletedPlan.getId(), false);
+		Optional<Plan> deletedAndPassive = planRepository.findByIdAndDeleted(deletedAndPassivePlan.getId(), false);
 		
+		// Assertions
+		assertFalse(passive.isEmpty());
+		assertFalse(active.isEmpty());
+		assertTrue(deleted.isEmpty());
+		assertTrue(deletedAndPassive.isEmpty());
 	}
 	
 	@Test
 	public void findByIdAndActiveTest() {
+		// Repository calls
+		Optional<Plan> passive = planRepository.findByIdAndActive(passivePlan.getId(), true);
+		Optional<Plan> active = planRepository.findByIdAndActive(activePlan.getId(), true);
+		Optional<Plan> deleted = planRepository.findByIdAndActive(deletedPlan.getId(), true);
+		Optional<Plan> deletedAndPassive = planRepository.findByIdAndActive(deletedAndPassivePlan.getId(), true);
 		
+		// Assertions
+		assertTrue(passive.isEmpty());
+		assertFalse(active.isEmpty());
+		assertFalse(deleted.isEmpty());
+		assertTrue(deletedAndPassive.isEmpty());
 	}
 	
 	@Test
 	public void findByIdAndDeletedAndActiveTest() {
+		// Repository calls
+		Optional<Plan> passive = planRepository.findByIdAndDeletedAndActive(passivePlan.getId(), false, true);
+		Optional<Plan> active = planRepository.findByIdAndDeletedAndActive(activePlan.getId(), false, true);
+		Optional<Plan> deleted = planRepository.findByIdAndDeletedAndActive(deletedPlan.getId(), false, true);
+		Optional<Plan> deletedAndPassive = planRepository.findByIdAndDeletedAndActive(deletedAndPassivePlan.getId(), false, true);
 		
+		// Assertions
+		assertTrue(passive.isEmpty());
+		assertFalse(active.isEmpty());
+		assertTrue(deleted.isEmpty());
+		assertTrue(deletedAndPassive.isEmpty());
 	}
 	
 	@Test
 	public void existsByIdAndDeletedTest() {
-		
+		// Assertions
+		assertTrue(planRepository.existsByIdAndDeleted(passivePlan.getId(), false));
+		assertTrue(planRepository.existsByIdAndDeleted(activePlan.getId(), false));
+		assertFalse(planRepository.existsByIdAndDeleted(deletedPlan.getId(), false));
+		assertFalse(planRepository.existsByIdAndDeleted(deletedAndPassivePlan.getId(), false));
 	}
 
 }
