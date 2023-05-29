@@ -33,7 +33,7 @@ public class Court {
 	@OneToMany(mappedBy="parent", cascade=CascadeType.ALL)
 	private List<Court> subs;
 	
-	@Column(name="name")
+	@Column(name="name", unique=true)
 	private String name;
 	
 	@OneToMany(mappedBy="court")
