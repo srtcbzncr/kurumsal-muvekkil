@@ -18,7 +18,8 @@ public class LocaleConfig implements WebMvcConfigurer {
 	@Bean
 	public AcceptHeaderLocaleResolver localeResolver() {
 		final AcceptHeaderLocaleResolver resolver = new AcceptHeaderLocaleResolver();
-		resolver.setDefaultLocale(Locale.US);
+		Locale locale = new Locale("tr", "TR");
+		resolver.setDefaultLocale(locale);
 		return resolver;
 	}
 	

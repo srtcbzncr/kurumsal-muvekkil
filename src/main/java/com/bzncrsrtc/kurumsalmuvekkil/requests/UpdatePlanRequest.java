@@ -22,7 +22,7 @@ public class UpdatePlanRequest {
 	@NotNull(message="{monthlyPrice.notNull}")
 	private BigDecimal monthlyPrice;
 	
-	@NotNull(message="{annual.notNull}")
+	@NotNull(message="{annualPrice.notNull}")
 	private BigDecimal annualPrice;
 	
 	@NotNull(message="{clientQuota.notNull}")
