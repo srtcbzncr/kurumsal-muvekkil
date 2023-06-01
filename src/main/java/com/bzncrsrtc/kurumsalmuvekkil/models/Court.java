@@ -18,8 +18,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@RequiredArgsConstructor
 @Entity(name="courts")
 public class Court {
 
@@ -33,6 +38,7 @@ public class Court {
 	@OneToMany(mappedBy="parent", cascade=CascadeType.ALL)
 	private List<Court> subs;
 	
+	@NonNull
 	@Column(name="name", unique=true)
 	private String name;
 	

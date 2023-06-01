@@ -25,7 +25,7 @@ class PlanRepositoryTest {
 	Plan deletedPlan = new Plan("Deleted Plan", "desc", new BigDecimal(10), new BigDecimal(10), 10, 10, 10);
 	Plan deletedAndPassivePlan = new Plan("Deleted and Passive Plan", "desc", new BigDecimal(10), new BigDecimal(10), 10, 10, 10);
 	
-	@BeforeEach()
+	@BeforeEach
 	public void init() {
 		passivePlan.setActive(false);
 		passivePlan = planRepository.save(passivePlan);
