@@ -20,10 +20,6 @@ import org.springframework.context.MessageSource;
 
 import com.bzncrsrtc.kurumsalmuvekkil.exceptions.CourtExistsException;
 import com.bzncrsrtc.kurumsalmuvekkil.exceptions.CourtNotFoundException;
-import com.bzncrsrtc.kurumsalmuvekkil.exceptions.CourtNotFoundException;
-import com.bzncrsrtc.kurumsalmuvekkil.models.Court;
-import com.bzncrsrtc.kurumsalmuvekkil.models.Court;
-import com.bzncrsrtc.kurumsalmuvekkil.models.Court;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Court;
 import com.bzncrsrtc.kurumsalmuvekkil.repositories.CourtRepository;
 
@@ -118,40 +114,39 @@ class CourtServiceTest {
 	@Test
 	public void createTest_NotExistingCourt_ShouldNotCauseCourtExistsException() {
 		// Create a court
-		Court court = new Court();
+		Court court = new Court("Court");
 		court.setId(UUID.randomUUID());
 		
 		// Mock the repository
-		when(courtRepository.existsByNameAndDeleted(any(), any())).thenReturn(false);
+		when(courtRepository.existsByNameAndDeleted(court.getName(), false)).thenReturn(false);
 		when(courtRepository.save(any(Court.class))).thenReturn(court);
 		
 		// Service call
 		Court savedCourt = courtService.create(court, Locale.US);
 		
 		// Assertions
-		assertThrows(CourtExistsException.class, () -> courtService.create(court, Locale.US));
+		assertDoesNotThrow(() -> courtService.create(court, Locale.US));
 		assertEquals(court.hashCode(), savedCourt.hashCode());
 		
 		// Verifications
-		verify(courtRepository, times(2)).existsByNameAndDeleted(any(), any());
+		verify(courtRepository, times(2)).existsByNameAndDeleted(court.getName(), false);
 		verify(courtRepository, times(2)).save(any(Court.class));
 	}
 	
 	@Test
 	public void createTest_ExistingCourt_ShouldCauseCourtExistsException() {
 		// Create a court
-		Court court = new Court();
+		Court court = new Court("Court");
 		court.setId(UUID.randomUUID());
 		
 		// Mock the repository
-		when(courtRepository.existsByNameAndDeleted(any(), any())).thenReturn(true);
-		when(courtRepository.save(any(Court.class))).thenReturn(court);
+		when(courtRepository.existsByNameAndDeleted(court.getName(), false)).thenReturn(true);
 				
 		// Assertions
 		assertThrows(CourtExistsException.class, () -> courtService.create(court, Locale.US));
 		
 		// Verifications
-		verify(courtRepository, times(1)).existsByNameAndDeleted(any(), any());
+		verify(courtRepository, times(1)).existsByNameAndDeleted(court.getName(), false);
 		verify(courtRepository, times(0)).save(any(Court.class));
 	}
 	
@@ -237,6 +232,81 @@ class CourtServiceTest {
 			
 		// Assertions
 		assertDoesNotThrow(() -> courtService.getParent(id, Locale.US));
+		
+		// Verification
+		verify(courtRepository, times(1)).findByIdAndDeletedAndActive(id, false, true);
+	}
+	
+	@Test
+	public void getParentTest_NotExistingCourt_ShouldCauseCourtNotFoundException() {
+		// Create a random id
+		UUID id = UUID.randomUUID();
+		
+		// Mock the repository
+		when(courtRepository.findByIdAndDeletedAndActive(id, false, true)).thenReturn(Optional.empty());
+			
+		// Assertions
+		assertThrows(CourtNotFoundException.class, () -> courtService.getParent(id, Locale.US));
+		
+		// Verification
+		verify(courtRepository, times(1)).findByIdAndDeletedAndActive(id, false, true);
+	}
+	
+	@Test
+	public void getSubsTest_ExistingCourt_ShouldNotCauseCourtNotFoundException() {
+		// Create a random id
+		UUID id = UUID.randomUUID();
+		
+		// Mock the repository
+		when(courtRepository.findByIdAndDeletedAndActive(id, false, true)).thenReturn(Optional.of(new Court()));
+			
+		// Assertions
+		assertDoesNotThrow(() -> courtService.getSubs(id, Locale.US));
+		
+		// Verification
+		verify(courtRepository, times(1)).findByIdAndDeletedAndActive(id, false, true);
+	}
+	
+	@Test
+	public void getSubsTest_NotExistingCourt_ShouldCauseCourtNotFoundException() {
+		// Create a random id
+		UUID id = UUID.randomUUID();
+		
+		// Mock the repository
+		when(courtRepository.findByIdAndDeletedAndActive(id, false, true)).thenReturn(Optional.empty());
+			
+		// Assertions
+		assertThrows(CourtNotFoundException.class, () -> courtService.getSubs(id, Locale.US));
+		
+		// Verification
+		verify(courtRepository, times(1)).findByIdAndDeletedAndActive(id, false, true);
+	}
+	
+	@Test
+	public void getFilesTest_ExistingCourt_ShouldNotCauseCourtNotFoundException() {
+		// Create a random id
+		UUID id = UUID.randomUUID();
+		
+		// Mock the repository
+		when(courtRepository.findByIdAndDeletedAndActive(id, false, true)).thenReturn(Optional.of(new Court()));
+			
+		// Assertions
+		assertDoesNotThrow(() -> courtService.getFiles(id, Locale.US));
+		
+		// Verification
+		verify(courtRepository, times(1)).findByIdAndDeletedAndActive(id, false, true);
+	}
+	
+	@Test
+	public void getFilesTest_NotExistingCourt_ShouldCauseCourtNotFoundException() {
+		// Create a random id
+		UUID id = UUID.randomUUID();
+		
+		// Mock the repository
+		when(courtRepository.findByIdAndDeletedAndActive(id, false, true)).thenReturn(Optional.empty());
+			
+		// Assertions
+		assertThrows(CourtNotFoundException.class, () -> courtService.getFiles(id, Locale.US));
 		
 		// Verification
 		verify(courtRepository, times(1)).findByIdAndDeletedAndActive(id, false, true);

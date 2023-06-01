@@ -69,7 +69,7 @@ public class CourtService {
 	}
 	
 	public void delete(UUID id, Locale locale) {
-		Optional<Court> optionalCourt = courtRepository.findByIdAndDeletedAndActive(id, false, true);
+		Optional<Court> optionalCourt = courtRepository.findByIdAndDeleted(id, false);
 		
 		if(optionalCourt.isEmpty()) {
 			throw new CourtNotFoundException(messageSource.getMessage("court.not.found.message", null, locale));
