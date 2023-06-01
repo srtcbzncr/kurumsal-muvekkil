@@ -90,10 +90,6 @@ public class CourtService {
 		
 		Court parent = optionalCourt.get().getParent();
 		
-		if(parent == null) {
-			throw new CourtNotFoundException(messageSource.getMessage("court.not.found.message", null, locale));
-		}
-		
 		return parent;
 	}
 	
