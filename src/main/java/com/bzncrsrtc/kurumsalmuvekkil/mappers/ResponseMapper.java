@@ -3,6 +3,7 @@ package com.bzncrsrtc.kurumsalmuvekkil.mappers;
 import java.util.List;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import com.bzncrsrtc.kurumsalmuvekkil.models.Client;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Company;
@@ -32,6 +33,8 @@ public interface ResponseMapper {
 	GetCompanyResponse getCompanyResponse(Company company);
 	List<GetCompanyResponse> getCompanyListResponse(List<Company> companies);
 	
+	@Mapping(target="parentId", source="parent.id")
+	@Mapping(target="parentName", source="parent.name")
 	GetCourtResponse getCourtResponse(Court court);
 	List<GetCourtResponse> getCourtListResponse(List<Court> courts);
 	

@@ -18,12 +18,13 @@ import com.bzncrsrtc.kurumsalmuvekkil.responses.GetSubscriptionResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetUpdateResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import org.springframework.stereotype.Component;
 
 /*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-06-01T20:47:12+0300",
+    date = "2023-06-01T21:39:33+0300",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.33.0.v20230218-1114, environment: Java 17.0.6 (Eclipse Adoptium)"
 )
 */
@@ -98,6 +99,8 @@ public class ResponseMapperImpl implements ResponseMapper {
 
         GetCourtResponse getCourtResponse = new GetCourtResponse();
 
+        getCourtResponse.setParentId( courtParentId( court ) );
+        getCourtResponse.setParentName( courtParentName( court ) );
         getCourtResponse.setId( court.getId() );
         getCourtResponse.setName( court.getName() );
 
@@ -284,5 +287,35 @@ public class ResponseMapperImpl implements ResponseMapper {
         }
 
         return list;
+    }
+
+    private UUID courtParentId(Court court) {
+        if ( court == null ) {
+            return null;
+        }
+        Court parent = court.getParent();
+        if ( parent == null ) {
+            return null;
+        }
+        UUID id = parent.getId();
+        if ( id == null ) {
+            return null;
+        }
+        return id;
+    }
+
+    private String courtParentName(Court court) {
+        if ( court == null ) {
+            return null;
+        }
+        Court parent = court.getParent();
+        if ( parent == null ) {
+            return null;
+        }
+        String name = parent.getName();
+        if ( name == null ) {
+            return null;
+        }
+        return name;
     }
 }

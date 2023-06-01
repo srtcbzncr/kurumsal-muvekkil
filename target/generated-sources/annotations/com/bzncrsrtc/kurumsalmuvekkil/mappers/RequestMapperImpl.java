@@ -1,17 +1,20 @@
 package com.bzncrsrtc.kurumsalmuvekkil.mappers;
 
 import com.bzncrsrtc.kurumsalmuvekkil.models.Company;
+import com.bzncrsrtc.kurumsalmuvekkil.models.Court;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Plan;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateCompanyRequest;
+import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateCourtRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreatePlanRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateCompanyRequest;
+import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateCourtRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdatePlanRequest;
 import org.springframework.stereotype.Component;
 
 /*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-06-01T20:47:26+0300",
+    date = "2023-06-01T21:45:16+0300",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.33.0.v20230218-1114, environment: Java 17.0.6 (Eclipse Adoptium)"
 )
 */
@@ -148,5 +151,59 @@ public class RequestMapperImpl implements RequestMapper {
         updatePlanRequest.setName( plan.getName() );
 
         return updatePlanRequest;
+    }
+
+    @Override
+    public Court fromCreateCourtRequestToCourt(CreateCourtRequest createCourtRequest) {
+        if ( createCourtRequest == null ) {
+            return null;
+        }
+
+        Court court = new Court();
+
+        court.setName( createCourtRequest.getName() );
+
+        return court;
+    }
+
+    @Override
+    public Court fromUpdateCourtRequestToCourt(UpdateCourtRequest updateCourtRequest) {
+        if ( updateCourtRequest == null ) {
+            return null;
+        }
+
+        Court court = new Court();
+
+        court.setId( updateCourtRequest.getId() );
+        court.setName( updateCourtRequest.getName() );
+
+        return court;
+    }
+
+    @Override
+    public CreateCourtRequest fromCourtToCreateCourtRequest(Court court) {
+        if ( court == null ) {
+            return null;
+        }
+
+        CreateCourtRequest createCourtRequest = new CreateCourtRequest();
+
+        createCourtRequest.setName( court.getName() );
+
+        return createCourtRequest;
+    }
+
+    @Override
+    public UpdateCourtRequest fromCourtToUpdateCourtRequest(Court court) {
+        if ( court == null ) {
+            return null;
+        }
+
+        UpdateCourtRequest updateCourtRequest = new UpdateCourtRequest();
+
+        updateCourtRequest.setId( court.getId() );
+        updateCourtRequest.setName( court.getName() );
+
+        return updateCourtRequest;
     }
 }

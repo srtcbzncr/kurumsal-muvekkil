@@ -32,7 +32,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.services.PlanService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/plan")
+@RequestMapping("/plans")
 public class PlanController {
 	
 	private final PlanService planService;
