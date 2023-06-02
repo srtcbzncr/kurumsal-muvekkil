@@ -25,14 +25,14 @@ import com.bzncrsrtc.kurumsalmuvekkil.models.Subscription;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreatePlanRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdatePlanRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetPlanResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetSubscriptionResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.GetSubscriptionWithoutPlanResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.ResponseHandler;
 import com.bzncrsrtc.kurumsalmuvekkil.services.PlanService;
 
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/plans")
+@RequestMapping("/plan")
 public class PlanController {
 	
 	private final PlanService planService;
@@ -102,7 +102,7 @@ public class PlanController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		List<Subscription> subscriptions = planService.getSubscriptions(id, locale);
-		List<GetSubscriptionResponse> response = responseMapper.getSubscriptionListResponse(subscriptions);
+		List<GetSubscriptionWithoutPlanResponse> response = responseMapper.getSubscriptionWithoutPlanListResponse(subscriptions);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}

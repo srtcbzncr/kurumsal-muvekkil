@@ -11,10 +11,13 @@ import com.bzncrsrtc.kurumsalmuvekkil.models.Update;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetClientResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCompanyResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCourtResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCourtWithoutParentResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetFileResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.GetFileWithoutCourtResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetLawyerResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetPlanResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetSubscriptionResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.GetSubscriptionWithoutPlanResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetUpdateResponse;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +27,7 @@ import org.springframework.stereotype.Component;
 /*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-06-01T21:39:33+0300",
+    date = "2023-06-02T15:02:53+0300",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.33.0.v20230218-1114, environment: Java 17.0.6 (Eclipse Adoptium)"
 )
 */
@@ -122,6 +125,34 @@ public class ResponseMapperImpl implements ResponseMapper {
     }
 
     @Override
+    public GetCourtWithoutParentResponse getCourtWithoutParentResponse(Court court) {
+        if ( court == null ) {
+            return null;
+        }
+
+        GetCourtWithoutParentResponse getCourtWithoutParentResponse = new GetCourtWithoutParentResponse();
+
+        getCourtWithoutParentResponse.setId( court.getId() );
+        getCourtWithoutParentResponse.setName( court.getName() );
+
+        return getCourtWithoutParentResponse;
+    }
+
+    @Override
+    public List<GetCourtWithoutParentResponse> getCourtWithoutParentListResponse(List<Court> courts) {
+        if ( courts == null ) {
+            return null;
+        }
+
+        List<GetCourtWithoutParentResponse> list = new ArrayList<GetCourtWithoutParentResponse>( courts.size() );
+        for ( Court court : courts ) {
+            list.add( getCourtWithoutParentResponse( court ) );
+        }
+
+        return list;
+    }
+
+    @Override
     public GetFileResponse getFileResponse(File file) {
         if ( file == null ) {
             return null;
@@ -147,6 +178,36 @@ public class ResponseMapperImpl implements ResponseMapper {
         List<GetFileResponse> list = new ArrayList<GetFileResponse>( files.size() );
         for ( File file : files ) {
             list.add( getFileResponse( file ) );
+        }
+
+        return list;
+    }
+
+    @Override
+    public GetFileWithoutCourtResponse getFileWithoutCourtResponse(File file) {
+        if ( file == null ) {
+            return null;
+        }
+
+        GetFileWithoutCourtResponse getFileWithoutCourtResponse = new GetFileWithoutCourtResponse();
+
+        getFileWithoutCourtResponse.setCourtDetail( file.getCourtDetail() );
+        getFileWithoutCourtResponse.setDescription( file.getDescription() );
+        getFileWithoutCourtResponse.setId( file.getId() );
+        getFileWithoutCourtResponse.setTitle( file.getTitle() );
+
+        return getFileWithoutCourtResponse;
+    }
+
+    @Override
+    public List<GetFileWithoutCourtResponse> getFileWithoutCourtListResponse(List<File> files) {
+        if ( files == null ) {
+            return null;
+        }
+
+        List<GetFileWithoutCourtResponse> list = new ArrayList<GetFileWithoutCourtResponse>( files.size() );
+        for ( File file : files ) {
+            list.add( getFileWithoutCourtResponse( file ) );
         }
 
         return list;
@@ -253,6 +314,39 @@ public class ResponseMapperImpl implements ResponseMapper {
         List<GetSubscriptionResponse> list = new ArrayList<GetSubscriptionResponse>( subscriptions.size() );
         for ( Subscription subscription : subscriptions ) {
             list.add( getSubscriptionResponse( subscription ) );
+        }
+
+        return list;
+    }
+
+    @Override
+    public GetSubscriptionWithoutPlanResponse getSubscriptionWithoutPlanResponse(Subscription subscription) {
+        if ( subscription == null ) {
+            return null;
+        }
+
+        GetSubscriptionWithoutPlanResponse getSubscriptionWithoutPlanResponse = new GetSubscriptionWithoutPlanResponse();
+
+        getSubscriptionWithoutPlanResponse.setAutoRenew( subscription.isAutoRenew() );
+        getSubscriptionWithoutPlanResponse.setCompany( getCompanyResponse( subscription.getCompany() ) );
+        getSubscriptionWithoutPlanResponse.setEndDate( subscription.getEndDate() );
+        getSubscriptionWithoutPlanResponse.setFee( subscription.getFee() );
+        getSubscriptionWithoutPlanResponse.setId( subscription.getId() );
+        getSubscriptionWithoutPlanResponse.setStartDate( subscription.getStartDate() );
+        getSubscriptionWithoutPlanResponse.setType( subscription.getType() );
+
+        return getSubscriptionWithoutPlanResponse;
+    }
+
+    @Override
+    public List<GetSubscriptionWithoutPlanResponse> getSubscriptionWithoutPlanListResponse(List<Subscription> subscriptions) {
+        if ( subscriptions == null ) {
+            return null;
+        }
+
+        List<GetSubscriptionWithoutPlanResponse> list = new ArrayList<GetSubscriptionWithoutPlanResponse>( subscriptions.size() );
+        for ( Subscription subscription : subscriptions ) {
+            list.add( getSubscriptionWithoutPlanResponse( subscription ) );
         }
 
         return list;

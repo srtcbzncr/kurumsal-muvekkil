@@ -36,7 +36,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.services.CompanyService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/companies")
+@RequestMapping("/company")
 public class CompanyController {
 	
 	private final CompanyService companyService;

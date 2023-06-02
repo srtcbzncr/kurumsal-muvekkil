@@ -13,15 +13,16 @@ import com.bzncrsrtc.kurumsalmuvekkil.models.Lawyer;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Plan;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Subscription;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Update;
-import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateCompanyRequest;
-import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateCompanyRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetClientResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCompanyResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCourtResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCourtWithoutParentResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetFileResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.GetFileWithoutCourtResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetLawyerResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetPlanResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetSubscriptionResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.GetSubscriptionWithoutPlanResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetUpdateResponse;
 
 @Mapper(componentModel = "spring")
@@ -37,9 +38,14 @@ public interface ResponseMapper {
 	@Mapping(target="parentName", source="parent.name")
 	GetCourtResponse getCourtResponse(Court court);
 	List<GetCourtResponse> getCourtListResponse(List<Court> courts);
+	GetCourtWithoutParentResponse getCourtWithoutParentResponse(Court court);
+	List<GetCourtWithoutParentResponse> getCourtWithoutParentListResponse(List<Court> courts);
 	
 	GetFileResponse getFileResponse(File file);
 	List<GetFileResponse> getFileListResponse(List<File> files);
+	
+	GetFileWithoutCourtResponse getFileWithoutCourtResponse(File file);
+	List<GetFileWithoutCourtResponse> getFileWithoutCourtListResponse(List<File> files);
 	
 	GetLawyerResponse getLawyerResponse(Lawyer lawyer);
 	List<GetLawyerResponse> getLawyerListResponse(List<Lawyer> lawyers);
@@ -49,6 +55,8 @@ public interface ResponseMapper {
 	
 	GetSubscriptionResponse getSubscriptionResponse(Subscription subscription);
 	List<GetSubscriptionResponse> getSubscriptionListResponse(List<Subscription> subscriptions);
+	GetSubscriptionWithoutPlanResponse getSubscriptionWithoutPlanResponse(Subscription subscription);
+	List<GetSubscriptionWithoutPlanResponse> getSubscriptionWithoutPlanListResponse(List<Subscription> subscriptions);
 	
 	GetUpdateResponse getUpdateResponse(Update update);
 	List<GetUpdateResponse> getUpdateListResponse(List<Update> updates);

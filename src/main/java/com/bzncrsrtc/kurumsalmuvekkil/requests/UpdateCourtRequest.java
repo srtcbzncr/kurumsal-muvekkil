@@ -15,6 +15,4 @@ public class UpdateCourtRequest {
 	@NotEmpty
 	private String name;
 	
-	private UUID parentId;
-	
 }

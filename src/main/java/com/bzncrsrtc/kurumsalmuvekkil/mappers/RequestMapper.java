@@ -1,7 +1,6 @@
 package com.bzncrsrtc.kurumsalmuvekkil.mappers;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import com.bzncrsrtc.kurumsalmuvekkil.models.Company;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Court;

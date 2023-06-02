@@ -55,7 +55,23 @@ public class CourtService {
 		if(courtRepository.existsByNameAndDeleted(court.getName(), false)) {
 			throw new CourtExistsException(messageSource.getMessage("court.exists.message", null, locale));
 		}
+
+		Court savedCourt = courtRepository.save(court);
+		return savedCourt;
+	}
+	
+	public Court add(UUID parentId, Court court, Locale locale) {
+		Optional<Court> parent = courtRepository.findByIdAndDeletedAndActive(parentId, false, true);
 		
+		if(parent.isEmpty()) {
+			throw new CourtNotFoundException(messageSource.getMessage("parent.court.not.found.message", null, locale));
+		}
+		
+		if(courtRepository.existsByNameAndDeleted(court.getName(), false)) {
+			throw new CourtExistsException(messageSource.getMessage("court.exists.message", null, locale));
+		}
+		
+		court.setParent(parent.get());
 		Court savedCourt = courtRepository.save(court);
 		return savedCourt;
 	}
@@ -66,6 +82,22 @@ public class CourtService {
 		}
 		
 		courtRepository.save(court);
+	}
+	
+	public void updateParent(UUID parentId, Court court, Locale locale) {
+		
+		Optional<Court> parent = courtRepository.findByIdAndDeletedAndActive(parentId, false, true);
+		
+		if(parent.isEmpty()) {
+			throw new CourtNotFoundException(messageSource.getMessage("parent.court.not.found.message", null, locale));
+		}
+		
+		if(!courtRepository.existsByIdAndDeleted(court.getId(), false)) {
+			throw new CourtNotFoundException(messageSource.getMessage("court.not.found.message", null, locale));
+		}
+		
+		court.setParent(parent.get());
+		courtRepository.save(court);		
 	}
 	
 	public void delete(UUID id, Locale locale) {

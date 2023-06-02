@@ -115,39 +115,104 @@ class CourtServiceTest {
 	public void createTest_NotExistingCourt_ShouldNotCauseCourtExistsException() {
 		// Create a court
 		Court court = new Court("Court");
-		court.setId(UUID.randomUUID());
+		
+		// Create court returned by courtRepository.save();
+		Court courtWithId = new Court("Court");
+		UUID id = UUID.randomUUID();
+		courtWithId.setId(id);
 		
 		// Mock the repository
 		when(courtRepository.existsByNameAndDeleted(court.getName(), false)).thenReturn(false);
-		when(courtRepository.save(any(Court.class))).thenReturn(court);
+		when(courtRepository.save(court)).thenReturn(courtWithId);
 		
 		// Service call
 		Court savedCourt = courtService.create(court, Locale.US);
 		
 		// Assertions
 		assertDoesNotThrow(() -> courtService.create(court, Locale.US));
-		assertEquals(court.hashCode(), savedCourt.hashCode());
+		assertEquals(courtWithId.hashCode(), savedCourt.hashCode());
 		
 		// Verifications
 		verify(courtRepository, times(2)).existsByNameAndDeleted(court.getName(), false);
-		verify(courtRepository, times(2)).save(any(Court.class));
+		verify(courtRepository, times(2)).save(court);
+		
 	}
 	
 	@Test
 	public void createTest_ExistingCourt_ShouldCauseCourtExistsException() {
 		// Create a court
 		Court court = new Court("Court");
-		court.setId(UUID.randomUUID());
 		
 		// Mock the repository
 		when(courtRepository.existsByNameAndDeleted(court.getName(), false)).thenReturn(true);
-				
+		
 		// Assertions
 		assertThrows(CourtExistsException.class, () -> courtService.create(court, Locale.US));
 		
 		// Verifications
 		verify(courtRepository, times(1)).existsByNameAndDeleted(court.getName(), false);
-		verify(courtRepository, times(0)).save(any(Court.class));
+		verify(courtRepository, times(0)).save(court);
+		
+	}
+	
+	@Test
+	public void addTest_ExistingCourt_ShouldCauseCourtExistsException() {
+		// Create a court
+		Court court = new Court("Court");
+		
+		// Generate random parent ID
+		UUID id = UUID.randomUUID();
+		
+		// Mock the repository
+		when(courtRepository.findByIdAndDeletedAndActive(id, false, true)).thenReturn(Optional.of(new Court("Parent")));
+		when(courtRepository.existsByNameAndDeleted(court.getName(), false)).thenReturn(true);
+		
+		// Assertions
+		assertThrows(CourtExistsException.class, () -> courtService.add(id, court, Locale.US));
+		
+		// Verifications
+		verify(courtRepository, times(0)).save(court);
+	}
+	
+	@Test
+	public void addTest_NotExistingParentCourt_ShouldCauseCourtNotFoundException() {
+		// Create a court
+		Court court = new Court("Court");
+		
+		// Generate random parent ID
+		UUID id = UUID.randomUUID();
+		
+		// Mock the repository
+		when(courtRepository.findByIdAndDeletedAndActive(id, false, true)).thenReturn(Optional.empty());
+		
+		// Assertions
+		assertThrows(CourtNotFoundException.class, () -> courtService.add(id, court, Locale.US));
+		
+		// Verifications
+		verify(courtRepository, times(0)).save(court);
+	}
+	
+	@Test
+	public void addTest_ExistingParentAndNotExistingCourt_ShouldNotCauseException() {
+		// Create a court
+		Court court = new Court("Court");
+		
+		// Generate random parent ID
+		UUID id = UUID.randomUUID();
+		
+		// Create parent
+		Court parent = new Court("Parent");
+		parent.setId(id);
+		
+		// Mock the repository
+		when(courtRepository.findByIdAndDeletedAndActive(id, false, true)).thenReturn(Optional.of(parent));
+		when(courtRepository.existsByNameAndDeleted(court.getName(), false)).thenReturn(false);
+		
+		// Assertions
+		assertDoesNotThrow(() -> courtService.add(id, court, Locale.US));
+		
+		// Verifications
+		verify(courtRepository, times(1)).save(court);
 	}
 	
 	@Test
