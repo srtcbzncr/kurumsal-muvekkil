@@ -12,7 +12,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -30,7 +29,6 @@ import com.bzncrsrtc.kurumsalmuvekkil.exceptions.CompanyNotFoundException;
 import com.bzncrsrtc.kurumsalmuvekkil.mappers.RequestMapper;
 import com.bzncrsrtc.kurumsalmuvekkil.mappers.ResponseMapper;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Company;
-import com.bzncrsrtc.kurumsalmuvekkil.models.Subscription;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateCompanyRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateCompanyRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.services.CompanyService;
@@ -149,7 +147,7 @@ class CompanyControllerTest {
 	}
 		
 	@Test
-	public void createTest_ExistingCompanyName_ShouldReturn201() throws Exception {
+	public void createTest_NotExistingCompanyName_ShouldReturn201() throws Exception {
 		// Create a company
 		Company company = new Company("Company 1");
 		
@@ -180,7 +178,7 @@ class CompanyControllerTest {
 	}
 	
 	@Test
-	public void createTest_NotExistingCompanyName_ShouldReturn201() throws Exception {
+	public void createTest_ExistingCompanyName_ShouldReturn409() throws Exception {
 		// Create a company
 		Company company = new Company("Company 1");
 		

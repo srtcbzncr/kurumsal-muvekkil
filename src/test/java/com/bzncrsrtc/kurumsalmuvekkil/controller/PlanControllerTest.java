@@ -1,7 +1,6 @@
 package com.bzncrsrtc.kurumsalmuvekkil.controller;
 
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
@@ -26,11 +25,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.bzncrsrtc.kurumsalmuvekkil.configurations.TestConfig;
 import com.bzncrsrtc.kurumsalmuvekkil.controllers.PlanController;
-import com.bzncrsrtc.kurumsalmuvekkil.exceptions.CompanyNotFoundException;
 import com.bzncrsrtc.kurumsalmuvekkil.exceptions.PlanNotFoundException;
 import com.bzncrsrtc.kurumsalmuvekkil.mappers.RequestMapper;
 import com.bzncrsrtc.kurumsalmuvekkil.mappers.ResponseMapper;
-import com.bzncrsrtc.kurumsalmuvekkil.models.Company;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Plan;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Subscription;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreatePlanRequest;

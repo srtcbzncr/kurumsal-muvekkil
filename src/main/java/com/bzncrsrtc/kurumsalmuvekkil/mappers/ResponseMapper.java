@@ -34,8 +34,6 @@ public interface ResponseMapper {
 	GetCompanyResponse getCompanyResponse(Company company);
 	List<GetCompanyResponse> getCompanyListResponse(List<Company> companies);
 	
-	@Mapping(target="parentId", source="parent.id")
-	@Mapping(target="parentName", source="parent.name")
 	GetCourtResponse getCourtResponse(Court court);
 	List<GetCourtResponse> getCourtListResponse(List<Court> courts);
 	GetCourtWithoutParentResponse getCourtWithoutParentResponse(Court court);
