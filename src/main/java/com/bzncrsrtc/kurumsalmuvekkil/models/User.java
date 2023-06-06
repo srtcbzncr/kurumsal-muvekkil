@@ -12,8 +12,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@RequiredArgsConstructor
 @Entity(name="users")
 public class User {
 
@@ -21,13 +26,20 @@ public class User {
 	@GeneratedValue(strategy=GenerationType.UUID)
 	private UUID id;
 	
-	@Column(name="username", unique=true)
+	@NonNull
+	@Column(name="email", unique=true, nullable=false)
+	private String email;
+	
+	@NonNull
+	@Column(name="username", unique=true, nullable=false)
 	private String username;
 	
-	@Column(name="password")
+	@NonNull
+	@Column(name="password", nullable=false)
 	private String password;
 	
-	@Column(name="role")
+	@NonNull
+	@Column(name="role", nullable=false)
 	private String role;
 	
 	@Column(name="is_new")

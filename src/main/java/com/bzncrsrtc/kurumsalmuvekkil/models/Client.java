@@ -18,8 +18,13 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@RequiredArgsConstructor
 @Entity(name="clients")
 public class Client {
 
@@ -27,23 +32,24 @@ public class Client {
 	@GeneratedValue(strategy=GenerationType.UUID)
 	private UUID id;
 	
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne(cascade=CascadeType.REMOVE)
 	@JoinColumn(name="user_id", referencedColumnName="id")
 	private User user;
 	
-	@Column(name="identification_number", unique=true)
+	@NonNull
+	@Column(name="identification_number", unique=true, nullable=false)
 	private String identificationNumber;
 	
-	@Column(name="first_name")
+	@NonNull
+	@Column(name="first_name", nullable=false)
 	private String firstName;
 	
-	@Column(name="last_name")
+	@NonNull
+	@Column(name="last_name", nullable=false)
 	private String lastName;
 	
-	@Column(name="email", unique=true)
-	private String email;
-	
-	@Column(name="phone", unique=true)
+	@NonNull
+	@Column(name="phone", unique=true, nullable=false)
 	private String phone;
 	
 	@ManyToMany()

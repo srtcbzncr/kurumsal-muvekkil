@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.bzncrsrtc.kurumsalmuvekkil.exceptions.EmailAlreadyUsedException;
+import com.bzncrsrtc.kurumsalmuvekkil.exceptions.IdentificationNumberAlreadyUsedException;
+import com.bzncrsrtc.kurumsalmuvekkil.exceptions.PhoneNumberAlreadyUsedException;
+import com.bzncrsrtc.kurumsalmuvekkil.exceptions.UsernameAlreadyUsedException;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.ErrorResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.ResponseHandler;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.ValidationErrorResponse;
@@ -45,6 +49,38 @@ public class GeneralExceptionHandler {
 	        errors.add(validationError);
 	    });
 	    return ResponseHandler.generateValidationErrorResponse(null, HttpStatus.BAD_REQUEST, errors);
+	}
+	
+	@ResponseStatus(HttpStatus.CONFLICT)
+	@ExceptionHandler(IdentificationNumberAlreadyUsedException.class)
+	public ResponseEntity<Object> handleIdentificationNumberAlreadyUsedException(IdentificationNumberAlreadyUsedException exception){
+		ErrorResponse response = new ErrorResponse(HttpStatus.CONFLICT.name(), exception.getMessage());
+		
+		return ResponseHandler.generateResponse(null, HttpStatus.CONFLICT, response);
+	}
+	
+	@ResponseStatus(HttpStatus.CONFLICT)
+	@ExceptionHandler(PhoneNumberAlreadyUsedException.class)
+	public ResponseEntity<Object> handlePhoneNumberAlreadyUsedException(PhoneNumberAlreadyUsedException exception){
+		ErrorResponse response = new ErrorResponse(HttpStatus.CONFLICT.name(), exception.getMessage());
+		
+		return ResponseHandler.generateResponse(null, HttpStatus.CONFLICT, response);
+	}
+	
+	@ResponseStatus(HttpStatus.CONFLICT)
+	@ExceptionHandler(UsernameAlreadyUsedException.class)
+	public ResponseEntity<Object> handleUsernameAlreadyUsedException(UsernameAlreadyUsedException exception){
+		ErrorResponse response = new ErrorResponse(HttpStatus.CONFLICT.name(), exception.getMessage());
+		
+		return ResponseHandler.generateResponse(null, HttpStatus.CONFLICT, response);
+	}
+	
+	@ResponseStatus(HttpStatus.CONFLICT)
+	@ExceptionHandler(EmailAlreadyUsedException.class)
+	public ResponseEntity<Object> handleEmailAlreadyUsedException(EmailAlreadyUsedException exception){
+		ErrorResponse response = new ErrorResponse(HttpStatus.CONFLICT.name(), exception.getMessage());
+		
+		return ResponseHandler.generateResponse(null, HttpStatus.CONFLICT, response);
 	}
 	
 }

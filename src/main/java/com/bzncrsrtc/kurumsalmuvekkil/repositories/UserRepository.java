@@ -1,0 +1,23 @@
+package com.bzncrsrtc.kurumsalmuvekkil.repositories;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.bzncrsrtc.kurumsalmuvekkil.models.User;
+
+public interface UserRepository extends JpaRepository<User, UUID>{
+	List<User> findAllByDeleted(boolean deleted);
+	List<User> findAllByActive(boolean active);
+	List<User> findAllByDeletedAndActive(boolean deleted, boolean active);
+	Optional<User> findByIdAndDeleted(UUID id, boolean deleted);
+	Optional<User> findByIdAndActive(UUID id, boolean active);
+	Optional<User> findByIdAndDeletedAndActive(UUID id, boolean deleted, boolean active);
+	Optional<User> findByEmailAndDeletedAndActive(String email, boolean deleted, boolean active);
+	Optional<User> findByUsernameAndDeletedAndActive(String username, boolean deleted, boolean active);
+	boolean existsByUsernameAndDeleted(String username, boolean deleted);
+	boolean existsByEmailAndDeleted(String email, boolean deleted);
+	boolean existsByIdAndDeleted(UUID id, boolean deleted);	
+}
