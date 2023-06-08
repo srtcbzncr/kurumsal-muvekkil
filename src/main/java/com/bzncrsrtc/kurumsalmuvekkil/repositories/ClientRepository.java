@@ -15,8 +15,9 @@ public interface ClientRepository extends JpaRepository<Client, UUID> {
 	Optional<Client> findByIdAndDeleted(UUID id, boolean deleted);
 	Optional<Client> findByIdAndActive(UUID id, boolean active);
 	Optional<Client> findByIdAndDeletedAndActive(UUID id, boolean deleted, boolean active);
-	boolean existsByNameAndDeleted(String name, boolean deleted);
 	boolean existsByIdAndDeleted(UUID id, boolean deleted);
-	boolean existsByIdentificationNumber(String identificationNumber);
-	boolean existsByPhone(String phone);
+	boolean existsByIdentificationNumberAndDeleted(String identificationNumber, boolean deleted);
+	boolean existsByPhoneAndDeleted(String phone, boolean deleted);
+	boolean existsByIdentificationNumberAndDeletedAndIdNot(String identificationNumber, boolean deleted, UUID id);
+	boolean existsByPhoneAndDeletedAndIdNot(String phone, boolean deleted, UUID id);
 }

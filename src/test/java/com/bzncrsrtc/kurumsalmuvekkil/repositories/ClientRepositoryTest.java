@@ -9,19 +9,21 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import com.bzncrsrtc.kurumsalmuvekkil.models.Client;
 
+@DataJpaTest
 class ClientRepositoryTest {
 
 	@Autowired
 	private ClientRepository clientRepository;
 	
-	Client passiveClient = new Client("Identification Number", "Firstname", "Lastname", "Phone");
-	Client deletedClient = new Client("Identification Number", "Firstname", "Lastname", "Phone");
-	Client deletedAndPassiveClient = new Client("Identification Number", "Firstname", "Lastname", "Phone");
-	Client activeClient1 = new Client("Identification Number", "Firstname", "Lastname", "Phone");
-	Client activeClient2 = new Client("Identification Number", "Firstname", "Lastname", "Phone");
+	Client passiveClient = new Client("Identification Number1", "Firstname", "Lastname", "Phone1");
+	Client deletedClient = new Client("Identification Number2", "Firstname", "Lastname", "Phone2");
+	Client deletedAndPassiveClient = new Client("Identification Number3", "Firstname", "Lastname", "Phone3");
+	Client activeClient1 = new Client("Identification Number4", "Firstname", "Lastname", "Phone4");
+	Client activeClient2 = new Client("Identification Number5", "Firstname", "Lastname", "Phone5");
 	
 	@BeforeEach
 	public void init() {
