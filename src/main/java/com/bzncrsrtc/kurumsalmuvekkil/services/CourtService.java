@@ -112,39 +112,4 @@ public class CourtService {
 		court.setDeletedAt(LocalDateTime.now());
 		courtRepository.save(court);
 	}
-	
-	public Court getParent(UUID id, Locale locale) {
-		Optional<Court> optionalCourt = courtRepository.findByIdAndDeletedAndActive(id, false, true);
-		
-		if(optionalCourt.isEmpty()) {
-			throw new CourtNotFoundException(messageSource.getMessage("court.not.found.message", null, locale));
-		}
-		
-		Court parent = optionalCourt.get().getParent();
-		
-		return parent;
-	}
-	
-	public List<Court> getSubs(UUID id, Locale locale){
-		Optional<Court> optionalCourt = courtRepository.findByIdAndDeletedAndActive(id, false, true);
-		
-		if(optionalCourt.isEmpty()) {
-			throw new CourtNotFoundException(messageSource.getMessage("court.not.found.message", null, locale));
-		}
-		
-		List<Court> subs = optionalCourt.get().getSubs();
-		return subs;
-	}
-	
-	public List<File> getFiles(UUID id, Locale locale){
-		Optional<Court> optionalCourt = courtRepository.findByIdAndDeletedAndActive(id, false, true);
-		
-		if(optionalCourt.isEmpty()) {
-			throw new CourtNotFoundException(messageSource.getMessage("court.not.found.message", null, locale));
-		}
-		
-		List<File> files = optionalCourt.get().getFiles();
-		return files;
-	}
-	
 }

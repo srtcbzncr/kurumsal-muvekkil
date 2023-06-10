@@ -109,15 +109,4 @@ public class ClientController {
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
-	
-	@GetMapping("/{id}/files")
-	public ResponseEntity<Object> getFiles(@PathVariable UUID id, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
-		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
-		
-		List<File> files = clientService.getFiles(id, locale);
-		List<GetFileResponse> response = responseMapper.getFileListResponse(files);
-		
-		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
-	}
-	
 }

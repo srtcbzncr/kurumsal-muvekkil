@@ -13,11 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bzncrsrtc.kurumsalmuvekkil.exceptions.ClientNotFoundException;
-import com.bzncrsrtc.kurumsalmuvekkil.exceptions.EmailAlreadyUsedException;
 import com.bzncrsrtc.kurumsalmuvekkil.exceptions.IdentificationNumberAlreadyUsedException;
 import com.bzncrsrtc.kurumsalmuvekkil.exceptions.PhoneNumberAlreadyUsedException;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Client;
-import com.bzncrsrtc.kurumsalmuvekkil.models.File;
 import com.bzncrsrtc.kurumsalmuvekkil.models.User;
 import com.bzncrsrtc.kurumsalmuvekkil.repositories.ClientRepository;
 
@@ -113,15 +111,4 @@ public class ClientService {
 		
 		return client.get().getUser();
 	}
-	
-	public List<File> getFiles(UUID id, Locale locale){
-		Optional<Client> client = clientRepository.findByIdAndDeleted(id, false);
-		
-		if(client.isEmpty()) {
-			throw new ClientNotFoundException(messageSource.getMessage("client.not.found.message", null, locale));
-		}
-		
-		return client.get().getFiles();
-	}
-
 }

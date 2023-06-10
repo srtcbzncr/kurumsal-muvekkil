@@ -96,15 +96,4 @@ public class PlanController {
 		
 		return ResponseHandler.generateResponse(null, HttpStatus.OK, null);
 	}
-	
-	@GetMapping("/{id}/subscriptions")
-	public ResponseEntity<Object> getSubscriptions(@PathVariable UUID id, @RequestHeader(name = "Accept_Language", required = false) String localeStr){
-		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
-		
-		List<Subscription> subscriptions = planService.getSubscriptions(id, locale);
-		List<GetSubscriptionWithoutPlanResponse> response = responseMapper.getSubscriptionWithoutPlanListResponse(subscriptions);
-		
-		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
-	}
-
 }

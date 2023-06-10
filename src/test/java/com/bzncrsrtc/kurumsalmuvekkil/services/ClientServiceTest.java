@@ -302,37 +302,4 @@ class ClientServiceTest {
 		verify(clientRepository, times(1)).findByIdAndDeleted(id, false);
 		
 	}
-	
-	@Test
-	public void getFiles_ExistingClient_ShouldNotCauseException() {
-		// Create an id
-		UUID id = UUID.randomUUID();
-		
-		// Mock the repository
-		when(clientRepository.findByIdAndDeleted(id, false)).thenReturn(Optional.of(new Client()));
-		
-		// Assertions
-		assertDoesNotThrow(() -> clientService.getFiles(id, Locale.US));
-		
-		// Verifications
-		verify(clientRepository, times(1)).findByIdAndDeleted(id, false);
-		
-	}
-	
-	@Test
-	public void getFiles_NotExistingClient_ShouldCauseClientNotFoundException() {
-		// Create an id
-		UUID id = UUID.randomUUID();
-		
-		// Mock the repository
-		when(clientRepository.findByIdAndDeleted(id, false)).thenReturn(Optional.empty());
-		
-		// Assertions
-		assertThrows(ClientNotFoundException.class, () -> clientService.getFiles(id, Locale.US));
-		
-		// Verifications
-		verify(clientRepository, times(1)).findByIdAndDeleted(id, false);
-		
-	}
-
 }

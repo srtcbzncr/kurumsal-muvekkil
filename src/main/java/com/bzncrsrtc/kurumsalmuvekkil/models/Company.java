@@ -34,8 +34,8 @@ public class Company {
 	@Column(name="name", unique=true)
 	private String name;
 	
-	@OneToOne(mappedBy="company", cascade=CascadeType.ALL)
-	private Subscription subscription;
+	@OneToMany(mappedBy="company", cascade=CascadeType.ALL)
+	private List<Subscription> subscriptions;
 	
 	@OneToMany(mappedBy="company", cascade=CascadeType.ALL)
 	private List<Lawyer> lawyers;

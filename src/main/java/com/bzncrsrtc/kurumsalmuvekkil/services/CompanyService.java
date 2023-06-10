@@ -81,39 +81,5 @@ public class CompanyService {
 		company.setDeleted(true);
 		company.setDeletedAt(LocalDateTime.now());
 		companyRepository.save(company);
-	}
-	
-	public Subscription getSubscription(UUID companyId, Locale locale) {
-		Optional<Company> company = companyRepository.findByIdAndDeletedAndActive(companyId, false, true);
-
-		if(company.isEmpty()) {
-			throw new CompanyNotFoundException(messageSource.getMessage("company.not.found.message", null, locale));
-		}
-		
-		Subscription subscription = company.get().getSubscription();
-		return subscription;
-	}
-	
-	public List<Lawyer> getLawyers(UUID companyId, Locale locale){
-		Optional<Company> company = companyRepository.findByIdAndDeletedAndActive(companyId, false, true);
-
-		if(company.isEmpty()) {
-			throw new CompanyNotFoundException(messageSource.getMessage("company.not.found.message", null, locale));
-		}
-		
-		List<Lawyer> lawyers = company.get().getLawyers();
-		return lawyers;
-	}
-	
-	public List<File> getFiles(UUID companyId, Locale locale){
-		Optional<Company> company = companyRepository.findByIdAndDeletedAndActive(companyId, false, true);
-
-		if(company.isEmpty()) {
-			throw new CompanyNotFoundException(messageSource.getMessage("company.not.found.message", null, locale));
-		}
-		
-		List<File> files = company.get().getFiles();
-		return files;
-	}
-	
+	}	
 }

@@ -336,42 +336,4 @@ class PlanControllerTest {
 				.andExpect(jsonPath("$.error.message").value("Test"))
 				.andExpect(jsonPath("$.status").value(404));
 	}
-	
-	@Test
-	public void getSubscriptionTest_ExistingPlan_ShouldReturn200() throws Exception {
-		// Create random id
-		UUID id = UUID.randomUUID();
-		
-		when(planService.getSubscriptions(any(), any())).thenReturn(List.of(new Subscription(), new Subscription()));
-		
-		// Perform request
-				mockMvc.perform(get("/plan/{id}/subscriptions", id)
-						        .accept(MediaType.APPLICATION_JSON))
-						.andExpect(status().isOk())
-						.andExpect(jsonPath("$.data").isNotEmpty())
-						.andExpect(jsonPath("$.error").isEmpty())
-						.andExpect(jsonPath("$.status").value(200));
-	}
-
-	@Test
-	public void getSubscriptionTest_NotExistingPlan_ShouldReturn404() throws Exception {
-		// Create random id
-		UUID id = UUID.randomUUID();
-		
-		// Mock the service
-		when(planService.getSubscriptions(any(), any())).thenThrow(new PlanNotFoundException("Test"));
-		
-		// Perform request
-		mockMvc.perform(get("/plan/{id}/subscriptions", id)
-				        .accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isNotFound())
-				.andExpect(jsonPath("$.data").isEmpty())
-				.andExpect(jsonPath("$.error").isNotEmpty())
-				.andExpect(jsonPath("$.error.type").exists())
-				.andExpect(jsonPath("$.error.message").value("Test"))
-				.andExpect(jsonPath("$.status").value(404));
-	}
-	
-	
-
 }

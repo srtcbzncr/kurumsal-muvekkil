@@ -101,34 +101,4 @@ public class CompanyController {
 		return ResponseHandler.generateResponse(null, HttpStatus.OK, null);
 	}
 	
-	@GetMapping("/{id}/subscription")
-	public ResponseEntity<Object> getSubscription(@PathVariable UUID id, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
-		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
-		
-		Subscription subscription = companyService.getSubscription(id, locale);
-		GetSubscriptionResponse response = responseMapper.getSubscriptionResponse(subscription);
-		
-		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
-	}
-	
-	@GetMapping("/{id}/lawyers")
-	public ResponseEntity<Object> getLawyers(@PathVariable UUID id, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
-		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
-		
-		List<Lawyer> lawyers = companyService.getLawyers(id, locale);
-		List<GetLawyerResponse> response = responseMapper.getLawyerListResponse(lawyers);
-		
-		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
-	}
-	
-	@GetMapping("/{id}/files")
-	public ResponseEntity<Object> getFiles(@PathVariable UUID id, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
-		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
-		
-		List<File> files = companyService.getFiles(id, locale);
-		List<GetFileResponse> response = responseMapper.getFileListResponse(files);
-		
-		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
-	}
-	
 }

@@ -205,35 +205,4 @@ class PlanServiceTest {
 		verify(planRepository, times(1)).findByIdAndDeleted(id, false);
 		verify(planRepository, times(0)).save(any(Plan.class));	
 	}
-	
-	@Test
-	public void getSubscriptionsTest_ExistingPlan_ShouldNotCausePlanNotFoundException() {
-		// Create a random UUID
-		UUID id = UUID.randomUUID();
-		
-		// Mock the repository
-		when(planRepository.findByIdAndDeletedAndActive(id, false, true)).thenReturn(Optional.of(new Plan()));
-		
-		// Assertions
-		assertDoesNotThrow(() -> planService.getSubscriptions(id, Locale.US));
-		
-		// Verifications
-		verify(planRepository, times(1)).findByIdAndDeletedAndActive(id, false, true);
-	}
-	
-	@Test
-	public void getSubscriptionsTest_NotExistingPlan_ShouldCausePlanNotFoundException() {
-		// Create a random UUID
-		UUID id = UUID.randomUUID();
-		
-		// Mock the repository
-		when(planRepository.findByIdAndDeletedAndActive(id, false, true)).thenReturn(Optional.empty());
-		
-		// Assertions
-		assertThrows(PlanNotFoundException.class, () -> planService.getSubscriptions(id, Locale.US));
-		
-		// Verifications
-		verify(planRepository, times(1)).findByIdAndDeletedAndActive(id, false, true);
-	}
-	
 }

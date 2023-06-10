@@ -110,35 +110,4 @@ public class CourtController {
 		
 		return ResponseHandler.generateResponse(null, HttpStatus.OK, null);
 	}
-	
-	@GetMapping("/{id}/parent")
-	public ResponseEntity<Object> getParent(@RequestHeader(name = "Accept-Language", required = false) String localeStr, @PathVariable UUID id){
-		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
-		
-		Court parent = courtService.getParent(id, locale);
-		GetCourtResponse response = responseMapper.getCourtResponse(parent);
-		
-		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
-	}
-	
-	@GetMapping("/{id}/subs")
-	public ResponseEntity<Object> getSubs(@RequestHeader(name = "Accept-Language", required = false) String localeStr, @PathVariable UUID id){
-		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
-		
-		List<Court> subs = courtService.getSubs(id, locale);
-		List<GetCourtWithoutParentResponse> response = responseMapper.getCourtWithoutParentListResponse(subs);
-		
-		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
-	}
-	
-	@GetMapping("/{id}/files")
-	public ResponseEntity<Object> getFiles(@RequestHeader(name = "Accept-Language", required = false) String localeStr, @PathVariable UUID id){
-		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
-		
-		List<File> files = courtService.getFiles(id, locale);
-		List<GetFileWithoutCourtResponse> response = responseMapper.getFileWithoutCourtListResponse(files);
-		
-		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
-	}
-	
 }

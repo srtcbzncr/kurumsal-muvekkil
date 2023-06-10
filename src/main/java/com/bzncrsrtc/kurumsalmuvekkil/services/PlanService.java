@@ -75,16 +75,4 @@ public class PlanService {
 		plan.setDeletedAt(LocalDateTime.now());
 		planRepository.save(plan);
 	}
-	
-	public List<Subscription> getSubscriptions(UUID planId, Locale locale){
-		Optional<Plan> plan = planRepository.findByIdAndDeletedAndActive(planId, false, true);
-		
-		if(plan.isEmpty()) {
-			throw new PlanNotFoundException(messageSource.getMessage("plan.not.found.message", null, locale));
-		}
-		
-		List<Subscription> subscriptions = plan.get().getSubscriptions();
-		return subscriptions;
-	}
-	
 }
