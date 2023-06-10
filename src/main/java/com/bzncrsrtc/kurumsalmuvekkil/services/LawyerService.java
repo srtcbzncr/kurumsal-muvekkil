@@ -12,9 +12,11 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bzncrsrtc.kurumsalmuvekkil.exceptions.ClientNotFoundException;
 import com.bzncrsrtc.kurumsalmuvekkil.exceptions.IdentificationNumberAlreadyUsedException;
 import com.bzncrsrtc.kurumsalmuvekkil.exceptions.LawyerNotFoundException;
 import com.bzncrsrtc.kurumsalmuvekkil.exceptions.PhoneNumberAlreadyUsedException;
+import com.bzncrsrtc.kurumsalmuvekkil.models.Client;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Lawyer;
 import com.bzncrsrtc.kurumsalmuvekkil.models.User;
 import com.bzncrsrtc.kurumsalmuvekkil.repositories.LawyerRepository;
@@ -100,6 +102,16 @@ public class LawyerService {
 		lawyer.setDeleted(true);
 		lawyer.setDeletedAt(LocalDateTime.now());
 		lawyerRepository.save(lawyer);
+	}
+	
+	public User getUser(UUID id, Locale locale) {
+		Optional<Lawyer> lawyer = lawyerRepository.findByIdAndDeleted(id, false);
+		
+		if(lawyer.isEmpty()) {
+			throw new LawyerNotFoundException(messageSource.getMessage("lawyer.not.found.message", null, locale));
+		}
+		
+		return lawyer.get().getUser();
 	}
 	
 }
