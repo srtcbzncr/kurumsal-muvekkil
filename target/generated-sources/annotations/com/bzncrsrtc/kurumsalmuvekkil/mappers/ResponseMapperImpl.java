@@ -8,6 +8,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.models.Lawyer;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Plan;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Subscription;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Update;
+import com.bzncrsrtc.kurumsalmuvekkil.models.User;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetClientResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCompanyResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCourtResponse;
@@ -19,6 +20,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.responses.GetPlanResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetSubscriptionResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetSubscriptionWithoutPlanResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetUpdateResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.GetUserResponse;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Component;
@@ -26,7 +28,7 @@ import org.springframework.stereotype.Component;
 /*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-06-06T22:29:12+0300",
+    date = "2023-06-11T00:20:32+0300",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.33.0.v20230218-1114, environment: Java 17.0.6 (Eclipse Adoptium)"
 )
 */
@@ -375,6 +377,36 @@ public class ResponseMapperImpl implements ResponseMapper {
         List<GetUpdateResponse> list = new ArrayList<GetUpdateResponse>( updates.size() );
         for ( Update update : updates ) {
             list.add( getUpdateResponse( update ) );
+        }
+
+        return list;
+    }
+
+    @Override
+    public GetUserResponse getUserResponse(User user) {
+        if ( user == null ) {
+            return null;
+        }
+
+        GetUserResponse getUserResponse = new GetUserResponse();
+
+        getUserResponse.setEmail( user.getEmail() );
+        getUserResponse.setId( user.getId() );
+        getUserResponse.setRole( user.getRole() );
+        getUserResponse.setUsername( user.getUsername() );
+
+        return getUserResponse;
+    }
+
+    @Override
+    public List<GetUserResponse> getUserListResponse(List<User> users) {
+        if ( users == null ) {
+            return null;
+        }
+
+        List<GetUserResponse> list = new ArrayList<GetUserResponse>( users.size() );
+        for ( User user : users ) {
+            list.add( getUserResponse( user ) );
         }
 
         return list;

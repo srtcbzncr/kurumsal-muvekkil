@@ -1,20 +1,26 @@
 package com.bzncrsrtc.kurumsalmuvekkil.mappers;
 
+import com.bzncrsrtc.kurumsalmuvekkil.models.Client;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Company;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Court;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Plan;
+import com.bzncrsrtc.kurumsalmuvekkil.models.User;
+import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateClientRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateCompanyRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateCourtRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreatePlanRequest;
+import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateUserRequest;
+import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateClientRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateCompanyRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateCourtRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdatePlanRequest;
+import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateUserRequest;
 import org.springframework.stereotype.Component;
 
 /*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-06-02T15:02:53+0300",
+    date = "2023-06-10T21:50:51+0300",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.33.0.v20230218-1114, environment: Java 17.0.6 (Eclipse Adoptium)"
 )
 */
@@ -205,5 +211,141 @@ public class RequestMapperImpl implements RequestMapper {
         updateCourtRequest.setName( court.getName() );
 
         return updateCourtRequest;
+    }
+
+    @Override
+    public User fromCreateUserRequestToUser(CreateUserRequest createUserRequest) {
+        if ( createUserRequest == null ) {
+            return null;
+        }
+
+        User user = new User();
+
+        user.setEmail( createUserRequest.getEmail() );
+        user.setPassword( createUserRequest.getPassword() );
+        user.setRole( createUserRequest.getRole() );
+        user.setUsername( createUserRequest.getUsername() );
+
+        return user;
+    }
+
+    @Override
+    public User fromUpdateUserRequestToUser(UpdateUserRequest updateUserRequest) {
+        if ( updateUserRequest == null ) {
+            return null;
+        }
+
+        User user = new User();
+
+        user.setEmail( updateUserRequest.getEmail() );
+        user.setId( updateUserRequest.getId() );
+        user.setPassword( updateUserRequest.getPassword() );
+        user.setRole( updateUserRequest.getRole() );
+        user.setUsername( updateUserRequest.getUsername() );
+
+        return user;
+    }
+
+    @Override
+    public CreateUserRequest fromUserToCreateUserRequest(User user) {
+        if ( user == null ) {
+            return null;
+        }
+
+        CreateUserRequest createUserRequest = new CreateUserRequest();
+
+        createUserRequest.setEmail( user.getEmail() );
+        createUserRequest.setPassword( user.getPassword() );
+        createUserRequest.setRole( user.getRole() );
+        createUserRequest.setUsername( user.getUsername() );
+
+        return createUserRequest;
+    }
+
+    @Override
+    public UpdateUserRequest fromUserToUpdateUserRequest(User user) {
+        if ( user == null ) {
+            return null;
+        }
+
+        UpdateUserRequest updateUserRequest = new UpdateUserRequest();
+
+        updateUserRequest.setEmail( user.getEmail() );
+        updateUserRequest.setId( user.getId() );
+        updateUserRequest.setPassword( user.getPassword() );
+        updateUserRequest.setRole( user.getRole() );
+        updateUserRequest.setUsername( user.getUsername() );
+
+        return updateUserRequest;
+    }
+
+    @Override
+    public Client fromCreateClientRequestToClient(CreateClientRequest createClientRequest) {
+        if ( createClientRequest == null ) {
+            return null;
+        }
+
+        Client client = new Client();
+
+        client.setFirstName( createClientRequest.getFirstName() );
+        client.setIdentificationNumber( createClientRequest.getIdentificationNumber() );
+        client.setLastName( createClientRequest.getLastName() );
+        client.setPhone( createClientRequest.getPhone() );
+        client.setUser( fromCreateUserRequestToUser( createClientRequest.getUser() ) );
+
+        return client;
+    }
+
+    @Override
+    public Client fromUpdateClientRequestToClient(UpdateClientRequest updateClientRequest) {
+        if ( updateClientRequest == null ) {
+            return null;
+        }
+
+        Client client = new Client();
+
+        client.setFirstName( updateClientRequest.getFirstName() );
+        client.setId( updateClientRequest.getId() );
+        client.setIdentificationNumber( updateClientRequest.getIdentificationNumber() );
+        client.setLastName( updateClientRequest.getLastName() );
+        client.setPhone( updateClientRequest.getPhone() );
+        client.setUser( fromUpdateUserRequestToUser( updateClientRequest.getUser() ) );
+
+        return client;
+    }
+
+    @Override
+    public CreateClientRequest fromClientToCreateClientRequest(Client client) {
+        if ( client == null ) {
+            return null;
+        }
+
+        CreateClientRequest createClientRequest = new CreateClientRequest();
+
+        createClientRequest.setFirstName( client.getFirstName() );
+        createClientRequest.setIdentificationNumber( client.getIdentificationNumber() );
+        createClientRequest.setLastName( client.getLastName() );
+        createClientRequest.setPhone( client.getPhone() );
+        createClientRequest.setUser( fromUserToCreateUserRequest( client.getUser() ) );
+
+        return createClientRequest;
+    }
+
+    @Override
+    public UpdateClientRequest fromClientToUpdateClientRequest(Client client) {
+        if ( client == null ) {
+            return null;
+        }
+
+        UpdateClientRequest updateClientRequest = new UpdateClientRequest();
+
+        updateClientRequest.setFirstName( client.getFirstName() );
+        updateClientRequest.setId( client.getId() );
+        updateClientRequest.setIdentificationNumber( client.getIdentificationNumber() );
+        updateClientRequest.setLastName( client.getLastName() );
+        updateClientRequest.setPhone( client.getPhone() );
+        updateClientRequest.setUser( fromUserToUpdateUserRequest( client.getUser() ) );
+
+        return updateClientRequest;
     }
 }

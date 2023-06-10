@@ -13,6 +13,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.models.Lawyer;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Plan;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Subscription;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Update;
+import com.bzncrsrtc.kurumsalmuvekkil.models.User;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetClientResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCompanyResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCourtResponse;
@@ -24,6 +25,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.responses.GetPlanResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetSubscriptionResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetSubscriptionWithoutPlanResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetUpdateResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.GetUserResponse;
 
 @Mapper(componentModel = "spring")
 public interface ResponseMapper {
@@ -58,5 +60,8 @@ public interface ResponseMapper {
 	
 	GetUpdateResponse getUpdateResponse(Update update);
 	List<GetUpdateResponse> getUpdateListResponse(List<Update> updates);
+	
+	GetUserResponse getUserResponse(User user);
+	List<GetUserResponse> getUserListResponse(List<User> users);
 	
 }
