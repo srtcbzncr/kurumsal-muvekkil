@@ -3,16 +3,19 @@ package com.bzncrsrtc.kurumsalmuvekkil.mappers;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Client;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Company;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Court;
+import com.bzncrsrtc.kurumsalmuvekkil.models.Lawyer;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Plan;
 import com.bzncrsrtc.kurumsalmuvekkil.models.User;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateClientRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateCompanyRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateCourtRequest;
+import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateLawyerRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreatePlanRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateUserRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateClientRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateCompanyRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateCourtRequest;
+import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateLawyerRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdatePlanRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateUserRequest;
 import org.springframework.stereotype.Component;
@@ -20,7 +23,7 @@ import org.springframework.stereotype.Component;
 /*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-06-11T00:31:13+0300",
+    date = "2023-06-11T19:04:11+0300",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.33.0.v20230218-1114, environment: Java 17.0.6 (Eclipse Adoptium)"
 )
 */
@@ -347,5 +350,79 @@ public class RequestMapperImpl implements RequestMapper {
         updateClientRequest.setUser( fromUserToUpdateUserRequest( client.getUser() ) );
 
         return updateClientRequest;
+    }
+
+    @Override
+    public Lawyer fromCreateLawyerRequestToLawyer(CreateLawyerRequest createLawyerRequest) {
+        if ( createLawyerRequest == null ) {
+            return null;
+        }
+
+        Lawyer lawyer = new Lawyer();
+
+        lawyer.setFirstName( createLawyerRequest.getFirstName() );
+        lawyer.setIdentificationNumber( createLawyerRequest.getIdentificationNumber() );
+        lawyer.setLastName( createLawyerRequest.getLastName() );
+        lawyer.setPhone( createLawyerRequest.getPhone() );
+        lawyer.setTitle( createLawyerRequest.getTitle() );
+        lawyer.setUser( fromCreateUserRequestToUser( createLawyerRequest.getUser() ) );
+
+        return lawyer;
+    }
+
+    @Override
+    public Lawyer fromUpdateLawyerRequestToLawyer(UpdateLawyerRequest updateLawyerRequest) {
+        if ( updateLawyerRequest == null ) {
+            return null;
+        }
+
+        Lawyer lawyer = new Lawyer();
+
+        lawyer.setFirstName( updateLawyerRequest.getFirstName() );
+        lawyer.setId( updateLawyerRequest.getId() );
+        lawyer.setIdentificationNumber( updateLawyerRequest.getIdentificationNumber() );
+        lawyer.setLastName( updateLawyerRequest.getLastName() );
+        lawyer.setPhone( updateLawyerRequest.getPhone() );
+        lawyer.setTitle( updateLawyerRequest.getTitle() );
+        lawyer.setUser( fromUpdateUserRequestToUser( updateLawyerRequest.getUser() ) );
+
+        return lawyer;
+    }
+
+    @Override
+    public CreateLawyerRequest fromLawyerToCreateLawyerRequest(Lawyer lawyer) {
+        if ( lawyer == null ) {
+            return null;
+        }
+
+        CreateLawyerRequest createLawyerRequest = new CreateLawyerRequest();
+
+        createLawyerRequest.setFirstName( lawyer.getFirstName() );
+        createLawyerRequest.setIdentificationNumber( lawyer.getIdentificationNumber() );
+        createLawyerRequest.setLastName( lawyer.getLastName() );
+        createLawyerRequest.setPhone( lawyer.getPhone() );
+        createLawyerRequest.setTitle( lawyer.getTitle() );
+        createLawyerRequest.setUser( fromUserToCreateUserRequest( lawyer.getUser() ) );
+
+        return createLawyerRequest;
+    }
+
+    @Override
+    public UpdateLawyerRequest fromLawyerToUpdateLawyerRequest(Lawyer lawyer) {
+        if ( lawyer == null ) {
+            return null;
+        }
+
+        UpdateLawyerRequest updateLawyerRequest = new UpdateLawyerRequest();
+
+        updateLawyerRequest.setFirstName( lawyer.getFirstName() );
+        updateLawyerRequest.setId( lawyer.getId() );
+        updateLawyerRequest.setIdentificationNumber( lawyer.getIdentificationNumber() );
+        updateLawyerRequest.setLastName( lawyer.getLastName() );
+        updateLawyerRequest.setPhone( lawyer.getPhone() );
+        updateLawyerRequest.setTitle( lawyer.getTitle() );
+        updateLawyerRequest.setUser( fromUserToUpdateUserRequest( lawyer.getUser() ) );
+
+        return updateLawyerRequest;
     }
 }
