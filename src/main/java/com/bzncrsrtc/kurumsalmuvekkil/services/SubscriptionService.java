@@ -68,7 +68,7 @@ public class SubscriptionService {
 	}
 	
 	public void delete(UUID id, Locale locale) {
-		Optional<Subscription> optionalSubscription = subscriptionRepository.findByIdAndDeletedAndActive(id, false, true);
+		Optional<Subscription> optionalSubscription = subscriptionRepository.findByIdAndDeleted(id, false);
 		
 		if(optionalSubscription.isEmpty()) {
 			throw new SubscriptionNotFoundException(messageSource.getMessage("subscription.not.found.message", null, locale));

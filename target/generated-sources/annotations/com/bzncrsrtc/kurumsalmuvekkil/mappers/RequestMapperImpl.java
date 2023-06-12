@@ -7,6 +7,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.models.File;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Lawyer;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Plan;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Subscription;
+import com.bzncrsrtc.kurumsalmuvekkil.models.Update;
 import com.bzncrsrtc.kurumsalmuvekkil.models.User;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateClientRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateCompanyRequest;
@@ -15,6 +16,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateFileRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateLawyerRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreatePlanRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateSubscriptionRequest;
+import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateUpdateRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateUserRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateClientRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateCompanyRequest;
@@ -23,13 +25,14 @@ import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateFileRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateLawyerRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdatePlanRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateSubscriptionRequest;
+import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateUpdateRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateUserRequest;
 import org.springframework.stereotype.Component;
 
 /*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-06-12T17:23:38+0300",
+    date = "2023-06-12T20:34:23+0300",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.33.0.v20230218-1114, environment: Java 17.0.6 (Eclipse Adoptium)"
 )
 */
@@ -560,6 +563,59 @@ public class RequestMapperImpl implements RequestMapper {
         updateSubscriptionRequest.setId( subscription.getId() );
         updateSubscriptionRequest.setStartDate( subscription.getStartDate() );
         updateSubscriptionRequest.setType( subscription.getType() );
+
+        return updateSubscriptionRequest;
+    }
+
+    @Override
+    public Update fromCreateUpdateRequestToUpdate(CreateUpdateRequest createUpdateRequest) {
+        if ( createUpdateRequest == null ) {
+            return null;
+        }
+
+        Update update = new Update();
+
+        update.setContent( createUpdateRequest.getContent() );
+        update.setState( createUpdateRequest.getState() );
+
+        return update;
+    }
+
+    @Override
+    public Update fromUpdateUpdateRequestToUpdate(UpdateUpdateRequest updateUpdateRequest) {
+        if ( updateUpdateRequest == null ) {
+            return null;
+        }
+
+        Update update = new Update();
+
+        update.setContent( updateUpdateRequest.getContent() );
+        update.setId( updateUpdateRequest.getId() );
+        update.setState( updateUpdateRequest.getState() );
+
+        return update;
+    }
+
+    @Override
+    public CreateSubscriptionRequest fromUpdateToCreateUpdateRequest(Update update) {
+        if ( update == null ) {
+            return null;
+        }
+
+        CreateSubscriptionRequest createSubscriptionRequest = new CreateSubscriptionRequest();
+
+        return createSubscriptionRequest;
+    }
+
+    @Override
+    public UpdateSubscriptionRequest fromUpdateToUpdateUpdateRequest(Update update) {
+        if ( update == null ) {
+            return null;
+        }
+
+        UpdateSubscriptionRequest updateSubscriptionRequest = new UpdateSubscriptionRequest();
+
+        updateSubscriptionRequest.setId( update.getId() );
 
         return updateSubscriptionRequest;
     }

@@ -63,7 +63,7 @@ public class FileService {
 	}
 	
 	public void delete(UUID id, Locale locale) {
-		Optional<File> optionalFile = fileRepository.findByIdAndDeletedAndActive(id, false, true);
+		Optional<File> optionalFile = fileRepository.findByIdAndDeleted(id, false);
 		
 		if(optionalFile.isEmpty()) {
 			throw new FileNotFoundException(messageSource.getMessage("file.not.found.message", null, locale));

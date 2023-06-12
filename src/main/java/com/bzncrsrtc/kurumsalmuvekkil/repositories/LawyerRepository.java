@@ -7,7 +7,6 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.bzncrsrtc.kurumsalmuvekkil.models.Lawyer;
-import com.bzncrsrtc.kurumsalmuvekkil.models.Lawyer;
 
 public interface LawyerRepository extends JpaRepository<Lawyer, UUID> {
 	List<Lawyer> findAllByDeleted(boolean deleted);
