@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 public class CreateCourtRequest {
 	
-	@NotEmpty
+	@NotEmpty(message="{name.notNull}")
 	private String name;
 }

@@ -1,5 +1,6 @@
 package com.bzncrsrtc.kurumsalmuvekkil.requests;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -23,6 +24,7 @@ public class CreateClientRequest {
 	@Max(value=15, message="{phone.sizeError}")
 	private String phone;
 	
+	@Valid
 	private CreateUserRequest user;
 	
 }

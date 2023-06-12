@@ -2,6 +2,7 @@ package com.bzncrsrtc.kurumsalmuvekkil.requests;
 
 import java.util.UUID;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -28,6 +29,7 @@ public class UpdateClientRequest {
 	@Max(value=15, message="{phone.sizeError}")
 	private String phone;
 	
+	@Valid
 	private UpdateUserRequest user;
 	
 }

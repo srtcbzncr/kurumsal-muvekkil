@@ -6,6 +6,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.models.Court;
 import com.bzncrsrtc.kurumsalmuvekkil.models.File;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Lawyer;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Plan;
+import com.bzncrsrtc.kurumsalmuvekkil.models.Subscription;
 import com.bzncrsrtc.kurumsalmuvekkil.models.User;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateClientRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateCompanyRequest;
@@ -13,6 +14,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateCourtRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateFileRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateLawyerRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreatePlanRequest;
+import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateSubscriptionRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateUserRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateClientRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateCompanyRequest;
@@ -20,13 +22,14 @@ import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateCourtRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateFileRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateLawyerRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdatePlanRequest;
+import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateSubscriptionRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateUserRequest;
 import org.springframework.stereotype.Component;
 
 /*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-06-12T09:49:08+0300",
+    date = "2023-06-12T17:23:38+0300",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.33.0.v20230218-1114, environment: Java 17.0.6 (Eclipse Adoptium)"
 )
 */
@@ -489,5 +492,75 @@ public class RequestMapperImpl implements RequestMapper {
         updateFileRequest.setTitle( file.getTitle() );
 
         return updateFileRequest;
+    }
+
+    @Override
+    public Subscription fromCreateSubscriptionRequestToSubscription(CreateSubscriptionRequest createSubscriptionRequest) {
+        if ( createSubscriptionRequest == null ) {
+            return null;
+        }
+
+        Subscription subscription = new Subscription();
+
+        subscription.setAutoRenew( createSubscriptionRequest.isAutoRenew() );
+        subscription.setEndDate( createSubscriptionRequest.getEndDate() );
+        subscription.setFee( createSubscriptionRequest.getFee() );
+        subscription.setStartDate( createSubscriptionRequest.getStartDate() );
+        subscription.setType( createSubscriptionRequest.getType() );
+
+        return subscription;
+    }
+
+    @Override
+    public Subscription fromUpdateSubscriptionRequestToSubscription(UpdateSubscriptionRequest updateSubscriptionRequest) {
+        if ( updateSubscriptionRequest == null ) {
+            return null;
+        }
+
+        Subscription subscription = new Subscription();
+
+        subscription.setAutoRenew( updateSubscriptionRequest.isAutoRenew() );
+        subscription.setEndDate( updateSubscriptionRequest.getEndDate() );
+        subscription.setFee( updateSubscriptionRequest.getFee() );
+        subscription.setId( updateSubscriptionRequest.getId() );
+        subscription.setStartDate( updateSubscriptionRequest.getStartDate() );
+        subscription.setType( updateSubscriptionRequest.getType() );
+
+        return subscription;
+    }
+
+    @Override
+    public CreateSubscriptionRequest fromSubscriptionToCreateSubscriptionRequest(Subscription subscription) {
+        if ( subscription == null ) {
+            return null;
+        }
+
+        CreateSubscriptionRequest createSubscriptionRequest = new CreateSubscriptionRequest();
+
+        createSubscriptionRequest.setAutoRenew( subscription.isAutoRenew() );
+        createSubscriptionRequest.setEndDate( subscription.getEndDate() );
+        createSubscriptionRequest.setFee( subscription.getFee() );
+        createSubscriptionRequest.setStartDate( subscription.getStartDate() );
+        createSubscriptionRequest.setType( subscription.getType() );
+
+        return createSubscriptionRequest;
+    }
+
+    @Override
+    public UpdateSubscriptionRequest fromSubscriptionToUpdateSubscriptionRequest(Subscription subscription) {
+        if ( subscription == null ) {
+            return null;
+        }
+
+        UpdateSubscriptionRequest updateSubscriptionRequest = new UpdateSubscriptionRequest();
+
+        updateSubscriptionRequest.setAutoRenew( subscription.isAutoRenew() );
+        updateSubscriptionRequest.setEndDate( subscription.getEndDate() );
+        updateSubscriptionRequest.setFee( subscription.getFee() );
+        updateSubscriptionRequest.setId( subscription.getId() );
+        updateSubscriptionRequest.setStartDate( subscription.getStartDate() );
+        updateSubscriptionRequest.setType( subscription.getType() );
+
+        return updateSubscriptionRequest;
     }
 }

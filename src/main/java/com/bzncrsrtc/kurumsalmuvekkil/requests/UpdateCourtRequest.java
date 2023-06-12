@@ -9,10 +9,10 @@ import lombok.Data;
 @Data
 public class UpdateCourtRequest {
 
-	@NotNull
+	@NotNull(message="{id.notNull}")
 	private UUID id;
 	
-	@NotEmpty
+	@NotEmpty(message="{name.notNull}")
 	private String name;
 	
 }

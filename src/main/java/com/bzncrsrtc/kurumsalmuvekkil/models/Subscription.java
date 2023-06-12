@@ -46,13 +46,13 @@ public class Subscription {
 	private BigDecimal fee;
 	
 	@Column(name="start_date")
-	private LocalDate startDate;
+	private LocalDate startDate = LocalDate.now();
 	
 	@Column(name="end_date")
 	private LocalDate endDate;
 	
 	@Column(name="auto_renew")
-	private boolean autoRenew;
+	private boolean autoRenew = true;
 	
 	@Column(name="deleted")
 	private boolean deleted = false;
