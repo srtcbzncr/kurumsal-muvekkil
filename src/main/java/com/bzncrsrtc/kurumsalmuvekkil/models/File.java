@@ -46,10 +46,10 @@ public class File {
 	private List<Update> updates;
 	
 	@ManyToOne()
-	@JoinColumn(name="court_id", referencedColumnName="id")
+	@JoinColumn(name="court_id", referencedColumnName="id", nullable=true)
 	private Court court;
 	
-	@Column(name="court_detail")
+	@Column(name="court_detail", nullable=true)
 	private String courtDetail;
 	
 	@Column(name="deleted")

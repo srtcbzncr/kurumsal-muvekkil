@@ -30,7 +30,7 @@ public class Subscription {
 	@GeneratedValue(strategy=GenerationType.UUID)
 	private UUID id;
 	
-	@OneToOne()
+	@ManyToOne()
 	@JoinColumn(name="company_id", referencedColumnName="id")
 	private Company company;
 	

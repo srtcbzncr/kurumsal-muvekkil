@@ -5,18 +5,21 @@ import org.mapstruct.Mapper;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Client;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Company;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Court;
+import com.bzncrsrtc.kurumsalmuvekkil.models.File;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Lawyer;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Plan;
 import com.bzncrsrtc.kurumsalmuvekkil.models.User;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateClientRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateCompanyRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateCourtRequest;
+import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateFileRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateLawyerRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreatePlanRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateUserRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateClientRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateCompanyRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateCourtRequest;
+import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateFileRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateLawyerRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdatePlanRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateUserRequest;
@@ -54,5 +57,9 @@ public interface RequestMapper {
 	CreateLawyerRequest fromLawyerToCreateLawyerRequest(Lawyer lawyer);
 	UpdateLawyerRequest fromLawyerToUpdateLawyerRequest(Lawyer lawyer);
 	
+	File fromCreateFileRequestToFile(CreateFileRequest createFileRequest);
+	File fromUpdateFileRequestToFile(UpdateFileRequest updateFileRequest);
+	CreateFileRequest fromFileToCreateFileRequest(File file);
+	UpdateFileRequest fromFileToUpdateFileRequest(File file);
 	
 }

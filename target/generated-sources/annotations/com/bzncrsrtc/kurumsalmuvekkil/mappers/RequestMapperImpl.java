@@ -3,18 +3,21 @@ package com.bzncrsrtc.kurumsalmuvekkil.mappers;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Client;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Company;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Court;
+import com.bzncrsrtc.kurumsalmuvekkil.models.File;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Lawyer;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Plan;
 import com.bzncrsrtc.kurumsalmuvekkil.models.User;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateClientRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateCompanyRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateCourtRequest;
+import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateFileRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateLawyerRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreatePlanRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateUserRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateClientRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateCompanyRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateCourtRequest;
+import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateFileRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateLawyerRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdatePlanRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateUserRequest;
@@ -23,7 +26,7 @@ import org.springframework.stereotype.Component;
 /*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-06-11T19:04:11+0300",
+    date = "2023-06-12T09:49:08+0300",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.33.0.v20230218-1114, environment: Java 17.0.6 (Eclipse Adoptium)"
 )
 */
@@ -424,5 +427,67 @@ public class RequestMapperImpl implements RequestMapper {
         updateLawyerRequest.setUser( fromUserToUpdateUserRequest( lawyer.getUser() ) );
 
         return updateLawyerRequest;
+    }
+
+    @Override
+    public File fromCreateFileRequestToFile(CreateFileRequest createFileRequest) {
+        if ( createFileRequest == null ) {
+            return null;
+        }
+
+        File file = new File();
+
+        file.setCourtDetail( createFileRequest.getCourtDetail() );
+        file.setDescription( createFileRequest.getDescription() );
+        file.setTitle( createFileRequest.getTitle() );
+
+        return file;
+    }
+
+    @Override
+    public File fromUpdateFileRequestToFile(UpdateFileRequest updateFileRequest) {
+        if ( updateFileRequest == null ) {
+            return null;
+        }
+
+        File file = new File();
+
+        file.setCourtDetail( updateFileRequest.getCourtDetail() );
+        file.setDescription( updateFileRequest.getDescription() );
+        file.setId( updateFileRequest.getId() );
+        file.setTitle( updateFileRequest.getTitle() );
+
+        return file;
+    }
+
+    @Override
+    public CreateFileRequest fromFileToCreateFileRequest(File file) {
+        if ( file == null ) {
+            return null;
+        }
+
+        CreateFileRequest createFileRequest = new CreateFileRequest();
+
+        createFileRequest.setCourtDetail( file.getCourtDetail() );
+        createFileRequest.setDescription( file.getDescription() );
+        createFileRequest.setTitle( file.getTitle() );
+
+        return createFileRequest;
+    }
+
+    @Override
+    public UpdateFileRequest fromFileToUpdateFileRequest(File file) {
+        if ( file == null ) {
+            return null;
+        }
+
+        UpdateFileRequest updateFileRequest = new UpdateFileRequest();
+
+        updateFileRequest.setCourtDetail( file.getCourtDetail() );
+        updateFileRequest.setDescription( file.getDescription() );
+        updateFileRequest.setId( file.getId() );
+        updateFileRequest.setTitle( file.getTitle() );
+
+        return updateFileRequest;
     }
 }
