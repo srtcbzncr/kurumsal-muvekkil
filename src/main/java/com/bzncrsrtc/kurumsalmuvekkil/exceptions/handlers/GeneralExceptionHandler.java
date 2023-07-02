@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestHeaderException;
@@ -81,6 +82,14 @@ public class GeneralExceptionHandler {
 		ErrorResponse response = new ErrorResponse(HttpStatus.CONFLICT.name(), exception.getMessage());
 		
 		return ResponseHandler.generateResponse(null, HttpStatus.CONFLICT, response);
+	}
+	
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	@ExceptionHandler(BadCredentialsException.class)
+	public ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException exception){
+		ErrorResponse response = new ErrorResponse(HttpStatus.UNAUTHORIZED.name(), exception.getMessage());
+		
+		return ResponseHandler.generateResponse(null, HttpStatus.UNAUTHORIZED, response);
 	}
 	
 }

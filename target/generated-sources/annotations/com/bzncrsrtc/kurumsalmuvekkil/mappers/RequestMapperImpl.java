@@ -6,6 +6,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.models.Court;
 import com.bzncrsrtc.kurumsalmuvekkil.models.File;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Lawyer;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Plan;
+import com.bzncrsrtc.kurumsalmuvekkil.models.Role;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Subscription;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Update;
 import com.bzncrsrtc.kurumsalmuvekkil.models.User;
@@ -15,6 +16,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateCourtRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateFileRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateLawyerRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreatePlanRequest;
+import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateRoleRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateSubscriptionRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateUpdateRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateUserRequest;
@@ -24,6 +26,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateCourtRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateFileRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateLawyerRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdatePlanRequest;
+import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateRoleRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateSubscriptionRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateUpdateRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateUserRequest;
@@ -32,7 +35,7 @@ import org.springframework.stereotype.Component;
 /*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-06-12T20:34:23+0300",
+    date = "2023-07-02T18:21:45+0300",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.33.0.v20230218-1114, environment: Java 17.0.6 (Eclipse Adoptium)"
 )
 */
@@ -226,6 +229,56 @@ public class RequestMapperImpl implements RequestMapper {
     }
 
     @Override
+    public Role fromCreateRoleRequestToRole(CreateRoleRequest createRoleRequest) {
+        if ( createRoleRequest == null ) {
+            return null;
+        }
+
+        Role role = new Role();
+
+        return role;
+    }
+
+    @Override
+    public Role fromUpdateRoleRequestToRole(UpdateRoleRequest updateRoleRequest) {
+        if ( updateRoleRequest == null ) {
+            return null;
+        }
+
+        Role role = new Role();
+
+        role.setId( updateRoleRequest.getId() );
+        role.setName( updateRoleRequest.getName() );
+
+        return role;
+    }
+
+    @Override
+    public CreateRoleRequest fromRoleToCreateRoleRequest(Role role) {
+        if ( role == null ) {
+            return null;
+        }
+
+        CreateRoleRequest createRoleRequest = new CreateRoleRequest();
+
+        return createRoleRequest;
+    }
+
+    @Override
+    public UpdateRoleRequest fromRoleToUpdateRoleRequest(Role role) {
+        if ( role == null ) {
+            return null;
+        }
+
+        UpdateRoleRequest updateRoleRequest = new UpdateRoleRequest();
+
+        updateRoleRequest.setId( role.getId() );
+        updateRoleRequest.setName( role.getName() );
+
+        return updateRoleRequest;
+    }
+
+    @Override
     public User fromCreateUserRequestToUser(CreateUserRequest createUserRequest) {
         if ( createUserRequest == null ) {
             return null;
@@ -235,7 +288,6 @@ public class RequestMapperImpl implements RequestMapper {
 
         user.setEmail( createUserRequest.getEmail() );
         user.setPassword( createUserRequest.getPassword() );
-        user.setRole( createUserRequest.getRole() );
         user.setUsername( createUserRequest.getUsername() );
 
         return user;
@@ -252,7 +304,6 @@ public class RequestMapperImpl implements RequestMapper {
         user.setEmail( updateUserRequest.getEmail() );
         user.setId( updateUserRequest.getId() );
         user.setPassword( updateUserRequest.getPassword() );
-        user.setRole( updateUserRequest.getRole() );
         user.setUsername( updateUserRequest.getUsername() );
 
         return user;
@@ -268,7 +319,6 @@ public class RequestMapperImpl implements RequestMapper {
 
         createUserRequest.setEmail( user.getEmail() );
         createUserRequest.setPassword( user.getPassword() );
-        createUserRequest.setRole( user.getRole() );
         createUserRequest.setUsername( user.getUsername() );
 
         return createUserRequest;
@@ -285,7 +335,6 @@ public class RequestMapperImpl implements RequestMapper {
         updateUserRequest.setEmail( user.getEmail() );
         updateUserRequest.setId( user.getId() );
         updateUserRequest.setPassword( user.getPassword() );
-        updateUserRequest.setRole( user.getRole() );
         updateUserRequest.setUsername( user.getUsername() );
 
         return updateUserRequest;

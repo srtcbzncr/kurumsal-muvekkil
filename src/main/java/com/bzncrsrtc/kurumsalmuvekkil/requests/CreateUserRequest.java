@@ -1,5 +1,7 @@
 package com.bzncrsrtc.kurumsalmuvekkil.requests;
 
+import java.util.UUID;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
@@ -18,6 +20,6 @@ public class CreateUserRequest {
 	private String password;
 	
 	@NotEmpty(message="{role.notNull}")
-	private String role;
+	private UUID role_id;
 	
 }

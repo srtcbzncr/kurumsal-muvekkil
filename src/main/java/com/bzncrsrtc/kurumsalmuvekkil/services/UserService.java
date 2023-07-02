@@ -1,10 +1,15 @@
 package com.bzncrsrtc.kurumsalmuvekkil.services;
 
 import java.util.Locale;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.bzncrsrtc.kurumsalmuvekkil.exceptions.EmailAlreadyUsedException;
@@ -14,7 +19,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.models.User;
 import com.bzncrsrtc.kurumsalmuvekkil.repositories.UserRepository;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 	
 	private UserRepository userRepository;
 	private MessageSource messageSource;
@@ -51,6 +56,17 @@ public class UserService {
 		}
 		
 		userRepository.save(user);
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String username){
+		Optional <User> user = userRepository.findByUsernameAndDeletedAndActive(username, false, true);
+		
+		if(user.isEmpty()) {
+			throw new BadCredentialsException(messageSource.getMessage("bad.credentials.message", null, null));
+		}
+		
+		return user.get();
 	}
 
 }

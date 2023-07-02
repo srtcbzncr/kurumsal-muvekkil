@@ -24,6 +24,6 @@ public class UpdateUserRequest {
 	private String password;
 	
 	@NotEmpty(message="{role.notNull}")
-	private String role;
+	private UUID role_id;
 	
 }

@@ -21,15 +21,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.bzncrsrtc.kurumsalmuvekkil.mappers.RequestMapper;
 import com.bzncrsrtc.kurumsalmuvekkil.mappers.ResponseMapper;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Company;
-import com.bzncrsrtc.kurumsalmuvekkil.models.File;
-import com.bzncrsrtc.kurumsalmuvekkil.models.Lawyer;
-import com.bzncrsrtc.kurumsalmuvekkil.models.Subscription;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateCompanyRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateCompanyRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCompanyResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetFileResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetLawyerResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetSubscriptionResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.ResponseHandler;
 import com.bzncrsrtc.kurumsalmuvekkil.services.CompanyService;
 

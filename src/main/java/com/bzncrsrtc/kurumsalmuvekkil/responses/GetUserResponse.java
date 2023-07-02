@@ -10,6 +10,6 @@ public class GetUserResponse {
 	private UUID id;
 	private String email;
 	private String username;
-	private String role;
+	private GetRoleResponse role;
 	
 }

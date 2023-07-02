@@ -6,6 +6,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.models.Court;
 import com.bzncrsrtc.kurumsalmuvekkil.models.File;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Lawyer;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Plan;
+import com.bzncrsrtc.kurumsalmuvekkil.models.Role;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Subscription;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Update;
 import com.bzncrsrtc.kurumsalmuvekkil.models.User;
@@ -17,6 +18,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.responses.GetFileResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetFileWithoutCourtResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetLawyerResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetPlanResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.GetRoleResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetSubscriptionResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetSubscriptionWithoutPlanResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetUpdateResponse;
@@ -28,7 +30,7 @@ import org.springframework.stereotype.Component;
 /*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-06-12T19:44:16+0300",
+    date = "2023-07-02T18:21:44+0300",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.33.0.v20230218-1114, environment: Java 17.0.6 (Eclipse Adoptium)"
 )
 */
@@ -391,7 +393,7 @@ public class ResponseMapperImpl implements ResponseMapper {
 
         getUserResponse.setEmail( user.getEmail() );
         getUserResponse.setId( user.getId() );
-        getUserResponse.setRole( user.getRole() );
+        getUserResponse.setRole( getRoleResponse( user.getRole() ) );
         getUserResponse.setUsername( user.getUsername() );
 
         return getUserResponse;
@@ -406,6 +408,34 @@ public class ResponseMapperImpl implements ResponseMapper {
         List<GetUserResponse> list = new ArrayList<GetUserResponse>( users.size() );
         for ( User user : users ) {
             list.add( getUserResponse( user ) );
+        }
+
+        return list;
+    }
+
+    @Override
+    public GetRoleResponse getRoleResponse(Role role) {
+        if ( role == null ) {
+            return null;
+        }
+
+        GetRoleResponse getRoleResponse = new GetRoleResponse();
+
+        getRoleResponse.setId( role.getId() );
+        getRoleResponse.setName( role.getName() );
+
+        return getRoleResponse;
+    }
+
+    @Override
+    public List<GetRoleResponse> getRoleListResponse(List<Role> roles) {
+        if ( roles == null ) {
+            return null;
+        }
+
+        List<GetRoleResponse> list = new ArrayList<GetRoleResponse>( roles.size() );
+        for ( Role role : roles ) {
+            list.add( getRoleResponse( role ) );
         }
 
         return list;

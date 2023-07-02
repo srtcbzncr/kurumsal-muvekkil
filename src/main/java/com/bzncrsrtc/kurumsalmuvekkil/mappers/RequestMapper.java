@@ -8,6 +8,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.models.Court;
 import com.bzncrsrtc.kurumsalmuvekkil.models.File;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Lawyer;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Plan;
+import com.bzncrsrtc.kurumsalmuvekkil.models.Role;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Subscription;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Update;
 import com.bzncrsrtc.kurumsalmuvekkil.models.User;
@@ -17,6 +18,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateCourtRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateFileRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateLawyerRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreatePlanRequest;
+import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateRoleRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateSubscriptionRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateUpdateRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateUserRequest;
@@ -26,6 +28,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateCourtRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateFileRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateLawyerRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdatePlanRequest;
+import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateRoleRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateSubscriptionRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateUpdateRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateUserRequest;
@@ -47,6 +50,11 @@ public interface RequestMapper {
 	Court fromUpdateCourtRequestToCourt(UpdateCourtRequest updateCourtRequest);
 	CreateCourtRequest fromCourtToCreateCourtRequest(Court court);
 	UpdateCourtRequest fromCourtToUpdateCourtRequest(Court court);
+	
+	Role fromCreateRoleRequestToRole(CreateRoleRequest createRoleRequest);
+	Role fromUpdateRoleRequestToRole(UpdateRoleRequest updateRoleRequest);
+	CreateRoleRequest fromRoleToCreateRoleRequest(Role role);
+	UpdateRoleRequest fromRoleToUpdateRoleRequest(Role role);
 	
 	User fromCreateUserRequestToUser(CreateUserRequest createUserRequest);
 	User fromUpdateUserRequestToUser(UpdateUserRequest updateUserRequest);

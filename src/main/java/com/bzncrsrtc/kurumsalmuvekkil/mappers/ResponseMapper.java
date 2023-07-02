@@ -11,6 +11,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.models.Court;
 import com.bzncrsrtc.kurumsalmuvekkil.models.File;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Lawyer;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Plan;
+import com.bzncrsrtc.kurumsalmuvekkil.models.Role;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Subscription;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Update;
 import com.bzncrsrtc.kurumsalmuvekkil.models.User;
@@ -22,6 +23,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.responses.GetFileResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetFileWithoutCourtResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetLawyerResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetPlanResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.GetRoleResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetSubscriptionResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetSubscriptionWithoutPlanResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetUpdateResponse;
@@ -63,5 +65,8 @@ public interface ResponseMapper {
 	
 	GetUserResponse getUserResponse(User user);
 	List<GetUserResponse> getUserListResponse(List<User> users);
+	
+	GetRoleResponse getRoleResponse(Role role);
+	List<GetRoleResponse> getRoleListResponse(List<Role> roles);
 	
 }
