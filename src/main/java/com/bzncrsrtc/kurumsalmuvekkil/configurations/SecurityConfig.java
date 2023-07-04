@@ -22,9 +22,10 @@ public class SecurityConfig {
 		http.headers().frameOptions().disable();
 		http.authorizeHttpRequests()
         	.requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
-        	.requestMatchers(new AntPathRequestMatcher("/auth/admin/login")).permitAll()
+        	.requestMatchers(new AntPathRequestMatcher("/auth/login")).permitAll()
         	.anyRequest().authenticated();
 		http.httpBasic(Customizer.withDefaults());
+		http.cors();
 	    return http.build();
 	  }
 	  
