@@ -22,6 +22,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateRoleRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateSubscriptionRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateUpdateRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateUserRequest;
+import com.bzncrsrtc.kurumsalmuvekkil.requests.ParentCourtRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateClientRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateCompanyRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateCourtRequest;
@@ -50,6 +51,9 @@ public interface RequestMapper {
 	Court fromUpdateCourtRequestToCourt(UpdateCourtRequest updateCourtRequest);
 	CreateCourtRequest fromCourtToCreateCourtRequest(Court court);
 	UpdateCourtRequest fromCourtToUpdateCourtRequest(Court court);
+	
+	Court fromParentCourtRequestToCourt(ParentCourtRequest parentCourtRequest);
+	ParentCourtRequest fromCourtToParentCourtRequest(Court court);
 	
 	Role fromCreateRoleRequestToRole(CreateRoleRequest createRoleRequest);
 	Role fromUpdateRoleRequestToRole(UpdateRoleRequest updateRoleRequest);

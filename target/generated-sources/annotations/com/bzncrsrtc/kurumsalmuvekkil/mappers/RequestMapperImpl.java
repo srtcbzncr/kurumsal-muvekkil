@@ -20,6 +20,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateRoleRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateSubscriptionRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateUpdateRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateUserRequest;
+import com.bzncrsrtc.kurumsalmuvekkil.requests.ParentCourtRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateClientRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateCompanyRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateCourtRequest;
@@ -35,7 +36,7 @@ import org.springframework.stereotype.Component;
 /*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-07-14T16:14:03+0300",
+    date = "2023-07-16T08:15:57+0300",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.33.0.v20230218-1114, environment: Java 17.0.6 (Eclipse Adoptium)"
 )
 */
@@ -183,6 +184,7 @@ public class RequestMapperImpl implements RequestMapper {
         Court court = new Court();
 
         court.setName( createCourtRequest.getName() );
+        court.setParent( fromParentCourtRequestToCourt( createCourtRequest.getParent() ) );
 
         return court;
     }
@@ -210,6 +212,7 @@ public class RequestMapperImpl implements RequestMapper {
         CreateCourtRequest createCourtRequest = new CreateCourtRequest();
 
         createCourtRequest.setName( court.getName() );
+        createCourtRequest.setParent( fromCourtToParentCourtRequest( court.getParent() ) );
 
         return createCourtRequest;
     }
@@ -226,6 +229,32 @@ public class RequestMapperImpl implements RequestMapper {
         updateCourtRequest.setName( court.getName() );
 
         return updateCourtRequest;
+    }
+
+    @Override
+    public Court fromParentCourtRequestToCourt(ParentCourtRequest parentCourtRequest) {
+        if ( parentCourtRequest == null ) {
+            return null;
+        }
+
+        Court court = new Court();
+
+        court.setId( parentCourtRequest.getId() );
+
+        return court;
+    }
+
+    @Override
+    public ParentCourtRequest fromCourtToParentCourtRequest(Court court) {
+        if ( court == null ) {
+            return null;
+        }
+
+        ParentCourtRequest parentCourtRequest = new ParentCourtRequest();
+
+        parentCourtRequest.setId( court.getId() );
+
+        return parentCourtRequest;
     }
 
     @Override
