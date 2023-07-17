@@ -9,6 +9,8 @@ public class GetCourtResponse {
 
 	private UUID id;
 	private String name;
+	private boolean active;
+	private boolean deleted;
 	private GetCourtWithoutParentResponse parent;
 	
 }

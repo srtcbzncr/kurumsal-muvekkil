@@ -30,7 +30,19 @@ public class CourtService {
 	}
 	
 	public List<Court> findAll(Locale locale){
+		return courtRepository.findAllByDeleted(false);
+	}
+	
+	public List<Court> findAllActive(Locale locale){
 		return courtRepository.findAllByDeletedAndActive(false, true);
+	}
+	
+	public List<Court> findAllPassive(Locale locale){
+		return courtRepository.findAllByDeletedAndActive(false, false);
+	}
+	
+	public List<Court> findAllDeleted(Locale locale){
+		return courtRepository.findAllByDeleted(true);
 	}
 	
 	public Court findById(UUID id, Locale locale) {
@@ -41,14 +53,6 @@ public class CourtService {
 		}
 		
 		return court.get();
-	}
-	
-	public List<Court> findAllDeleted(Locale locale){
-		return courtRepository.findAllByDeleted(true);
-	}
-	
-	public List<Court> findAllPassive(Locale locale){
-		return courtRepository.findAllByDeletedAndActive(false, false);
 	}
 	
 	public Court create(Court court, Locale locale) {
@@ -111,5 +115,21 @@ public class CourtService {
 		court.setDeleted(true);
 		court.setDeletedAt(LocalDateTime.now());
 		courtRepository.save(court);
+	}
+	
+	public int allCount(Locale locale) {
+		return courtRepository.countByDeleted(false);
+	}
+	
+	public int activeCount(Locale locale) {
+		return courtRepository.countByActiveAndDeleted(true, false);
+	}
+	
+	public int passiveCount(Locale locale) {
+		return courtRepository.countByActiveAndDeleted(false, false);
+	}
+	
+	public int deletedCount(Locale locale) {
+		return courtRepository.countByDeleted(true);
 	}
 }

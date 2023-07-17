@@ -23,4 +23,7 @@ public interface CourtRepository extends JpaRepository<Court, UUID> {
 	
 	boolean existsByNameAndDeleted(String name, boolean deleted);
 	boolean existsByIdAndDeleted(UUID id, boolean deleted);
+	
+	int countByActiveAndDeleted(boolean active, boolean deleted);
+	int countByDeleted(boolean deleted);
 }

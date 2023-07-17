@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 /*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-07-16T07:57:35+0300",
+    date = "2023-07-17T14:10:52+0300",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.33.0.v20230218-1114, environment: Java 17.0.6 (Eclipse Adoptium)"
 )
 */
@@ -104,6 +104,8 @@ public class ResponseMapperImpl implements ResponseMapper {
 
         GetCourtResponse getCourtResponse = new GetCourtResponse();
 
+        getCourtResponse.setActive( court.isActive() );
+        getCourtResponse.setDeleted( court.isDeleted() );
         getCourtResponse.setId( court.getId() );
         getCourtResponse.setName( court.getName() );
         getCourtResponse.setParent( getCourtWithoutParentResponse( court.getParent() ) );
@@ -133,6 +135,8 @@ public class ResponseMapperImpl implements ResponseMapper {
 
         GetCourtWithoutParentResponse getCourtWithoutParentResponse = new GetCourtWithoutParentResponse();
 
+        getCourtWithoutParentResponse.setActive( court.isActive() );
+        getCourtWithoutParentResponse.setDeleted( court.isDeleted() );
         getCourtWithoutParentResponse.setId( court.getId() );
         getCourtWithoutParentResponse.setName( court.getName() );
 

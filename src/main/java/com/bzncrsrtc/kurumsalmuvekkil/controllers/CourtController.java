@@ -26,10 +26,12 @@ import com.bzncrsrtc.kurumsalmuvekkil.models.File;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateCourtRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateCourtRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCourtResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCourtStatiscticsResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCourtWithoutParentResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetFileWithoutCourtResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.ResponseHandler;
 import com.bzncrsrtc.kurumsalmuvekkil.services.CourtService;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCourtStatiscticsResponse;
 
 import jakarta.validation.Valid;
 
@@ -48,12 +50,56 @@ public class CourtController {
 		this.requestMapper = requestMapper;
 	}
 	
-	@GetMapping("")
+	@GetMapping("/stats")
+	public ResponseEntity<Object> statistics(@RequestHeader(name = "Accept-Language", required = false) String localeStr){
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		int allCount = courtService.allCount(locale);
+		int activeCount = courtService.activeCount(locale);
+		int passiveCount = courtService.passiveCount(locale);
+		int deletedCount = courtService.deletedCount(locale);
+		
+		GetCourtStatiscticsResponse response = new GetCourtStatiscticsResponse(allCount, activeCount, passiveCount, deletedCount);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
+	}
+	
+	@GetMapping("/all")
 	public ResponseEntity<Object> findAll(@RequestHeader(name = "Accept-Language", required = false) String localeStr){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		List<Court> courts = courtService.findAll(locale);
 		List<GetCourtResponse> response = responseMapper.getCourtListResponse(courts);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
+	}
+	
+	@GetMapping("/active")
+	public ResponseEntity<Object> findAllActive(@RequestHeader(name = "Accept-Language", required = false) String localeStr){
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		List<Court> activeCourts = courtService.findAllActive(locale);
+		List<GetCourtResponse> response = responseMapper.getCourtListResponse(activeCourts);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
+	}
+	
+	@GetMapping("/passive")
+	public ResponseEntity<Object> findAllPassive(@RequestHeader(name = "Accept-Language", required = false) String localeStr){
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		List<Court> passiveCourts = courtService.findAllPassive(locale);
+		List<GetCourtResponse> response = responseMapper.getCourtListResponse(passiveCourts);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
+	}
+	
+	@GetMapping("/deleted")
+	public ResponseEntity<Object> findAllDeleted(@RequestHeader(name = "Accept-Language", required = false) String localeStr){
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		List<Court> deletedCourts = courtService.findAllDeleted(locale);
+		List<GetCourtResponse> response = responseMapper.getCourtListResponse(deletedCourts);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
