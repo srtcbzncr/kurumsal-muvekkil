@@ -2,10 +2,13 @@ package com.bzncrsrtc.kurumsalmuvekkil.exceptions.handlers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
+import org.springframework.context.MessageSource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
@@ -22,9 +25,16 @@ import com.bzncrsrtc.kurumsalmuvekkil.exceptions.UsernameAlreadyUsedException;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.ErrorResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.ResponseHandler;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.ValidationErrorResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.ValidationFieldError;
 
 @ControllerAdvice
 public class GeneralExceptionHandler {
+	
+	private MessageSource messageSource;
+	
+	public GeneralExceptionHandler(MessageSource messageSource) {
+		this.messageSource = messageSource;
+	}
 
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(MissingRequestHeaderException.class)
@@ -45,12 +55,23 @@ public class GeneralExceptionHandler {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-	    List<ValidationErrorResponse> errors = new ArrayList<ValidationErrorResponse>();
+	    List<ValidationFieldError> fieldErrors = new ArrayList<ValidationFieldError>();
 	    ex.getBindingResult().getAllErrors().forEach((error) -> {
-	    	ValidationErrorResponse validationError = new ValidationErrorResponse(((FieldError) error).getField(), error.getDefaultMessage());
-	        errors.add(validationError);
+	    	ValidationFieldError fieldError = new ValidationFieldError(((FieldError) error).getField(), error.getDefaultMessage());
+	    	fieldErrors.add(fieldError);
 	    });
+	    
+	    ValidationErrorResponse errors = new ValidationErrorResponse(HttpStatus.BAD_REQUEST.name(), fieldErrors);
+	    
 	    return ResponseHandler.generateValidationErrorResponse(null, HttpStatus.BAD_REQUEST, errors);
+	}
+	
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(HttpMessageNotReadableException.class)
+	public ResponseEntity<Object> handleHttpMessageNotReadableException(HttpMessageNotReadableException exception){
+		ErrorResponse response = new ErrorResponse(HttpStatus.BAD_REQUEST.name(), messageSource.getMessage("request.body.missing.message", null, Locale.ENGLISH));
+		
+		return ResponseHandler.generateResponse(null, HttpStatus.BAD_REQUEST, response);
 	}
 	
 	@ResponseStatus(HttpStatus.CONFLICT)
