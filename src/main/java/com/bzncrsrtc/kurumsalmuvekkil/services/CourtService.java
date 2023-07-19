@@ -59,6 +59,8 @@ public class CourtService {
 		if(courtRepository.existsByNameAndDeleted(court.getName(), false)) {
 			throw new CourtExistsException(messageSource.getMessage("court.exists.message", null, locale));
 		}
+		
+		
 
 		Court savedCourt = courtRepository.save(court);
 		return savedCourt;
