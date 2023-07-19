@@ -61,7 +61,7 @@ public class GeneralExceptionHandler {
 	    	fieldErrors.add(fieldError);
 	    });
 	    
-	    ValidationErrorResponse errors = new ValidationErrorResponse(HttpStatus.BAD_REQUEST.name(), fieldErrors);
+	    ValidationErrorResponse errors = new ValidationErrorResponse(HttpStatus.BAD_REQUEST.name(), messageSource.getMessage("validation.error.message", null, Locale.ENGLISH), fieldErrors);
 	    
 	    return ResponseHandler.generateValidationErrorResponse(null, HttpStatus.BAD_REQUEST, errors);
 	}

@@ -12,6 +12,7 @@ import lombok.Setter;
 public class ValidationErrorResponse {
 
 	private String type;
-	private List<ValidationFieldError> errors;
+	private String message;
+	private List<ValidationFieldError> fieldErrors;
 	
 }
