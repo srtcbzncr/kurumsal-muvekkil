@@ -138,7 +138,7 @@ public class CourtController {
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
 	
-	@PutMapping("/{id}/set-active")
+	@PutMapping("/set-active/{id}")
 	public ResponseEntity<Object> setActive(@RequestHeader(name = "Accept-Language", required = false) String localeStr, @PathVariable UUID id){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
@@ -148,7 +148,7 @@ public class CourtController {
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
 	
-	@PutMapping("/{id}/set-passive")
+	@PutMapping("/set-passive/{id}")
 	public ResponseEntity<Object> setPassive(@RequestHeader(name = "Accept-Language", required = false) String localeStr, @PathVariable UUID id){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
