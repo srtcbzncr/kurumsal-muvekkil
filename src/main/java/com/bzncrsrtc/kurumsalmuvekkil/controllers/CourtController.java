@@ -127,27 +127,35 @@ public class CourtController {
 		return ResponseHandler.generateResponse(location, HttpStatus.CREATED, null);
 	}	
 	
-	@PostMapping("/{id}/add")
-	public ResponseEntity<Object> add(@RequestHeader(name = "Accept-Language", required = false) String localeStr, @PathVariable UUID id, @Valid @RequestBody CreateCourtRequest createCourtRequest){
-		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
-		
-		Court court = requestMapper.fromCreateCourtRequestToCourt(createCourtRequest);
-		Court savedCourt = courtService.add(id, court, locale);
-		URI location = ServletUriComponentsBuilder
-				.fromCurrentRequest().path("/{id}")
-				.buildAndExpand(savedCourt.getId()).toUri();
-		
-		return ResponseHandler.generateResponse(location, HttpStatus.CREATED, null);
-	}
-	
 	@PutMapping("")
 	public ResponseEntity<Object> update(@RequestHeader(name = "Accept-Language", required = false) String localeStr, @Valid @RequestBody UpdateCourtRequest updateCourtRequest){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		Court court = requestMapper.fromUpdateCourtRequestToCourt(updateCourtRequest);
-		courtService.update(court, locale);
+		Court updatedCourt = courtService.update(court, locale);
+		GetCourtResponse response = responseMapper.getCourtResponse(updatedCourt);
 		
-		return ResponseHandler.generateResponse(court, HttpStatus.OK, null);
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
+	}
+	
+	@PutMapping("/{id}/set-active")
+	public ResponseEntity<Object> setActive(@RequestHeader(name = "Accept-Language", required = false) String localeStr, @PathVariable UUID id){
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		Court court = courtService.setActive(id, locale);
+		GetCourtResponse response = responseMapper.getCourtResponse(court);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
+	}
+	
+	@PutMapping("/{id}/set-passive")
+	public ResponseEntity<Object> setPassive(@RequestHeader(name = "Accept-Language", required = false) String localeStr, @PathVariable UUID id){
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		Court court = courtService.setPassive(id, locale);
+		GetCourtResponse response = responseMapper.getCourtResponse(court);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
 	
 	@DeleteMapping("/{id}")
