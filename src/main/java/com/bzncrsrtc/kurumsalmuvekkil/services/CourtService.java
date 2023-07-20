@@ -60,7 +60,7 @@ public class CourtService {
 			throw new CourtExistsException(messageSource.getMessage("court.exists.message", null, locale));
 		}
 		
-		if(!courtRepository.existsByIdAndDeleted(court.getParent().getId(), false)) {
+		if(court.getParent() != null && !courtRepository.existsByIdAndDeleted(court.getParent().getId(), false)) {
 			throw new CourtNotFoundException(messageSource.getMessage("parent.court.not.found.message", null, locale));
 		}
 
