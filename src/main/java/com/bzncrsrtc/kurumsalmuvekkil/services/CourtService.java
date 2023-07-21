@@ -10,7 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.bzncrsrtc.kurumsalmuvekkil.exceptions.CourtCanNotDeleteException;
 import com.bzncrsrtc.kurumsalmuvekkil.exceptions.CourtExistsException;
 import com.bzncrsrtc.kurumsalmuvekkil.exceptions.CourtNotFoundException;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Court;
@@ -119,6 +121,7 @@ public class CourtService {
 		return courtRepository.save(court);		
 	}
 	
+	@Transactional
 	public void delete(UUID id, Locale locale) {
 		Optional<Court> optionalCourt = courtRepository.findByIdAndDeleted(id, false);
 		
@@ -126,10 +129,27 @@ public class CourtService {
 			throw new CourtNotFoundException(messageSource.getMessage("court.not.found.message", null, locale));
 		}
 		
+		this.deleteSubs(id, locale);
+		
 		Court court = optionalCourt.get();
+		
 		court.setDeleted(true);
 		court.setDeletedAt(LocalDateTime.now());
 		courtRepository.save(court);
+	}
+	
+	@Transactional
+	public void deleteSubs(UUID id, Locale locale) {		
+		if(!courtRepository.existsByIdAndDeleted(id, false)) {
+			throw new CourtNotFoundException(messageSource.getMessage("court.not.found.message", null, locale));
+		}
+		
+		List<Court> subCourts = courtRepository.findAllByParentIdAndDeleted(id, false);
+		subCourts.forEach((court) -> {
+			court.setDeleted(true);
+			court.setDeletedAt(LocalDateTime.now());
+			courtRepository.save(court);
+		});
 	}
 	
 	public int allCount(Locale locale) {
