@@ -48,7 +48,7 @@ public class CourtService {
 	}
 	
 	public Court findById(UUID id, Locale locale) {
-		Optional<Court> court = courtRepository.findByIdAndDeletedAndActive(id, false, true);
+		Optional<Court> court = courtRepository.findById(id);
 		
 		if(court.isEmpty()) {
 			throw new CourtNotFoundException(messageSource.getMessage("court.not.found.message", null, locale));
