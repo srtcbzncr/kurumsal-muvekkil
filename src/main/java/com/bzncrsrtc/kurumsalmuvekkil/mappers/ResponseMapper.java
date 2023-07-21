@@ -17,6 +17,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.models.Update;
 import com.bzncrsrtc.kurumsalmuvekkil.models.User;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetClientResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCompanyResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCourtDetailsResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCourtResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCourtWithoutParentResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetFileResponse;
@@ -42,7 +43,9 @@ public interface ResponseMapper {
 	List<GetCourtResponse> getCourtListResponse(List<Court> courts);
 	GetCourtWithoutParentResponse getCourtWithoutParentResponse(Court court);
 	List<GetCourtWithoutParentResponse> getCourtWithoutParentListResponse(List<Court> courts);
-	
+	GetCourtDetailsResponse getCourtDetailsResponse(Court court);
+	List<GetCourtDetailsResponse> getCourtDetailsListResponse(List<Court> courts);
+		
 	GetFileResponse getFileResponse(File file);
 	List<GetFileResponse> getFileListResponse(List<File> files);
 	

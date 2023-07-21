@@ -25,6 +25,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.models.Court;
 import com.bzncrsrtc.kurumsalmuvekkil.models.File;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateCourtRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateCourtRequest;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCourtDetailsResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCourtResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCourtStatiscticsResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCourtWithoutParentResponse;
@@ -109,7 +110,7 @@ public class CourtController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		Court court = courtService.findById(id, locale);
-		GetCourtResponse response = responseMapper.getCourtResponse(court);
+		GetCourtDetailsResponse response = responseMapper.getCourtDetailsResponse(court);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}

@@ -12,6 +12,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.models.Update;
 import com.bzncrsrtc.kurumsalmuvekkil.models.User;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetClientResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCompanyResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCourtDetailsResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCourtResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCourtWithoutParentResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetFileResponse;
@@ -30,7 +31,7 @@ import org.springframework.stereotype.Component;
 /*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-07-17T14:10:52+0300",
+    date = "2023-07-21T14:01:42+0300",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.33.0.v20230218-1114, environment: Java 17.0.6 (Eclipse Adoptium)"
 )
 */
@@ -152,6 +153,38 @@ public class ResponseMapperImpl implements ResponseMapper {
         List<GetCourtWithoutParentResponse> list = new ArrayList<GetCourtWithoutParentResponse>( courts.size() );
         for ( Court court : courts ) {
             list.add( getCourtWithoutParentResponse( court ) );
+        }
+
+        return list;
+    }
+
+    @Override
+    public GetCourtDetailsResponse getCourtDetailsResponse(Court court) {
+        if ( court == null ) {
+            return null;
+        }
+
+        GetCourtDetailsResponse getCourtDetailsResponse = new GetCourtDetailsResponse();
+
+        getCourtDetailsResponse.setActive( court.isActive() );
+        getCourtDetailsResponse.setDeleted( court.isDeleted() );
+        getCourtDetailsResponse.setId( court.getId() );
+        getCourtDetailsResponse.setName( court.getName() );
+        getCourtDetailsResponse.setParent( getCourtWithoutParentResponse( court.getParent() ) );
+        getCourtDetailsResponse.setSubs( getCourtWithoutParentListResponse( court.getSubs() ) );
+
+        return getCourtDetailsResponse;
+    }
+
+    @Override
+    public List<GetCourtDetailsResponse> getCourtDetailsListResponse(List<Court> courts) {
+        if ( courts == null ) {
+            return null;
+        }
+
+        List<GetCourtDetailsResponse> list = new ArrayList<GetCourtDetailsResponse>( courts.size() );
+        for ( Court court : courts ) {
+            list.add( getCourtDetailsResponse( court ) );
         }
 
         return list;
