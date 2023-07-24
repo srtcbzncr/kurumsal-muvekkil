@@ -47,6 +47,22 @@ public class CourtService {
 		return courtRepository.findAllByDeleted(true);
 	}
 	
+	public List<Court> findAllByParentId(UUID id, Locale locale){
+		return courtRepository.findAllByParentIdAndDeleted(id, false);
+	}
+	
+	public List<Court> findAllActiveByParentId(UUID id, Locale locale){
+		return courtRepository.findAllByParentIdAndDeletedAndActive(id, false, true);
+	}
+	
+	public List<Court> findAllPassiveByParentId(UUID id, Locale locale){
+		return courtRepository.findAllByParentIdAndDeletedAndActive(id, false, false);
+	}
+	
+	public List<Court> findAllDeletedByParentId(UUID id, Locale locale){
+		return courtRepository.findAllByParentIdAndDeleted(id, true);
+	}
+	 
 	public Court findById(UUID id, Locale locale) {
 		Optional<Court> court = courtRepository.findById(id);
 		

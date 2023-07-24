@@ -105,6 +105,46 @@ public class CourtController {
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
 	
+	@GetMapping("/{id}/subs/all")
+	public ResponseEntity<Object> findAllByParentId(@PathVariable UUID id, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		List<Court> courts = courtService.findAllByParentId(id, locale);
+		List<GetCourtResponse> response = responseMapper.getCourtListResponse(courts);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
+	}
+	
+	@GetMapping("/{id}/subs/active")
+	public ResponseEntity<Object> findAllActiveByParentId(@PathVariable UUID id, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		List<Court> courts = courtService.findAllActiveByParentId(id, locale);
+		List<GetCourtResponse> response = responseMapper.getCourtListResponse(courts);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
+	}
+	
+	@GetMapping("/{id}/subs/passive")
+	public ResponseEntity<Object> findAllPassiveByParentId(@PathVariable UUID id, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		List<Court> courts = courtService.findAllPassiveByParentId(id, locale);
+		List<GetCourtResponse> response = responseMapper.getCourtListResponse(courts);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
+	}
+	
+	@GetMapping("/{id}/subs/deleted")
+	public ResponseEntity<Object> findAllDeletedByParentId(@PathVariable UUID id, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		List<Court> courts = courtService.findAllDeletedByParentId(id, locale);
+		List<GetCourtResponse> response = responseMapper.getCourtListResponse(courts);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
+	}
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<Object> findById(@PathVariable UUID id, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
@@ -139,7 +179,7 @@ public class CourtController {
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
 	
-	@PutMapping("/set-active/{id}")
+	@PutMapping("/{id}/setActive")
 	public ResponseEntity<Object> setActive(@RequestHeader(name = "Accept-Language", required = false) String localeStr, @PathVariable UUID id){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
@@ -149,7 +189,7 @@ public class CourtController {
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
 	
-	@PutMapping("/set-passive/{id}")
+	@PutMapping("/{id}/setPassive")
 	public ResponseEntity<Object> setPassive(@RequestHeader(name = "Accept-Language", required = false) String localeStr, @PathVariable UUID id){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
