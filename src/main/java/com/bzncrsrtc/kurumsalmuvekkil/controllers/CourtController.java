@@ -65,6 +65,20 @@ public class CourtController {
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
 	
+	@GetMapping("/{id}/stats")
+	public ResponseEntity<Object> subStatistics(@PathVariable UUID id, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		int allCountByParentId = courtService.allCountByParentId(id, locale);
+		int activeCountByParentId = courtService.activeCountByParentId(id, locale);
+		int passiveCountByParentId = courtService.passiveCountByParentId(id, locale);
+		int deletedCountByParentId = courtService.deletedCountByParentId(id, locale);
+		
+		GetCourtStatiscticsResponse response = new GetCourtStatiscticsResponse(allCountByParentId, activeCountByParentId, passiveCountByParentId, deletedCountByParentId);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
+	}
+	
 	@GetMapping("/all")
 	public ResponseEntity<Object> findAll(@RequestHeader(name = "Accept-Language", required = false) String localeStr){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
@@ -110,7 +124,7 @@ public class CourtController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		List<Court> courts = courtService.findAllByParentId(id, locale);
-		List<GetCourtResponse> response = responseMapper.getCourtListResponse(courts);
+		List<GetCourtWithoutParentResponse> response = responseMapper.getCourtWithoutParentListResponse(courts);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
@@ -120,7 +134,7 @@ public class CourtController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		List<Court> courts = courtService.findAllActiveByParentId(id, locale);
-		List<GetCourtResponse> response = responseMapper.getCourtListResponse(courts);
+		List<GetCourtWithoutParentResponse> response = responseMapper.getCourtWithoutParentListResponse(courts);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
@@ -130,7 +144,7 @@ public class CourtController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		List<Court> courts = courtService.findAllPassiveByParentId(id, locale);
-		List<GetCourtResponse> response = responseMapper.getCourtListResponse(courts);
+		List<GetCourtWithoutParentResponse> response = responseMapper.getCourtWithoutParentListResponse(courts);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
@@ -140,7 +154,7 @@ public class CourtController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		List<Court> courts = courtService.findAllDeletedByParentId(id, locale);
-		List<GetCourtResponse> response = responseMapper.getCourtListResponse(courts);
+		List<GetCourtWithoutParentResponse> response = responseMapper.getCourtWithoutParentListResponse(courts);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}

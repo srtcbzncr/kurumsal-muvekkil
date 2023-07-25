@@ -172,15 +172,31 @@ public class CourtService {
 		return courtRepository.countByDeleted(false);
 	}
 	
+	public int allCountByParentId(UUID id, Locale locale) {
+		return courtRepository.countByParentIdAndDeleted(id, false);
+	}
+	
 	public int activeCount(Locale locale) {
 		return courtRepository.countByActiveAndDeleted(true, false);
+	}
+	
+	public int activeCountByParentId(UUID id, Locale locale) {
+		return courtRepository.countByParentIdAndActiveAndDeleted(id, true, false);
 	}
 	
 	public int passiveCount(Locale locale) {
 		return courtRepository.countByActiveAndDeleted(false, false);
 	}
 	
+	public int passiveCountByParentId(UUID id, Locale locale) {
+		return courtRepository.countByParentIdAndActiveAndDeleted(id, false, false);
+	}
+	
 	public int deletedCount(Locale locale) {
 		return courtRepository.countByDeleted(true);
+	}
+	
+	public int deletedCountByParentId(UUID id, Locale locale) {
+		return courtRepository.countByParentIdAndDeleted(id, true);
 	}
 }
