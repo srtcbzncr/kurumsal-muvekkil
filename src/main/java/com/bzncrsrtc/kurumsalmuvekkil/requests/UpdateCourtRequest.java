@@ -15,4 +15,6 @@ public class UpdateCourtRequest {
 	@NotEmpty(message="{name.notNull}")
 	private String name;
 	
+	private ParentCourtRequest parent;
+	
 }

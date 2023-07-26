@@ -36,7 +36,7 @@ import org.springframework.stereotype.Component;
 /*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-07-17T09:05:39+0300",
+    date = "2023-07-26T11:59:45+0300",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.33.0.v20230218-1114, environment: Java 17.0.6 (Eclipse Adoptium)"
 )
 */
@@ -199,6 +199,7 @@ public class RequestMapperImpl implements RequestMapper {
 
         court.setId( updateCourtRequest.getId() );
         court.setName( updateCourtRequest.getName() );
+        court.setParent( fromParentCourtRequestToCourt( updateCourtRequest.getParent() ) );
 
         return court;
     }
@@ -227,6 +228,7 @@ public class RequestMapperImpl implements RequestMapper {
 
         updateCourtRequest.setId( court.getId() );
         updateCourtRequest.setName( court.getName() );
+        updateCourtRequest.setParent( fromCourtToParentCourtRequest( court.getParent() ) );
 
         return updateCourtRequest;
     }

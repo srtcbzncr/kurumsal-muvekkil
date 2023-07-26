@@ -12,11 +12,9 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bzncrsrtc.kurumsalmuvekkil.exceptions.CourtCanNotDeleteException;
 import com.bzncrsrtc.kurumsalmuvekkil.exceptions.CourtExistsException;
 import com.bzncrsrtc.kurumsalmuvekkil.exceptions.CourtNotFoundException;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Court;
-import com.bzncrsrtc.kurumsalmuvekkil.models.File;
 import com.bzncrsrtc.kurumsalmuvekkil.repositories.CourtRepository;
 
 @Service
@@ -89,6 +87,10 @@ public class CourtService {
 	public Court update(Court court, Locale locale) {
 		if(!courtRepository.existsByIdAndDeleted(court.getId(), false)) {
 			throw new CourtNotFoundException(messageSource.getMessage("court.not.found.message", null, locale));
+		}
+		
+		if(courtRepository.existsByIdNotAndNameAndDeleted(court.getId(), court.getName(), false)) {
+			throw new CourtExistsException(messageSource.getMessage("court.exists.message", null, locale));
 		}
 		
 		return courtRepository.save(court);
