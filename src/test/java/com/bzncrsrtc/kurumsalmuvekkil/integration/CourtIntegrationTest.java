@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDateTime;
+import java.util.Base64;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -20,8 +22,9 @@ import com.bzncrsrtc.kurumsalmuvekkil.mappers.RequestMapper;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Court;
 import com.bzncrsrtc.kurumsalmuvekkil.repositories.CourtRepository;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest()
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
 public class CourtIntegrationTest {
 
 	@Autowired
@@ -66,12 +69,20 @@ public class CourtIntegrationTest {
 		
 	}
 	
+	private String getAuthorizationHeader() {
+	    String username = "admin";
+	    String password = "123456";
+	    String auth = username + ":" + password;
+	    byte[] encodedAuth = Base64.getEncoder().encode(auth.getBytes());
+	    return "Basic " + new String(encodedAuth);
+	}
+	
 	@Test
-	public void statisticsWithoutMockUserShouldReturn401() throws Exception {
+	public void statisticsWithoutAuthHeaderShouldReturn401() throws Exception {
 		ResultActions response = mockMvc.perform(get("/court/stats")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
-				.header("accept-language", "tr"));
+				.header("Accept-Language", "tr"));
 		
 		response.andExpect(status().isUnauthorized())
 				.andExpect(jsonPath("$.status").value(401))
@@ -79,14 +90,13 @@ public class CourtIntegrationTest {
 				.andExpect(jsonPath("$.error").isNotEmpty());
 	}
 	
-	
 	@Test
-	@WithMockUser(username="admin",roles="ADMIN")
-	public void statisticsWithMockUserShouldReturnCourtStatistics() throws Exception {
+	public void statisticsWithAuthHeaderShouldReturnCourtStatistics() throws Exception {
 		ResultActions response = mockMvc.perform(get("/court/stats")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
-				.header("accept-language", "tr"));
+				.header("Authorization", getAuthorizationHeader())
+				.header("Accept-Language", "tr"));
 		
 		response.andExpect(status().isOk())
 				.andExpect(jsonPath("$.status").value(200))
