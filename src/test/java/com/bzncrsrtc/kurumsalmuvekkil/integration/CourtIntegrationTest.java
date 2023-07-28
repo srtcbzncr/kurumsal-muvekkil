@@ -15,12 +15,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.bzncrsrtc.kurumsalmuvekkil.mappers.RequestMapper;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Court;
+import com.bzncrsrtc.kurumsalmuvekkil.models.User;
 import com.bzncrsrtc.kurumsalmuvekkil.repositories.CourtRepository;
+import com.bzncrsrtc.kurumsalmuvekkil.repositories.UserRepository;
 
 @SpringBootTest()
 @AutoConfigureMockMvc
@@ -66,7 +69,6 @@ public class CourtIntegrationTest {
 		deletedCourt.setDeleted(true);
 		deletedCourt.setDeletedAt(LocalDateTime.now());
 		courtRepository.save(deletedCourt);
-		
 	}
 	
 	private String getAuthorizationHeader() {
@@ -76,6 +78,8 @@ public class CourtIntegrationTest {
 	    byte[] encodedAuth = Base64.getEncoder().encode(auth.getBytes());
 	    return "Basic " + new String(encodedAuth);
 	}
+	
+	@Sql(scripts={"classpath:data.sql"})
 	
 	@Test
 	public void statisticsWithoutAuthHeaderShouldReturn401() throws Exception {
