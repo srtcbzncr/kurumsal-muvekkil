@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.bzncrsrtc.kurumsalmuvekkil.exceptions.AuthHeaderMissingException;
 import com.bzncrsrtc.kurumsalmuvekkil.exceptions.EmailAlreadyUsedException;
 import com.bzncrsrtc.kurumsalmuvekkil.exceptions.IdentificationNumberAlreadyUsedException;
 import com.bzncrsrtc.kurumsalmuvekkil.exceptions.PhoneNumberAlreadyUsedException;
@@ -114,6 +115,14 @@ public class GeneralExceptionHandler {
 		return ResponseHandler.generateResponse(null, HttpStatus.UNAUTHORIZED, response);
 	}
 	
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	@ExceptionHandler(AuthHeaderMissingException.class)
+	public ResponseEntity<Object> handleAuthHeaderMissingException(AuthHeaderMissingException exception){
+		ErrorResponse response = new ErrorResponse(HttpStatus.UNAUTHORIZED.name(), exception.getMessage());
+		
+		return ResponseHandler.generateResponse(null, HttpStatus.UNAUTHORIZED, response);
+	}
+	
 	@ResponseStatus(HttpStatus.FORBIDDEN)
 	@ExceptionHandler(AccessDeniedException.class)
 	public ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException exception){
@@ -121,5 +130,5 @@ public class GeneralExceptionHandler {
 		
 		return ResponseHandler.generateResponse(null, HttpStatus.FORBIDDEN, response);
 	}
-	
+		
 }
