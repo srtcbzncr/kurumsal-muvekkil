@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,6 +53,7 @@ public class CourtController {
 	}
 	
 	@GetMapping("/stats")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Object> statistics(@RequestHeader(name = "Accept-Language", required = false) String localeStr){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
@@ -66,6 +68,7 @@ public class CourtController {
 	}
 	
 	@GetMapping("/{id}/stats")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Object> subStatistics(@PathVariable UUID id, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
@@ -80,6 +83,7 @@ public class CourtController {
 	}
 	
 	@GetMapping("/all")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Object> findAll(@RequestHeader(name = "Accept-Language", required = false) String localeStr){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
@@ -90,6 +94,7 @@ public class CourtController {
 	}
 	
 	@GetMapping("/active")
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_LAWYER') or hasRole('ROLE_CLIENT')")
 	public ResponseEntity<Object> findAllActive(@RequestHeader(name = "Accept-Language", required = false) String localeStr){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
@@ -100,6 +105,7 @@ public class CourtController {
 	}
 	
 	@GetMapping("/passive")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Object> findAllPassive(@RequestHeader(name = "Accept-Language", required = false) String localeStr){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
@@ -110,6 +116,7 @@ public class CourtController {
 	}
 	
 	@GetMapping("/deleted")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Object> findAllDeleted(@RequestHeader(name = "Accept-Language", required = false) String localeStr){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
@@ -120,6 +127,7 @@ public class CourtController {
 	}
 	
 	@GetMapping("/{id}/subs/all")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Object> findAllByParentId(@PathVariable UUID id, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
@@ -130,6 +138,7 @@ public class CourtController {
 	}
 	
 	@GetMapping("/{id}/subs/active")
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_LAWYER') or hasRole('ROLE_CLIENT')")
 	public ResponseEntity<Object> findAllActiveByParentId(@PathVariable UUID id, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
@@ -140,6 +149,7 @@ public class CourtController {
 	}
 	
 	@GetMapping("/{id}/subs/passive")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Object> findAllPassiveByParentId(@PathVariable UUID id, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
@@ -150,6 +160,7 @@ public class CourtController {
 	}
 	
 	@GetMapping("/{id}/subs/deleted")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Object> findAllDeletedByParentId(@PathVariable UUID id, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
@@ -160,6 +171,7 @@ public class CourtController {
 	}
 	
 	@GetMapping("/{id}")
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_LAWYER') or hasRole('ROLE_CLIENT')")
 	public ResponseEntity<Object> findById(@PathVariable UUID id, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
@@ -170,6 +182,7 @@ public class CourtController {
 	}
 	
 	@PostMapping("")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Object> create(@RequestHeader(name = "Accept-Language", required = false) String localeStr, @Valid @RequestBody CreateCourtRequest createCourtRequest){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
@@ -183,6 +196,7 @@ public class CourtController {
 	}	
 	
 	@PutMapping("")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Object> update(@RequestHeader(name = "Accept-Language", required = false) String localeStr, @Valid @RequestBody UpdateCourtRequest updateCourtRequest){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
@@ -194,6 +208,7 @@ public class CourtController {
 	}
 	
 	@PutMapping("/{id}/setActive")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Object> setActive(@RequestHeader(name = "Accept-Language", required = false) String localeStr, @PathVariable UUID id){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
@@ -204,6 +219,7 @@ public class CourtController {
 	}
 	
 	@PutMapping("/{id}/setPassive")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Object> setPassive(@RequestHeader(name = "Accept-Language", required = false) String localeStr, @PathVariable UUID id){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
@@ -214,6 +230,7 @@ public class CourtController {
 	}
 	
 	@DeleteMapping("/{id}")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Object> delete(@RequestHeader(name = "Accept-Language", required = false) String localeStr, @PathVariable UUID id){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		

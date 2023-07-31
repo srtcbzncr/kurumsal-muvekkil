@@ -9,12 +9,15 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bzncrsrtc.kurumsalmuvekkil.exceptions.CourtExistsException;
 import com.bzncrsrtc.kurumsalmuvekkil.exceptions.CourtNotFoundException;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Court;
+import com.bzncrsrtc.kurumsalmuvekkil.models.User;
 import com.bzncrsrtc.kurumsalmuvekkil.repositories.CourtRepository;
 
 @Service
@@ -46,29 +49,74 @@ public class CourtService {
 	}
 	
 	public List<Court> findAllByParentId(UUID id, Locale locale){
+		
+		if(!courtRepository.existsById(id)) {
+			throw new CourtNotFoundException(messageSource.getMessage("court.not.found.message", null, locale));
+		}
+		
 		return courtRepository.findAllByParentIdAndDeleted(id, false);
 	}
 	
 	public List<Court> findAllActiveByParentId(UUID id, Locale locale){
+		
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		
+		if(user.getRole().getName().equals("ROLE_ADMIN")) {
+			
+			if(!courtRepository.existsById(id)) {
+				throw new CourtNotFoundException(messageSource.getMessage("court.not.found.message", null, locale));
+			}
+			
+		}
+		else {
+			if(!courtRepository.existsByIdAndActiveAndDeleted(id, true, false)) {
+				throw new CourtNotFoundException(messageSource.getMessage("court.not.found.message", null, locale));
+			}
+		}
+		
 		return courtRepository.findAllByParentIdAndDeletedAndActive(id, false, true);
 	}
 	
 	public List<Court> findAllPassiveByParentId(UUID id, Locale locale){
+		
+		if(!courtRepository.existsById(id)) {
+			throw new CourtNotFoundException(messageSource.getMessage("court.not.found.message", null, locale));
+		}
+		
 		return courtRepository.findAllByParentIdAndDeletedAndActive(id, false, false);
 	}
 	
 	public List<Court> findAllDeletedByParentId(UUID id, Locale locale){
+		
+		if(!courtRepository.existsById(id)) {
+			throw new CourtNotFoundException(messageSource.getMessage("court.not.found.message", null, locale));
+		}
+		
 		return courtRepository.findAllByParentIdAndDeleted(id, true);
 	}
 	 
 	public Court findById(UUID id, Locale locale) {
-		Optional<Court> court = courtRepository.findById(id);
 		
-		if(court.isEmpty()) {
-			throw new CourtNotFoundException(messageSource.getMessage("court.not.found.message", null, locale));
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Optional<Court> court;
+		
+		if(user.getRole().getName().equals("ROLE_ADMIN")) {
+			court = courtRepository.findById(id);
+			
+			if(court.isEmpty()) {
+				throw new CourtNotFoundException(messageSource.getMessage("court.not.found.message", null, locale));
+			}
 		}
-		
+		else {
+			court = courtRepository.findByIdAndDeletedAndActive(id, false, true);
+			
+			if(court.isEmpty()) {
+				throw new CourtNotFoundException(messageSource.getMessage("court.not.found.message", null, locale));
+			}		
+		}
+	
 		return court.get();
+		
 	}
 	
 	public Court create(Court court, Locale locale) {
@@ -93,6 +141,10 @@ public class CourtService {
 			throw new CourtExistsException(messageSource.getMessage("court.exists.message", null, locale));
 		}
 		
+		if(court.getParent() != null && !courtRepository.existsByIdAndDeleted(court.getParent().getId(), false)) {
+			throw new CourtNotFoundException(messageSource.getMessage("parent.court.not.found.message", null, locale));
+		}
+		
 		return courtRepository.save(court);
 	}
 	
@@ -109,12 +161,15 @@ public class CourtService {
 		return courtRepository.save(court);
 	}
 	
+	@Transactional
 	public Court setPassive(UUID id, Locale locale) {
 		Optional<Court> optionalCourt = courtRepository.findById(id);
 		
 		if(optionalCourt.isEmpty()) {
 			throw new CourtNotFoundException(messageSource.getMessage("court.not.found.message", null, locale));
 		}
+		
+		this.setPassiveSubs(id, locale);
 		
 		Court court = optionalCourt.get();
 		court.setActive(false);
@@ -157,6 +212,19 @@ public class CourtService {
 	}
 	
 	@Transactional
+	public void setPassiveSubs(UUID id, Locale locale) {
+		if(!courtRepository.existsByIdAndDeleted(id, false)) {
+			throw new CourtNotFoundException(messageSource.getMessage("court.not.found.message", null, locale));
+		}
+		
+		List<Court> subCourts = courtRepository.findAllByParentIdAndDeletedAndActive(id, false, true);
+		subCourts.forEach((court) -> {
+			court.setActive(false);
+			courtRepository.save(court);
+		});
+	}
+	
+	@Transactional
 	public void deleteSubs(UUID id, Locale locale) {		
 		if(!courtRepository.existsByIdAndDeleted(id, false)) {
 			throw new CourtNotFoundException(messageSource.getMessage("court.not.found.message", null, locale));
@@ -175,6 +243,11 @@ public class CourtService {
 	}
 	
 	public int allCountByParentId(UUID id, Locale locale) {
+		
+		if(!courtRepository.existsById(id)) {
+			throw new CourtNotFoundException(messageSource.getMessage("court.not.found.message", null, locale));
+		}
+		
 		return courtRepository.countByParentIdAndDeleted(id, false);
 	}
 	
@@ -183,6 +256,11 @@ public class CourtService {
 	}
 	
 	public int activeCountByParentId(UUID id, Locale locale) {
+		
+		if(!courtRepository.existsById(id)) {
+			throw new CourtNotFoundException(messageSource.getMessage("court.not.found.message", null, locale));
+		}
+		
 		return courtRepository.countByParentIdAndActiveAndDeleted(id, true, false);
 	}
 	
@@ -191,6 +269,11 @@ public class CourtService {
 	}
 	
 	public int passiveCountByParentId(UUID id, Locale locale) {
+		
+		if(!courtRepository.existsById(id)) {
+			throw new CourtNotFoundException(messageSource.getMessage("court.not.found.message", null, locale));
+		}
+		
 		return courtRepository.countByParentIdAndActiveAndDeleted(id, false, false);
 	}
 	
@@ -199,6 +282,11 @@ public class CourtService {
 	}
 	
 	public int deletedCountByParentId(UUID id, Locale locale) {
+		
+		if(!courtRepository.existsById(id)) {
+			throw new CourtNotFoundException(messageSource.getMessage("court.not.found.message", null, locale));
+		}
+		
 		return courtRepository.countByParentIdAndDeleted(id, true);
 	}
 }
