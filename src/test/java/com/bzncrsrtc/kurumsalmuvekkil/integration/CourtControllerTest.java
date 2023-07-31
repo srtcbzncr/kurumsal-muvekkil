@@ -441,8 +441,8 @@ public class CourtControllerTest {
 		
 		response.andExpect(status().isForbidden())
 				.andExpect(jsonPath("$.status").value(403))
-				.andExpect(jsonPath("$.data").isNotEmpty())
-				.andExpect(jsonPath("$.error").isEmpty());
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
 	}
 	
 	
