@@ -14,7 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import com.bzncrsrtc.kurumsalmuvekkil.security.filters.CheckAuthHeaderFilter;
+import com.bzncrsrtc.kurumsalmuvekkil.filters.CheckAuthHeaderFilter;
 
 @Configuration
 @EnableWebSecurity

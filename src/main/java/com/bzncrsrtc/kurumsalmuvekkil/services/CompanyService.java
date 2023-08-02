@@ -32,7 +32,19 @@ public class CompanyService {
 	}
 	
 	public List<Company> findAll(Locale locale){
+		return companyRepository.findAllByDeleted(false);
+	}
+	
+	public List<Company> findAllActive(Locale locale) {
 		return companyRepository.findAllByDeletedAndActive(false, true);
+	}
+	
+	public List<Company> findAllPassive(Locale locale){
+		return companyRepository.findAllByDeletedAndActive(false, false);
+	}
+	
+	public List<Company> findAllDeleted(Locale locale){
+		return companyRepository.findAllByDeleted(true);
 	}
 	
 	public Company findById(UUID id, Locale locale) {

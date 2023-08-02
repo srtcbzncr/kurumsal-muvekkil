@@ -36,7 +36,7 @@ public class LawyerService {
 	}
 	
 	public List<Lawyer> findAll(Locale locale){
-		return lawyerRepository.findAllByDeletedAndActive(false, true);
+		return lawyerRepository.findAll();
 	}
 	
 	public List<Lawyer> findAllDeleted(Locale locale){

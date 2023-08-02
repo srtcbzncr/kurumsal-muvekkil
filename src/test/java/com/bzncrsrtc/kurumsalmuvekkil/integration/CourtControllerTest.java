@@ -13,6 +13,7 @@ import java.util.UUID;
 
 import static org.hamcrest.Matchers.hasSize;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +25,8 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import com.bzncrsrtc.kurumsalmuvekkil.mappers.RequestMapper;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Court;
 import com.bzncrsrtc.kurumsalmuvekkil.repositories.CourtRepository;
-import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateCourtRequest;
 
 @SpringBootTest()
 @AutoConfigureMockMvc
@@ -113,8 +112,6 @@ public class CourtControllerTest {
 	    byte[] encodedAuth = Base64.getEncoder().encode(auth.getBytes());
 	    return "Basic " + new String(encodedAuth);
 	}
-	
-	@Sql(scripts={"classpath:data.sql"})
 	
 	@Test
 	public void statisticsWithoutAuthHeaderShouldReturn401() throws Exception {

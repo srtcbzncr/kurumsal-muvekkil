@@ -34,11 +34,9 @@ import jakarta.validation.Valid;
 public class AuthController {
 	
 	private AuthService authService;
-	private UserService userService;
 	
-	public AuthController(AuthService authService, UserService userService) {
+	public AuthController(AuthService authService) {
 		this.authService = authService;
-		this.userService = userService;
 	}
 
 	@PostMapping("/login")
