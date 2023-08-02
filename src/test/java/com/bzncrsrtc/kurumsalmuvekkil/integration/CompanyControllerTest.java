@@ -15,14 +15,19 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.bzncrsrtc.kurumsalmuvekkil.models.Company;
 import com.bzncrsrtc.kurumsalmuvekkil.models.User;
@@ -30,8 +35,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.repositories.CompanyRepository;
 import com.bzncrsrtc.kurumsalmuvekkil.repositories.RoleRepository;
 import com.bzncrsrtc.kurumsalmuvekkil.repositories.UserRepository;
 
-@SpringBootTest()
-@AutoConfigureMockMvc
+@SpringBootTest
 @ActiveProfiles("test")
 public class CompanyControllerTest {
 
@@ -74,12 +78,7 @@ public class CompanyControllerTest {
 	
 	
 	/* findAll endpoint */
-	
-	@Test
-	@SqlGroup({
-	    @Sql(value = "classpath:reset.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
-	    @Sql(value = "classpath:init-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-	})
+
 	public void findAllWithoutAuthHeaderShouldReturn401() throws Exception {
 		ResultActions response = mockMvc.perform(get("/company/all")
 										.contentType(MediaType.APPLICATION_JSON)
@@ -92,10 +91,6 @@ public class CompanyControllerTest {
 	}
 	
 	@Test
-	@SqlGroup({
-	    @Sql(value = "classpath:reset.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
-	    @Sql(value = "classpath:init-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-	})
 	public void findAllWithAdminRoleShouldReturn200() throws Exception {
 		
 		System.out.println("Users");
@@ -115,10 +110,6 @@ public class CompanyControllerTest {
 	}
 	
 	@Test
-	@SqlGroup({
-	    @Sql(value = "classpath:reset.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
-	    @Sql(value = "classpath:init-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-	})
 	public void findAllWithClientRoleShouldReturn403() throws Exception {
 		ResultActions response = mockMvc.perform(get("/company/all")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -131,10 +122,6 @@ public class CompanyControllerTest {
 	}
 	
 	@Test
-	@SqlGroup({
-	    @Sql(value = "classpath:reset.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD),
-	    @Sql(value = "classpath:init-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-	})
 	public void findAllWithLawyerRoleShouldReturn403() throws Exception {
 		ResultActions response = mockMvc.perform(get("/company/all")
 				.contentType(MediaType.APPLICATION_JSON)

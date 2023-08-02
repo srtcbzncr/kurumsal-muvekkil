@@ -75,11 +75,6 @@
 	        <artifactId>mapstruct</artifactId>
 	        <version>${org.mapstruct.version}</version>
 	    </dependency>
-	    <dependency>
-	    	<groupId>tutorial.security</groupId>
-	    	<artifactId>eazy-bank</artifactId>
-	    	<version>0.0.1-SNAPSHOT</version>
-	    </dependency>
 	</dependencies>
 
 	<build>
