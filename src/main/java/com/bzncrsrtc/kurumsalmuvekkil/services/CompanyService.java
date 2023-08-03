@@ -134,4 +134,20 @@ public class CompanyService {
 		company.setDeletedAt(LocalDateTime.now());
 		companyRepository.save(company);
 	}	
+	
+	public int allCount(Locale locale) {
+		return companyRepository.countByDeleted(false);
+	}
+	
+	public int activeCount(Locale locale) {
+		return companyRepository.countByActiveAndDeleted(true, false);
+	}
+	
+	public int passiveCount(Locale locale) {
+		return companyRepository.countByActiveAndDeleted(false, false);
+	}
+	
+	public int deletedCount(Locale locale) {
+		return companyRepository.countByDeleted(true);
+	}
 }

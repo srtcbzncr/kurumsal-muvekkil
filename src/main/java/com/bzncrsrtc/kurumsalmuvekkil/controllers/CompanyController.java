@@ -26,6 +26,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.models.Company;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateCompanyRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateCompanyRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCompanyResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCompanyStatisticsResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.ResponseHandler;
 import com.bzncrsrtc.kurumsalmuvekkil.services.CompanyService;
 
@@ -44,6 +45,21 @@ public class CompanyController {
 		this.companyService = companyService;
 		this.responseMapper = responseMapper;
 		this.requestMapper = requestMapper;
+	}
+	
+	@GetMapping("/stats")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Object> stats(@RequestHeader(name = "Accept-Language", required = false) String localeStr){
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		int allCount = companyService.allCount(locale);
+		int activeCount = companyService.activeCount(locale);
+		int passiveCount = companyService.passiveCount(locale);
+		int deletedCount = companyService.deletedCount(locale);
+		
+		GetCompanyStatisticsResponse response = new GetCompanyStatisticsResponse(allCount, activeCount, passiveCount, deletedCount);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
 
 	@GetMapping("/all")
