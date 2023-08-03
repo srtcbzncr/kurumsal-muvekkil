@@ -13,13 +13,13 @@ import java.util.UUID;
 
 import static org.hamcrest.Matchers.hasSize;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
@@ -28,9 +28,11 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Court;
 import com.bzncrsrtc.kurumsalmuvekkil.repositories.CourtRepository;
 
-@SpringBootTest()
+@SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
+@Sql({ "classpath:init-data.sql" })
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class CourtControllerTest {
 
 	@Autowired
@@ -1324,8 +1326,7 @@ public class CourtControllerTest {
 				.andExpect(jsonPath("$.status").value(200))
 				.andExpect(jsonPath("$.data").isNotEmpty())
 				.andExpect(jsonPath("$.data.name").value("New New Court"))
-				.andExpect(jsonPath("$.error").isEmpty());
-		
+				.andExpect(jsonPath("$.error").isEmpty());		
 	}
 	
 	@Test
@@ -1347,7 +1348,7 @@ public class CourtControllerTest {
 	}
 	
 	@Test
-	public void updateNullNameWithAdmnRoleShouldReturn400() throws Exception {
+	public void updateNullNameWithAdminRoleShouldReturn400() throws Exception {
 		
 		String request = "{ \"id\": \"" + activeRootCourt.getId() + "\", \"name\": \"\" }";
 		
@@ -1416,7 +1417,6 @@ public class CourtControllerTest {
 				.andExpect(jsonPath("$.data.name").value("New New Court"))
 				.andExpect(jsonPath("$.data.parent.name").value(passiveRootCourt.getName()))
 				.andExpect(jsonPath("$.error").isEmpty());
-		
 	}
 	
 	@Test
@@ -1435,6 +1435,22 @@ public class CourtControllerTest {
 				.andExpect(jsonPath("$.data").isEmpty())
 				.andExpect(jsonPath("$.error").isNotEmpty());
 		
+	}
+	
+	@Test
+	public void updateDeletedCourtWithAdminRoleShouldReturn404() throws Exception {
+		String request = "{ \"id\": \"" + deletedRootCourt.getId() + "\", \"name\": \"New Court\" }";
+		
+		ResultActions response = mockMvc.perform(put("/court")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(request)
+                .accept(MediaType.APPLICATION_JSON)
+                .header("Authorization", getAuthorizationHeader("admin")));
+		
+		response.andExpect(status().isNotFound())
+				.andExpect(jsonPath("$.status").value(404))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
 	}
 	
 	

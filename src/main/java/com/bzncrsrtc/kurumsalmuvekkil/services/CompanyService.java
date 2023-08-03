@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.bzncrsrtc.kurumsalmuvekkil.exceptions.CompanyExistsException;
@@ -17,6 +18,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.models.Company;
 import com.bzncrsrtc.kurumsalmuvekkil.models.File;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Lawyer;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Subscription;
+import com.bzncrsrtc.kurumsalmuvekkil.models.User;
 import com.bzncrsrtc.kurumsalmuvekkil.repositories.CompanyRepository;
 
 @Service
@@ -48,8 +50,16 @@ public class CompanyService {
 	}
 	
 	public Company findById(UUID id, Locale locale) {
-		Optional<Company> company = companyRepository.findByIdAndDeletedAndActive(id, false, true);
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Optional<Company> company;
 
+		if(user.getRole().getName().equals("ROLE_ADMIN")) {
+			company = companyRepository.findById(id);
+		}
+		else {
+			company = companyRepository.findByIdAndDeletedAndActive(id, false, true);
+		}
+				
 		if(company.isEmpty()) {
 			throw new CompanyNotFoundException(messageSource.getMessage("company.not.found.message", null, locale));
 		}
@@ -67,19 +77,49 @@ public class CompanyService {
 	
 	public Company create(Company company, Locale locale) {
 		if(companyRepository.existsByNameAndDeleted(company.getName(), false)) {
-			throw new CompanyExistsException(messageSource.getMessage("company.exist.message", null, locale));
+			throw new CompanyExistsException(messageSource.getMessage("company.exists.message", null, locale));
 		}
 		
 		Company savedCompany = companyRepository.save(company);
 		return savedCompany;
 	}
 	
-	public void update(Company company, Locale locale) {
+	public Company update(Company company, Locale locale) {
 		if(!companyRepository.existsByIdAndDeleted(company.getId(), false)) {
 			throw new CompanyNotFoundException(messageSource.getMessage("company.not.found.message", null, locale));
 		}
 		
-		companyRepository.save(company);
+		if(companyRepository.existsByIdNotAndNameAndDeleted(company.getId(), company.getName(), false)) {
+			throw new CompanyExistsException(messageSource.getMessage("company.exists.message", null, locale));
+		}
+		
+		return companyRepository.save(company);
+	}
+	
+	public Company setActive(UUID id, Locale locale) {
+		Optional<Company> optionalCompany = companyRepository.findByIdAndDeleted(id, false);
+		
+		if(optionalCompany.isEmpty()) {
+			throw new CompanyNotFoundException(messageSource.getMessage("company.not.found.message", null, locale));
+		}
+		
+		Company company = optionalCompany.get();
+		company.setActive(true);
+		
+		return companyRepository.save(company);
+	}
+	
+	public Company setPassive(UUID id, Locale locale) {
+		Optional<Company> optionalCompany = companyRepository.findByIdAndDeleted(id, false);
+		
+		if(optionalCompany.isEmpty()) {
+			throw new CompanyNotFoundException(messageSource.getMessage("company.not.found.message", null, locale));
+		}
+		
+		Company company = optionalCompany.get();
+		company.setActive(false);
+		
+		return companyRepository.save(company);
 	}
 	
 	public void delete(UUID id, Locale locale) {

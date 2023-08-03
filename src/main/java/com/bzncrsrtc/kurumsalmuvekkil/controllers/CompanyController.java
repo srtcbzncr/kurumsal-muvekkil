@@ -57,7 +57,41 @@ public class CompanyController {
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
 	
+	@GetMapping("/active")
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENT') or hasRole('ROLE_LAWYER')")
+	public ResponseEntity<Object> findAllActive(@RequestHeader(name = "Accept-Language", required = false) String localeStr){
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		List<Company> companies = companyService.findAllActive(locale);
+		List<GetCompanyResponse> response = responseMapper.getCompanyListResponse(companies);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
+	}
+	
+	@GetMapping("/passive")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Object> findAllPassive(@RequestHeader(name = "Accept-Language", required = false) String localeStr){
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		List<Company> companies = companyService.findAllPassive(locale);
+		List<GetCompanyResponse> response = responseMapper.getCompanyListResponse(companies);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
+	}
+	
+	@GetMapping("/deleted")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Object> findAllDeleted(@RequestHeader(name = "Accept-Language", required = false) String localeStr){
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		List<Company> companies = companyService.findAllDeleted(locale);
+		List<GetCompanyResponse> response = responseMapper.getCompanyListResponse(companies);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
+	}
+	
 	@GetMapping("/{id}")
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENT') or hasRole('ROLE_LAWYER')")
 	public ResponseEntity<Object> findById(@PathVariable UUID id, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
@@ -68,6 +102,7 @@ public class CompanyController {
 	}
 	
 	@PostMapping("")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Object> create(@Valid @RequestBody CreateCompanyRequest createCompanyRequest, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
@@ -81,16 +116,39 @@ public class CompanyController {
 	}
 	
 	@PutMapping("")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Object> update(@Valid @RequestBody UpdateCompanyRequest updateCompanyRequest, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		Company company = requestMapper.fromUpdateCompanyRequestToCompany(updateCompanyRequest);
-		companyService.update(company, locale);
+		Company savedCompany = companyService.update(company, locale);
+		GetCompanyResponse response = responseMapper.getCompanyResponse(savedCompany);
 		
-		return ResponseHandler.generateResponse(null, HttpStatus.OK, null);
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
+	}
+	
+	@PutMapping("/{id}/setActive")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Object> setActive(@PathVariable UUID id, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		Company company = companyService.setActive(id, locale);
+		
+		return ResponseHandler.generateResponse(company, HttpStatus.OK, null);
+	}
+	
+	@PutMapping("/{id}/setPassive")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Object> setPassive(@PathVariable UUID id, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		Company company = companyService.setPassive(id, locale);
+		
+		return ResponseHandler.generateResponse(company, HttpStatus.OK, null);
 	}
 	
 	@DeleteMapping("/{id}")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Object> delete(@PathVariable UUID id, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		

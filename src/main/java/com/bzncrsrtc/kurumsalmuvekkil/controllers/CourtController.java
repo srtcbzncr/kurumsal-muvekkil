@@ -201,8 +201,8 @@ public class CourtController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		Court court = requestMapper.fromUpdateCourtRequestToCourt(updateCourtRequest);
-		Court updatedCourt = courtService.update(court, locale);
-		GetCourtResponse response = responseMapper.getCourtResponse(updatedCourt);
+		Court savedCourt = courtService.update(court, locale);
+		GetCourtResponse response = responseMapper.getCourtResponse(savedCourt);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}

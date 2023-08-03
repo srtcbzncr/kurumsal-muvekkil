@@ -38,7 +38,7 @@ public class Court {
 	private List<Court> subs;
 	
 	@NonNull
-	@Column(name="name", unique=true)
+	@Column(name="name")
 	private String name;
 	
 	@OneToMany(mappedBy="court")

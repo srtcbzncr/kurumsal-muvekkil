@@ -96,25 +96,20 @@ public class CourtService {
 	}
 	 
 	public Court findById(UUID id, Locale locale) {
-		
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Optional<Court> court;
 		
 		if(user.getRole().getName().equals("ROLE_ADMIN")) {
 			court = courtRepository.findById(id);
-			
-			if(court.isEmpty()) {
-				throw new CourtNotFoundException(messageSource.getMessage("court.not.found.message", null, locale));
-			}
 		}
 		else {
-			court = courtRepository.findByIdAndDeletedAndActive(id, false, true);
-			
-			if(court.isEmpty()) {
-				throw new CourtNotFoundException(messageSource.getMessage("court.not.found.message", null, locale));
-			}		
+			court = courtRepository.findByIdAndDeletedAndActive(id, false, true);	
 		}
 	
+		if(court.isEmpty()) {
+			throw new CourtNotFoundException(messageSource.getMessage("court.not.found.message", null, locale));
+		}
+		
 		return court.get();
 		
 	}
