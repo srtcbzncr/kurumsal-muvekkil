@@ -16,5 +16,7 @@ public class PlanResponse {
 	private int clientQuota;
 	private int lawyerQuota;
 	private int fileQuotaPerClient;
+	private boolean active;
+	private boolean deleted;
 	
 }

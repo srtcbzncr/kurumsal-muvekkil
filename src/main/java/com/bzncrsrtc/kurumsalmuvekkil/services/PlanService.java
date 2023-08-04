@@ -29,7 +29,19 @@ public class PlanService {
 	}
 	
 	public List<Plan> findAll(Locale locale){
+		return planRepository.findAllByDeleted(false);
+	}
+	
+	public List<Plan> findAllActive(Locale locale){
 		return planRepository.findAllByDeletedAndActive(false, true);
+	}
+	
+	public List<Plan> findAllPassive(Locale locale) {
+		return planRepository.findAllByDeletedAndActive(false, false);
+	}
+	
+	public List<Plan> findAllDeleted(Locale locale) {
+		return planRepository.findAllByDeleted(true);
 	}
 	
 	public Plan findById(UUID id, Locale locale) {
@@ -40,14 +52,6 @@ public class PlanService {
 		}
 		
 		return plan.get();
-	}
-	
-	public List<Plan> findAllDeleted(Locale locale){
-		return planRepository.findAllByDeleted(true);
-	}
-	
-	public List<Plan> findAllPassive(Locale locale){
-		return planRepository.findAllByDeletedAndActive(false, false);
 	}
 	
 	public Plan create(Plan plan, Locale locale) {

@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,11 +48,45 @@ public class PlanController {
 		this.requestMapper = requestMapper;
 	}
 	
-	@GetMapping("")
+	@GetMapping("/all")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Object> findAll(@RequestHeader(name = "Accept-Language", required = false) String localeStr){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		List<Plan> plans = planService.findAll(locale);
+		List<PlanResponse> response = responseMapper.getPlanListResponse(plans);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
+	}
+	
+	@GetMapping("/active")
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENT') or hasRole('ROLE_LAWYER')")
+	public ResponseEntity<Object> findAllActive(@RequestHeader(name = "Accept-Language", required = false) String localeStr){
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		List<Plan> plans = planService.findAllActive(locale);
+		List<PlanResponse> response = responseMapper.getPlanListResponse(plans);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
+	}
+	
+	@GetMapping("/passive")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Object> findAllPassive(@RequestHeader(name = "Accept-Language", required = false) String localeStr){
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		List<Plan> plans = planService.findAllPassive(locale);
+		List<PlanResponse> response = responseMapper.getPlanListResponse(plans);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
+	}
+	
+	@GetMapping("/deleted")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Object> findAllDeleted(@RequestHeader(name = "Accept-Language", required = false) String localeStr){
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		List<Plan> plans = planService.findAllDeleted(locale);
 		List<PlanResponse> response = responseMapper.getPlanListResponse(plans);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);

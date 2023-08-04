@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 /*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-08-04T14:20:50+0300",
+    date = "2023-08-04T16:18:29+0300",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.33.0.v20230218-1114, environment: Java 17.0.6 (Eclipse Adoptium)"
 )
 */
@@ -82,8 +82,8 @@ public class ResponseMapperImpl implements ResponseMapper {
         companyResponse.setId( company.getId() );
         companyResponse.setName( company.getName() );
 
-        companyResponse.setLawyerCount( company.getLawyers().stream().filter(c -> c.isActive() == true && c.isDeleted() == false).collect(java.util.stream.Collectors.toList()).size() );
-        companyResponse.setPlan( company.getSubscriptions().size() > 0 ? company.getSubscriptions().get(0).getPlan().getName() : null );
+        companyResponse.setLawyerCount( company.getLawyers() != null && company.getLawyers().size() > 0 ? company.getLawyers().stream().filter(c -> c.isActive() == true && c.isDeleted() == false).collect(java.util.stream.Collectors.toList()).size() : 0 );
+        companyResponse.setPlan( company.getSubscriptions() != null && company.getSubscriptions().size() > 0 ? company.getSubscriptions().get(0).getPlan().getName() : null );
 
         return companyResponse;
     }
@@ -116,7 +116,7 @@ public class ResponseMapperImpl implements ResponseMapper {
         courtResponse.setName( court.getName() );
         courtResponse.setParent( getCourtWithoutParentResponse( court.getParent() ) );
 
-        courtResponse.setSubCount( court.getSubs().stream().filter(c -> c.isActive() == true && c.isDeleted() == false).collect(java.util.stream.Collectors.toList()).size() );
+        courtResponse.setSubCount( court.getSubs() != null && court.getSubs().size() > 0 ? court.getSubs().stream().filter(c -> c.isActive() == true && c.isDeleted() == false).collect(java.util.stream.Collectors.toList()).size() : 0 );
 
         return courtResponse;
     }
@@ -148,7 +148,7 @@ public class ResponseMapperImpl implements ResponseMapper {
         courtWithoutParentResponse.setId( court.getId() );
         courtWithoutParentResponse.setName( court.getName() );
 
-        courtWithoutParentResponse.setSubCount( court.getSubs().stream().filter(c -> c.isActive() == true && c.isDeleted() == false).collect(java.util.stream.Collectors.toList()).size() );
+        courtWithoutParentResponse.setSubCount( court.getSubs() != null && court.getSubs().size() > 0 ? court.getSubs().stream().filter(c -> c.isActive() == true && c.isDeleted() == false).collect(java.util.stream.Collectors.toList()).size() : 0 );
 
         return courtWithoutParentResponse;
     }
@@ -299,10 +299,12 @@ public class ResponseMapperImpl implements ResponseMapper {
 
         PlanResponse planResponse = new PlanResponse();
 
+        planResponse.setActive( plan.isActive() );
         planResponse.setAnnualPrice( plan.getAnnualPrice() );
         if ( plan.getClientQuota() != null ) {
             planResponse.setClientQuota( plan.getClientQuota() );
         }
+        planResponse.setDeleted( plan.isDeleted() );
         planResponse.setDescription( plan.getDescription() );
         if ( plan.getFileQuotaPerClient() != null ) {
             planResponse.setFileQuotaPerClient( plan.getFileQuotaPerClient() );

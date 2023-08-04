@@ -12,8 +12,10 @@ public interface PlanRepository extends JpaRepository<Plan, UUID> {
 	Optional<Plan> findByIdAndDeleted(UUID id, boolean deleted);
 	Optional<Plan> findByIdAndActive(UUID id, boolean active);
 	Optional<Plan> findByIdAndDeletedAndActive(UUID id, boolean deleted, boolean active);
+	
 	List<Plan> findAllByDeletedAndActive(boolean deleted, boolean active);
 	List<Plan> findAllByDeleted(boolean deleted);
 	List<Plan> findAllByActive(boolean active);
+	
 	boolean existsByIdAndDeleted(UUID id, boolean deleted);
 }
