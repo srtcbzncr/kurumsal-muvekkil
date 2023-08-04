@@ -104,6 +104,7 @@ public class PlanController {
 	}
 	
 	@PostMapping("")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Object> create(@Valid @RequestBody CreatePlanRequest createPlanRequest, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
@@ -117,16 +118,19 @@ public class PlanController {
 	}
 	
 	@PutMapping("")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Object> update(@Valid @RequestBody UpdatePlanRequest updatePlanRequest, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		Plan plan = requestMapper.fromUpdatePlanRequestToPlan(updatePlanRequest);
-		planService.update(plan, locale);
+		Plan savedPlan = planService.update(plan, locale);
+		PlanResponse response = responseMapper.getPlanResponse(savedPlan);
 		
-		return ResponseHandler.generateResponse(plan, HttpStatus.OK, null);
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
 	
 	@DeleteMapping("/{id}")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Object> delete(@PathVariable UUID id, @RequestHeader(name = "Accept_Language", required = false) String localeStr){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		

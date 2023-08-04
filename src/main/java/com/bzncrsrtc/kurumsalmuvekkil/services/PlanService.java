@@ -65,16 +65,15 @@ public class PlanService {
 	}
 	
 	public Plan create(Plan plan, Locale locale) {
-		Plan savedPlan = planRepository.save(plan);
-		return savedPlan;
+		return planRepository.save(plan);
 	}
 	
-	public void update(Plan plan, Locale locale) {
+	public Plan update(Plan plan, Locale locale) {
 		if(!planRepository.existsByIdAndDeleted(plan.getId(), false)) {
 			throw new PlanNotFoundException(messageSource.getMessage("plan.not.found.message", null, locale));
 		}
 		
-		planRepository.save(plan);
+		return planRepository.save(plan);
 	}
 	
 	public void delete(UUID id, Locale locale) {
