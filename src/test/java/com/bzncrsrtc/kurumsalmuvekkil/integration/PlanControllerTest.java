@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Base64;
+import java.util.UUID;
 
 import static org.hamcrest.Matchers.hasSize;
 
@@ -283,6 +284,151 @@ public class PlanControllerTest {
 				.andExpect(jsonPath("$.data").isArray())
 				.andExpect(jsonPath("$.data", hasSize(1)))
 				.andExpect(jsonPath("$.error").isEmpty());
+	}
+	
+	
+	/* findById endpoint */
+	
+	@Test
+	public void findByIdWithoutAuthHeaderShouldReturn401() throws Exception {
+		ResultActions response = mockMvc.perform(get("/plan/" + activePlan.getId())
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON));
+
+		response.andExpect(status().isUnauthorized())
+				.andExpect(jsonPath("$.status").value(401))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void findByIdActivePlanWithClientRoleShouldReturn200() throws Exception {
+		ResultActions response = mockMvc.perform(get("/plan/" + activePlan.getId())
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("client")));
+
+		response.andExpect(status().isOk())
+				.andExpect(jsonPath("$.status").value(200))
+				.andExpect(jsonPath("$.data").isNotEmpty())
+				.andExpect(jsonPath("$.error").isEmpty());
+	}
+	
+	@Test
+	public void findByIdPassivePlanWithClientRoleShouldReturn404() throws Exception {
+		ResultActions response = mockMvc.perform(get("/plan/" + passivePlan.getId())
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("client")));
+
+		response.andExpect(status().isNotFound())
+				.andExpect(jsonPath("$.status").value(404))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void findByIdDeletedPlanWithClientRoleShouldReturn404() throws Exception {
+		ResultActions response = mockMvc.perform(get("/plan/" + deletedPlan.getId())
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("client")));
+
+		response.andExpect(status().isNotFound())
+				.andExpect(jsonPath("$.status").value(404))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void findByIdActivePlanWithLawyerRoleShouldReturn200() throws Exception {
+		ResultActions response = mockMvc.perform(get("/plan/" + activePlan.getId())
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("lawyer")));
+
+		response.andExpect(status().isOk())
+				.andExpect(jsonPath("$.status").value(200))
+				.andExpect(jsonPath("$.data").isNotEmpty())
+				.andExpect(jsonPath("$.error").isEmpty());
+	}
+	
+	@Test
+	public void findByIdPassivePlanWithLawyerRoleShouldReturn404() throws Exception {
+		ResultActions response = mockMvc.perform(get("/plan/" + passivePlan.getId())
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("lawyer")));
+
+		response.andExpect(status().isNotFound())
+				.andExpect(jsonPath("$.status").value(404))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void findByIdDeletedPlanWithLawyerRoleShouldReturn404() throws Exception {
+		ResultActions response = mockMvc.perform(get("/plan/" + deletedPlan.getId())
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("lawyer")));
+
+		response.andExpect(status().isNotFound())
+				.andExpect(jsonPath("$.status").value(404))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void findByIdActivePlanWithAdminRoleShouldReturn200() throws Exception {
+		ResultActions response = mockMvc.perform(get("/plan/" + activePlan.getId())
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+
+		response.andExpect(status().isOk())
+				.andExpect(jsonPath("$.status").value(200))
+				.andExpect(jsonPath("$.data").isNotEmpty())
+				.andExpect(jsonPath("$.error").isEmpty());
+	}
+	
+	@Test
+	public void findByIdPassivePlanWithAdminRoleShouldReturn200() throws Exception {
+		ResultActions response = mockMvc.perform(get("/plan/" + passivePlan.getId())
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+
+		response.andExpect(status().isOk())
+				.andExpect(jsonPath("$.status").value(200))
+				.andExpect(jsonPath("$.data").isNotEmpty())
+				.andExpect(jsonPath("$.error").isEmpty());
+	}
+	
+	@Test
+	public void findByIdDeletedPlanWithAdminRoleShouldReturn200() throws Exception {
+		ResultActions response = mockMvc.perform(get("/plan/" + deletedPlan.getId())
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+
+		response.andExpect(status().isOk())
+				.andExpect(jsonPath("$.status").value(200))
+				.andExpect(jsonPath("$.data").isNotEmpty())
+				.andExpect(jsonPath("$.error").isEmpty());
+	}
+	
+	@Test
+	public void findByIdNotExistingPlanWithAdminRoleShouldReturn404() throws Exception {
+		ResultActions response = mockMvc.perform(get("/plan/" + UUID.randomUUID())
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+
+		response.andExpect(status().isNotFound())
+				.andExpect(jsonPath("$.status").value(404))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
 	}
 
 }

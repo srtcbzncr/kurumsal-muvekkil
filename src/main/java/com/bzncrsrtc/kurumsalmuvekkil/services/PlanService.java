@@ -9,11 +9,13 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.bzncrsrtc.kurumsalmuvekkil.exceptions.PlanNotFoundException;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Plan;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Subscription;
+import com.bzncrsrtc.kurumsalmuvekkil.models.User;
 import com.bzncrsrtc.kurumsalmuvekkil.repositories.PlanRepository;
 
 @Service
@@ -45,7 +47,15 @@ public class PlanService {
 	}
 	
 	public Plan findById(UUID id, Locale locale) {
-		Optional<Plan> plan = planRepository.findByIdAndDeletedAndActive(id, false, true);
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Optional<Plan> plan;
+		
+		if(user.getRole().getName().equals("ROLE_ADMIN")) {
+			plan = planRepository.findById(id);
+		}
+		else {
+			plan = planRepository.findByIdAndDeletedAndActive(id, false, true);
+		}
 		
 		if(plan.isEmpty()) {
 			throw new PlanNotFoundException(messageSource.getMessage("plan.not.found.message", null, locale));
