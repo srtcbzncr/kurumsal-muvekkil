@@ -36,11 +36,15 @@ public interface ResponseMapper {
 	ClientResponse getClientResponse(Client client);
 	List<ClientResponse> getClientListResponse(List<Client> clients);
 	
+	@Mapping(target = "lawyerCount", expression = "java(company.getLawyers().stream().filter(c -> c.isActive() == true && c.isDeleted() == false).collect(java.util.stream.Collectors.toList()).size())")
+	@Mapping(target = "plan", expression = "java(company.getSubscriptions().size() > 0 ? company.getSubscriptions().get(0).getPlan().getName() : null )")
 	CompanyResponse getCompanyResponse(Company company);
 	List<CompanyResponse> getCompanyListResponse(List<Company> companies);
 	
+	@Mapping(target = "subCount", expression = "java(court.getSubs().stream().filter(c -> c.isActive() == true && c.isDeleted() == false).collect(java.util.stream.Collectors.toList()).size())")
 	CourtResponse getCourtResponse(Court court);
 	List<CourtResponse> getCourtListResponse(List<Court> courts);
+	@Mapping(target = "subCount", expression = "java(court.getSubs().stream().filter(c -> c.isActive() == true && c.isDeleted() == false).collect(java.util.stream.Collectors.toList()).size())")
 	CourtWithoutParentResponse getCourtWithoutParentResponse(Court court);
 	List<CourtWithoutParentResponse> getCourtWithoutParentListResponse(List<Court> courts);
 	CourtDetailsResponse getCourtDetailsResponse(Court court);

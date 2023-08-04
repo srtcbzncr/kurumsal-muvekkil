@@ -9,6 +9,7 @@ public class CourtWithoutParentResponse {
 	
 	private UUID id;
 	private String name;
+	private int subCount;
 	private boolean active;
 	private boolean deleted;
 	

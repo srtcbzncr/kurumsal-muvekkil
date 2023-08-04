@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 /*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-08-04T12:04:20+0300",
+    date = "2023-08-04T14:20:50+0300",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.33.0.v20230218-1114, environment: Java 17.0.6 (Eclipse Adoptium)"
 )
 */
@@ -82,6 +82,9 @@ public class ResponseMapperImpl implements ResponseMapper {
         companyResponse.setId( company.getId() );
         companyResponse.setName( company.getName() );
 
+        companyResponse.setLawyerCount( company.getLawyers().stream().filter(c -> c.isActive() == true && c.isDeleted() == false).collect(java.util.stream.Collectors.toList()).size() );
+        companyResponse.setPlan( company.getSubscriptions().size() > 0 ? company.getSubscriptions().get(0).getPlan().getName() : null );
+
         return companyResponse;
     }
 
@@ -113,6 +116,8 @@ public class ResponseMapperImpl implements ResponseMapper {
         courtResponse.setName( court.getName() );
         courtResponse.setParent( getCourtWithoutParentResponse( court.getParent() ) );
 
+        courtResponse.setSubCount( court.getSubs().stream().filter(c -> c.isActive() == true && c.isDeleted() == false).collect(java.util.stream.Collectors.toList()).size() );
+
         return courtResponse;
     }
 
@@ -142,6 +147,8 @@ public class ResponseMapperImpl implements ResponseMapper {
         courtWithoutParentResponse.setDeleted( court.isDeleted() );
         courtWithoutParentResponse.setId( court.getId() );
         courtWithoutParentResponse.setName( court.getName() );
+
+        courtWithoutParentResponse.setSubCount( court.getSubs().stream().filter(c -> c.isActive() == true && c.isDeleted() == false).collect(java.util.stream.Collectors.toList()).size() );
 
         return courtWithoutParentResponse;
     }
