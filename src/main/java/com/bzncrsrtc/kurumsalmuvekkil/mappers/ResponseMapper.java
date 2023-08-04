@@ -15,61 +15,61 @@ import com.bzncrsrtc.kurumsalmuvekkil.models.Role;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Subscription;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Update;
 import com.bzncrsrtc.kurumsalmuvekkil.models.User;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetClientResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCompanyResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCourtDetailsResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCourtResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCourtWithoutParentResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetFileResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetFileWithoutCourtResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetLawyerResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetPlanResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetRoleResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetSubscriptionResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetSubscriptionWithoutPlanResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetUpdateResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetUserResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.ClientResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.CompanyResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.CourtDetailsResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.CourtResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.CourtWithoutParentResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.FileResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.FileWithoutCourtResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.LawyerResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.PlanResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.RoleResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.SubscriptionResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.SubscriptionWithoutPlanResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.UpdateResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.UserResponse;
 
 @Mapper(componentModel = "spring")
 public interface ResponseMapper {
 
-	GetClientResponse getClientResponse(Client client);
-	List<GetClientResponse> getClientListResponse(List<Client> clients);
+	ClientResponse getClientResponse(Client client);
+	List<ClientResponse> getClientListResponse(List<Client> clients);
 	
-	GetCompanyResponse getCompanyResponse(Company company);
-	List<GetCompanyResponse> getCompanyListResponse(List<Company> companies);
+	CompanyResponse getCompanyResponse(Company company);
+	List<CompanyResponse> getCompanyListResponse(List<Company> companies);
 	
-	GetCourtResponse getCourtResponse(Court court);
-	List<GetCourtResponse> getCourtListResponse(List<Court> courts);
-	GetCourtWithoutParentResponse getCourtWithoutParentResponse(Court court);
-	List<GetCourtWithoutParentResponse> getCourtWithoutParentListResponse(List<Court> courts);
-	GetCourtDetailsResponse getCourtDetailsResponse(Court court);
-	List<GetCourtDetailsResponse> getCourtDetailsListResponse(List<Court> courts);
+	CourtResponse getCourtResponse(Court court);
+	List<CourtResponse> getCourtListResponse(List<Court> courts);
+	CourtWithoutParentResponse getCourtWithoutParentResponse(Court court);
+	List<CourtWithoutParentResponse> getCourtWithoutParentListResponse(List<Court> courts);
+	CourtDetailsResponse getCourtDetailsResponse(Court court);
+	List<CourtDetailsResponse> getCourtDetailsListResponse(List<Court> courts);
 		
-	GetFileResponse getFileResponse(File file);
-	List<GetFileResponse> getFileListResponse(List<File> files);
+	FileResponse getFileResponse(File file);
+	List<FileResponse> getFileListResponse(List<File> files);
 	
-	GetFileWithoutCourtResponse getFileWithoutCourtResponse(File file);
-	List<GetFileWithoutCourtResponse> getFileWithoutCourtListResponse(List<File> files);
+	FileWithoutCourtResponse getFileWithoutCourtResponse(File file);
+	List<FileWithoutCourtResponse> getFileWithoutCourtListResponse(List<File> files);
 	
-	GetLawyerResponse getLawyerResponse(Lawyer lawyer);
-	List<GetLawyerResponse> getLawyerListResponse(List<Lawyer> lawyers);
+	LawyerResponse getLawyerResponse(Lawyer lawyer);
+	List<LawyerResponse> getLawyerListResponse(List<Lawyer> lawyers);
 	
-	GetPlanResponse getPlanResponse(Plan plan);
-	List<GetPlanResponse> getPlanListResponse(List<Plan> plans);
+	PlanResponse getPlanResponse(Plan plan);
+	List<PlanResponse> getPlanListResponse(List<Plan> plans);
 	
-	GetSubscriptionResponse getSubscriptionResponse(Subscription subscription);
-	List<GetSubscriptionResponse> getSubscriptionListResponse(List<Subscription> subscriptions);
-	GetSubscriptionWithoutPlanResponse getSubscriptionWithoutPlanResponse(Subscription subscription);
-	List<GetSubscriptionWithoutPlanResponse> getSubscriptionWithoutPlanListResponse(List<Subscription> subscriptions);
+	SubscriptionResponse getSubscriptionResponse(Subscription subscription);
+	List<SubscriptionResponse> getSubscriptionListResponse(List<Subscription> subscriptions);
+	SubscriptionWithoutPlanResponse getSubscriptionWithoutPlanResponse(Subscription subscription);
+	List<SubscriptionWithoutPlanResponse> getSubscriptionWithoutPlanListResponse(List<Subscription> subscriptions);
 	
-	GetUpdateResponse getUpdateResponse(Update update);
-	List<GetUpdateResponse> getUpdateListResponse(List<Update> updates);
+	UpdateResponse getUpdateResponse(Update update);
+	List<UpdateResponse> getUpdateListResponse(List<Update> updates);
 	
-	GetUserResponse getUserResponse(User user);
-	List<GetUserResponse> getUserListResponse(List<User> users);
+	UserResponse getUserResponse(User user);
+	List<UserResponse> getUserListResponse(List<User> users);
 	
-	GetRoleResponse getRoleResponse(Role role);
-	List<GetRoleResponse> getRoleListResponse(List<Role> roles);
+	RoleResponse getRoleResponse(Role role);
+	List<RoleResponse> getRoleListResponse(List<Role> roles);
 	
 }

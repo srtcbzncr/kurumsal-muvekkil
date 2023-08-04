@@ -25,7 +25,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.models.File;
 import com.bzncrsrtc.kurumsalmuvekkil.repositories.FileRepository;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateFileRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateFileRequest;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetFileResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.FileResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.ResponseHandler;
 import com.bzncrsrtc.kurumsalmuvekkil.services.FileService;
 
@@ -51,7 +51,7 @@ public class FileController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		List<File> files = fileService.findAll(locale);
-		List<GetFileResponse> response = responseMapper.getFileListResponse(files);
+		List<FileResponse> response = responseMapper.getFileListResponse(files);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
@@ -61,7 +61,7 @@ public class FileController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		File file = fileService.findById(id, locale);
-		GetFileResponse response = responseMapper.getFileResponse(file);
+		FileResponse response = responseMapper.getFileResponse(file);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}

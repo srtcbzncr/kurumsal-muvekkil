@@ -26,14 +26,14 @@ import com.bzncrsrtc.kurumsalmuvekkil.models.Court;
 import com.bzncrsrtc.kurumsalmuvekkil.models.File;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateCourtRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateCourtRequest;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCourtDetailsResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCourtResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCourtStatiscticsResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCourtWithoutParentResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetFileWithoutCourtResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.CourtDetailsResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.CourtResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.CourtStatiscticsResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.CourtWithoutParentResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.FileWithoutCourtResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.ResponseHandler;
 import com.bzncrsrtc.kurumsalmuvekkil.services.CourtService;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCourtStatiscticsResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.CourtStatiscticsResponse;
 
 import jakarta.validation.Valid;
 
@@ -62,7 +62,7 @@ public class CourtController {
 		int passiveCount = courtService.passiveCount(locale);
 		int deletedCount = courtService.deletedCount(locale);
 		
-		GetCourtStatiscticsResponse response = new GetCourtStatiscticsResponse(allCount, activeCount, passiveCount, deletedCount);
+		CourtStatiscticsResponse response = new CourtStatiscticsResponse(allCount, activeCount, passiveCount, deletedCount);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
@@ -77,7 +77,7 @@ public class CourtController {
 		int passiveCountByParentId = courtService.passiveCountByParentId(id, locale);
 		int deletedCountByParentId = courtService.deletedCountByParentId(id, locale);
 		
-		GetCourtStatiscticsResponse response = new GetCourtStatiscticsResponse(allCountByParentId, activeCountByParentId, passiveCountByParentId, deletedCountByParentId);
+		CourtStatiscticsResponse response = new CourtStatiscticsResponse(allCountByParentId, activeCountByParentId, passiveCountByParentId, deletedCountByParentId);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
@@ -88,7 +88,7 @@ public class CourtController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		List<Court> courts = courtService.findAll(locale);
-		List<GetCourtResponse> response = responseMapper.getCourtListResponse(courts);
+		List<CourtResponse> response = responseMapper.getCourtListResponse(courts);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
@@ -99,7 +99,7 @@ public class CourtController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		List<Court> activeCourts = courtService.findAllActive(locale);
-		List<GetCourtResponse> response = responseMapper.getCourtListResponse(activeCourts);
+		List<CourtResponse> response = responseMapper.getCourtListResponse(activeCourts);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
@@ -110,7 +110,7 @@ public class CourtController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		List<Court> passiveCourts = courtService.findAllPassive(locale);
-		List<GetCourtResponse> response = responseMapper.getCourtListResponse(passiveCourts);
+		List<CourtResponse> response = responseMapper.getCourtListResponse(passiveCourts);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
@@ -121,7 +121,7 @@ public class CourtController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		List<Court> deletedCourts = courtService.findAllDeleted(locale);
-		List<GetCourtResponse> response = responseMapper.getCourtListResponse(deletedCourts);
+		List<CourtResponse> response = responseMapper.getCourtListResponse(deletedCourts);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
@@ -132,7 +132,7 @@ public class CourtController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		List<Court> courts = courtService.findAllByParentId(id, locale);
-		List<GetCourtWithoutParentResponse> response = responseMapper.getCourtWithoutParentListResponse(courts);
+		List<CourtWithoutParentResponse> response = responseMapper.getCourtWithoutParentListResponse(courts);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
@@ -143,7 +143,7 @@ public class CourtController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		List<Court> courts = courtService.findAllActiveByParentId(id, locale);
-		List<GetCourtWithoutParentResponse> response = responseMapper.getCourtWithoutParentListResponse(courts);
+		List<CourtWithoutParentResponse> response = responseMapper.getCourtWithoutParentListResponse(courts);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
@@ -154,7 +154,7 @@ public class CourtController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		List<Court> courts = courtService.findAllPassiveByParentId(id, locale);
-		List<GetCourtWithoutParentResponse> response = responseMapper.getCourtWithoutParentListResponse(courts);
+		List<CourtWithoutParentResponse> response = responseMapper.getCourtWithoutParentListResponse(courts);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
@@ -165,7 +165,7 @@ public class CourtController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		List<Court> courts = courtService.findAllDeletedByParentId(id, locale);
-		List<GetCourtWithoutParentResponse> response = responseMapper.getCourtWithoutParentListResponse(courts);
+		List<CourtWithoutParentResponse> response = responseMapper.getCourtWithoutParentListResponse(courts);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
@@ -176,7 +176,7 @@ public class CourtController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		Court court = courtService.findById(id, locale);
-		GetCourtDetailsResponse response = responseMapper.getCourtDetailsResponse(court);
+		CourtDetailsResponse response = responseMapper.getCourtDetailsResponse(court);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
@@ -202,7 +202,7 @@ public class CourtController {
 		
 		Court court = requestMapper.fromUpdateCourtRequestToCourt(updateCourtRequest);
 		Court savedCourt = courtService.update(court, locale);
-		GetCourtResponse response = responseMapper.getCourtResponse(savedCourt);
+		CourtResponse response = responseMapper.getCourtResponse(savedCourt);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
@@ -213,7 +213,7 @@ public class CourtController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		Court court = courtService.setActive(id, locale);
-		GetCourtResponse response = responseMapper.getCourtResponse(court);
+		CourtResponse response = responseMapper.getCourtResponse(court);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
@@ -224,7 +224,7 @@ public class CourtController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		Court court = courtService.setPassive(id, locale);
-		GetCourtResponse response = responseMapper.getCourtResponse(court);
+		CourtResponse response = responseMapper.getCourtResponse(court);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}

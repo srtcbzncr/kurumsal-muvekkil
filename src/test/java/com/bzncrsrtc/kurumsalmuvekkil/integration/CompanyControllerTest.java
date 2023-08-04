@@ -72,6 +72,64 @@ public class CompanyControllerTest {
 	}
 	
 	
+	/* stats endpoint */
+	
+	@Test
+	public void statsWithoutAuthHeaderShouldReturn401() throws Exception {
+		ResultActions response = mockMvc.perform(get("/company/stats")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON));
+
+		response.andExpect(status().isUnauthorized())
+				.andExpect(jsonPath("$.status").value(401))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void statsWithClientRoleShouldReturn403() throws Exception {
+		ResultActions response = mockMvc.perform(get("/company/stats")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("client")));
+
+		response.andExpect(status().isForbidden())
+				.andExpect(jsonPath("$.status").value(403))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void statsWithLawyerRoleShouldReturn403() throws Exception {
+		ResultActions response = mockMvc.perform(get("/company/stats")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("lawyer")));
+
+		response.andExpect(status().isForbidden())
+				.andExpect(jsonPath("$.status").value(403))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void statsWithAdminRoleShouldReturn200() throws Exception {
+		ResultActions response = mockMvc.perform(get("/company/stats")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+
+		response.andExpect(status().isOk())
+				.andExpect(jsonPath("$.status").value(200))
+				.andExpect(jsonPath("$.data").isNotEmpty())
+				.andExpect(jsonPath("$.data.allCount").value(3))
+				.andExpect(jsonPath("$.data.activeCount").value(2))
+				.andExpect(jsonPath("$.data.passiveCount").value(1))
+				.andExpect(jsonPath("$.data.deletedCount").value(1))
+				.andExpect(jsonPath("$.error").isEmpty());
+	}
+	
+	
 	/* findAll endpoint */
 
 	public void findAllWithoutAuthHeaderShouldReturn401() throws Exception {
@@ -153,31 +211,29 @@ public class CompanyControllerTest {
 	}
 	
 	@Test
-	public void findAllActiveWithClientRoleShouldReturn200() throws Exception {
+	public void findAllActiveWithClientRoleShouldReturn403() throws Exception {
 		ResultActions response = mockMvc.perform(get("/company/active")
 				                        .contentType(MediaType.APPLICATION_JSON)
 				                        .accept(MediaType.APPLICATION_JSON)
 				                        .header("Authorization", getAuthorizationHeader("client")));
 		
-		response.andExpect(status().isOk())
-				.andExpect(jsonPath("$.status").value(200))
-				.andExpect(jsonPath("$.data").isArray())
-				.andExpect(jsonPath("$.data", hasSize(2)))
-				.andExpect(jsonPath("$.error").isEmpty());
+		response.andExpect(status().isForbidden())
+				.andExpect(jsonPath("$.status").value(403))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
 	}
 	
 	@Test
-	public void findAllActiveWithLawyerRoleShouldReturn200() throws Exception {
+	public void findAllActiveWithLawyerRoleShouldReturn403() throws Exception {
 		ResultActions response = mockMvc.perform(get("/company/active")
 				                        .contentType(MediaType.APPLICATION_JSON)
 				                        .accept(MediaType.APPLICATION_JSON)
 				                        .header("Authorization", getAuthorizationHeader("lawyer")));
 		
-		response.andExpect(status().isOk())
-				.andExpect(jsonPath("$.status").value(200))
-				.andExpect(jsonPath("$.data").isArray())
-				.andExpect(jsonPath("$.data", hasSize(2)))
-				.andExpect(jsonPath("$.error").isEmpty());
+		response.andExpect(status().isForbidden())
+				.andExpect(jsonPath("$.status").value(403))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
 	}
 	
 	

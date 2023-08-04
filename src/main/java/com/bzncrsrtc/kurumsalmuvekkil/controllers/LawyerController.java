@@ -26,8 +26,8 @@ import com.bzncrsrtc.kurumsalmuvekkil.models.Lawyer;
 import com.bzncrsrtc.kurumsalmuvekkil.models.User;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateLawyerRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateLawyerRequest;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetLawyerResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetUserResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.LawyerResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.UserResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.ResponseHandler;
 import com.bzncrsrtc.kurumsalmuvekkil.services.LawyerService;
 
@@ -54,7 +54,7 @@ public class LawyerController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		List<Lawyer> lawyers = lawyerService.findAll(locale);
-		List<GetLawyerResponse> response = responseMapper.getLawyerListResponse(lawyers);
+		List<LawyerResponse> response = responseMapper.getLawyerListResponse(lawyers);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
@@ -64,7 +64,7 @@ public class LawyerController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		Lawyer lawyer = lawyerService.findById(id, locale);
-		GetLawyerResponse response = responseMapper.getLawyerResponse(lawyer);
+		LawyerResponse response = responseMapper.getLawyerResponse(lawyer);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
@@ -107,7 +107,7 @@ public class LawyerController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		User user = lawyerService.getUser(id, locale);
-		GetUserResponse response = responseMapper.getUserResponse(user);
+		UserResponse response = responseMapper.getUserResponse(user);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}

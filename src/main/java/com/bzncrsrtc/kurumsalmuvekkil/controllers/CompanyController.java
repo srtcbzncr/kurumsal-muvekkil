@@ -25,8 +25,8 @@ import com.bzncrsrtc.kurumsalmuvekkil.mappers.ResponseMapper;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Company;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateCompanyRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateCompanyRequest;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCompanyResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCompanyStatisticsResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.CompanyResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.CompanyStatisticsResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.ResponseHandler;
 import com.bzncrsrtc.kurumsalmuvekkil.services.CompanyService;
 
@@ -57,7 +57,7 @@ public class CompanyController {
 		int passiveCount = companyService.passiveCount(locale);
 		int deletedCount = companyService.deletedCount(locale);
 		
-		GetCompanyStatisticsResponse response = new GetCompanyStatisticsResponse(allCount, activeCount, passiveCount, deletedCount);
+		CompanyStatisticsResponse response = new CompanyStatisticsResponse(allCount, activeCount, passiveCount, deletedCount);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
@@ -68,18 +68,18 @@ public class CompanyController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		List<Company> companies = companyService.findAll(locale);
-		List<GetCompanyResponse> response = responseMapper.getCompanyListResponse(companies);
+		List<CompanyResponse> response = responseMapper.getCompanyListResponse(companies);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
 	
 	@GetMapping("/active")
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENT') or hasRole('ROLE_LAWYER')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Object> findAllActive(@RequestHeader(name = "Accept-Language", required = false) String localeStr){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		List<Company> companies = companyService.findAllActive(locale);
-		List<GetCompanyResponse> response = responseMapper.getCompanyListResponse(companies);
+		List<CompanyResponse> response = responseMapper.getCompanyListResponse(companies);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
@@ -90,7 +90,7 @@ public class CompanyController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		List<Company> companies = companyService.findAllPassive(locale);
-		List<GetCompanyResponse> response = responseMapper.getCompanyListResponse(companies);
+		List<CompanyResponse> response = responseMapper.getCompanyListResponse(companies);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
@@ -101,7 +101,7 @@ public class CompanyController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		List<Company> companies = companyService.findAllDeleted(locale);
-		List<GetCompanyResponse> response = responseMapper.getCompanyListResponse(companies);
+		List<CompanyResponse> response = responseMapper.getCompanyListResponse(companies);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
@@ -112,7 +112,7 @@ public class CompanyController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		Company company = companyService.findById(id, locale);
-		GetCompanyResponse response = responseMapper.getCompanyResponse(company);
+		CompanyResponse response = responseMapper.getCompanyResponse(company);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
@@ -138,7 +138,7 @@ public class CompanyController {
 		
 		Company company = requestMapper.fromUpdateCompanyRequestToCompany(updateCompanyRequest);
 		Company savedCompany = companyService.update(company, locale);
-		GetCompanyResponse response = responseMapper.getCompanyResponse(savedCompany);
+		CompanyResponse response = responseMapper.getCompanyResponse(savedCompany);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
@@ -149,8 +149,9 @@ public class CompanyController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		Company company = companyService.setActive(id, locale);
+		CompanyResponse response = responseMapper.getCompanyResponse(company);
 		
-		return ResponseHandler.generateResponse(company, HttpStatus.OK, null);
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
 	
 	@PutMapping("/{id}/setPassive")
@@ -159,8 +160,9 @@ public class CompanyController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		Company company = companyService.setPassive(id, locale);
+		CompanyResponse response = responseMapper.getCompanyResponse(company);
 		
-		return ResponseHandler.generateResponse(company, HttpStatus.OK, null);
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
 	
 	@DeleteMapping("/{id}")

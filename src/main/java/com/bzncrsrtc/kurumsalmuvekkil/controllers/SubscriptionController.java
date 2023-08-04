@@ -24,7 +24,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.mappers.ResponseMapper;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Subscription;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateSubscriptionRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateSubscriptionRequest;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetSubscriptionResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.SubscriptionResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.ResponseHandler;
 import com.bzncrsrtc.kurumsalmuvekkil.services.SubscriptionService;
 
@@ -50,7 +50,7 @@ public class SubscriptionController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		List<Subscription> subscriptions = subscriptionService.findAll(locale);
-		List<GetSubscriptionResponse> response = responseMapper.getSubscriptionListResponse(subscriptions);
+		List<SubscriptionResponse> response = responseMapper.getSubscriptionListResponse(subscriptions);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
@@ -60,7 +60,7 @@ public class SubscriptionController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		Subscription subscription = subscriptionService.findById(id, locale);
-		GetSubscriptionResponse response = responseMapper.getSubscriptionResponse(subscription);
+		SubscriptionResponse response = responseMapper.getSubscriptionResponse(subscription);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}

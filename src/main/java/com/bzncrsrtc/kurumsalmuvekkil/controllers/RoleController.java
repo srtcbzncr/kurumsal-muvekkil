@@ -24,7 +24,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.mappers.ResponseMapper;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Role;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateRoleRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateRoleRequest;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetRoleResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.RoleResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.ResponseHandler;
 import com.bzncrsrtc.kurumsalmuvekkil.services.RoleService;
 
@@ -50,7 +50,7 @@ public class RoleController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		List<Role> roles = roleService.findAll(locale);
-		List<GetRoleResponse> response = responseMapper.getRoleListResponse(roles);
+		List<RoleResponse> response = responseMapper.getRoleListResponse(roles);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
@@ -60,7 +60,7 @@ public class RoleController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		Role role = roleService.findById(id, locale);
-		GetRoleResponse response = responseMapper.getRoleResponse(role);
+		RoleResponse response = responseMapper.getRoleResponse(role);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}

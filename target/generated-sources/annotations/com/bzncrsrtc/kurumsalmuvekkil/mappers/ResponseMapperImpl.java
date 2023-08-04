@@ -10,20 +10,20 @@ import com.bzncrsrtc.kurumsalmuvekkil.models.Role;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Subscription;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Update;
 import com.bzncrsrtc.kurumsalmuvekkil.models.User;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetClientResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCompanyResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCourtDetailsResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCourtResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetCourtWithoutParentResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetFileResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetFileWithoutCourtResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetLawyerResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetPlanResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetRoleResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetSubscriptionResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetSubscriptionWithoutPlanResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetUpdateResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetUserResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.ClientResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.CompanyResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.CourtDetailsResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.CourtResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.CourtWithoutParentResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.FileResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.FileWithoutCourtResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.LawyerResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.PlanResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.RoleResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.SubscriptionResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.SubscriptionWithoutPlanResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.UpdateResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.UserResponse;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Component;
@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 /*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-08-03T13:53:01+0300",
+    date = "2023-08-04T12:04:20+0300",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.33.0.v20230218-1114, environment: Java 17.0.6 (Eclipse Adoptium)"
 )
 */
@@ -39,29 +39,29 @@ import org.springframework.stereotype.Component;
 public class ResponseMapperImpl implements ResponseMapper {
 
     @Override
-    public GetClientResponse getClientResponse(Client client) {
+    public ClientResponse getClientResponse(Client client) {
         if ( client == null ) {
             return null;
         }
 
-        GetClientResponse getClientResponse = new GetClientResponse();
+        ClientResponse clientResponse = new ClientResponse();
 
-        getClientResponse.setFirstName( client.getFirstName() );
-        getClientResponse.setId( client.getId() );
-        getClientResponse.setIdentificationNumber( client.getIdentificationNumber() );
-        getClientResponse.setLastName( client.getLastName() );
-        getClientResponse.setPhone( client.getPhone() );
+        clientResponse.setFirstName( client.getFirstName() );
+        clientResponse.setId( client.getId() );
+        clientResponse.setIdentificationNumber( client.getIdentificationNumber() );
+        clientResponse.setLastName( client.getLastName() );
+        clientResponse.setPhone( client.getPhone() );
 
-        return getClientResponse;
+        return clientResponse;
     }
 
     @Override
-    public List<GetClientResponse> getClientListResponse(List<Client> clients) {
+    public List<ClientResponse> getClientListResponse(List<Client> clients) {
         if ( clients == null ) {
             return null;
         }
 
-        List<GetClientResponse> list = new ArrayList<GetClientResponse>( clients.size() );
+        List<ClientResponse> list = new ArrayList<ClientResponse>( clients.size() );
         for ( Client client : clients ) {
             list.add( getClientResponse( client ) );
         }
@@ -70,26 +70,28 @@ public class ResponseMapperImpl implements ResponseMapper {
     }
 
     @Override
-    public GetCompanyResponse getCompanyResponse(Company company) {
+    public CompanyResponse getCompanyResponse(Company company) {
         if ( company == null ) {
             return null;
         }
 
-        GetCompanyResponse getCompanyResponse = new GetCompanyResponse();
+        CompanyResponse companyResponse = new CompanyResponse();
 
-        getCompanyResponse.setId( company.getId() );
-        getCompanyResponse.setName( company.getName() );
+        companyResponse.setActive( company.isActive() );
+        companyResponse.setDeleted( company.isDeleted() );
+        companyResponse.setId( company.getId() );
+        companyResponse.setName( company.getName() );
 
-        return getCompanyResponse;
+        return companyResponse;
     }
 
     @Override
-    public List<GetCompanyResponse> getCompanyListResponse(List<Company> companies) {
+    public List<CompanyResponse> getCompanyListResponse(List<Company> companies) {
         if ( companies == null ) {
             return null;
         }
 
-        List<GetCompanyResponse> list = new ArrayList<GetCompanyResponse>( companies.size() );
+        List<CompanyResponse> list = new ArrayList<CompanyResponse>( companies.size() );
         for ( Company company : companies ) {
             list.add( getCompanyResponse( company ) );
         }
@@ -98,29 +100,29 @@ public class ResponseMapperImpl implements ResponseMapper {
     }
 
     @Override
-    public GetCourtResponse getCourtResponse(Court court) {
+    public CourtResponse getCourtResponse(Court court) {
         if ( court == null ) {
             return null;
         }
 
-        GetCourtResponse getCourtResponse = new GetCourtResponse();
+        CourtResponse courtResponse = new CourtResponse();
 
-        getCourtResponse.setActive( court.isActive() );
-        getCourtResponse.setDeleted( court.isDeleted() );
-        getCourtResponse.setId( court.getId() );
-        getCourtResponse.setName( court.getName() );
-        getCourtResponse.setParent( getCourtWithoutParentResponse( court.getParent() ) );
+        courtResponse.setActive( court.isActive() );
+        courtResponse.setDeleted( court.isDeleted() );
+        courtResponse.setId( court.getId() );
+        courtResponse.setName( court.getName() );
+        courtResponse.setParent( getCourtWithoutParentResponse( court.getParent() ) );
 
-        return getCourtResponse;
+        return courtResponse;
     }
 
     @Override
-    public List<GetCourtResponse> getCourtListResponse(List<Court> courts) {
+    public List<CourtResponse> getCourtListResponse(List<Court> courts) {
         if ( courts == null ) {
             return null;
         }
 
-        List<GetCourtResponse> list = new ArrayList<GetCourtResponse>( courts.size() );
+        List<CourtResponse> list = new ArrayList<CourtResponse>( courts.size() );
         for ( Court court : courts ) {
             list.add( getCourtResponse( court ) );
         }
@@ -129,28 +131,28 @@ public class ResponseMapperImpl implements ResponseMapper {
     }
 
     @Override
-    public GetCourtWithoutParentResponse getCourtWithoutParentResponse(Court court) {
+    public CourtWithoutParentResponse getCourtWithoutParentResponse(Court court) {
         if ( court == null ) {
             return null;
         }
 
-        GetCourtWithoutParentResponse getCourtWithoutParentResponse = new GetCourtWithoutParentResponse();
+        CourtWithoutParentResponse courtWithoutParentResponse = new CourtWithoutParentResponse();
 
-        getCourtWithoutParentResponse.setActive( court.isActive() );
-        getCourtWithoutParentResponse.setDeleted( court.isDeleted() );
-        getCourtWithoutParentResponse.setId( court.getId() );
-        getCourtWithoutParentResponse.setName( court.getName() );
+        courtWithoutParentResponse.setActive( court.isActive() );
+        courtWithoutParentResponse.setDeleted( court.isDeleted() );
+        courtWithoutParentResponse.setId( court.getId() );
+        courtWithoutParentResponse.setName( court.getName() );
 
-        return getCourtWithoutParentResponse;
+        return courtWithoutParentResponse;
     }
 
     @Override
-    public List<GetCourtWithoutParentResponse> getCourtWithoutParentListResponse(List<Court> courts) {
+    public List<CourtWithoutParentResponse> getCourtWithoutParentListResponse(List<Court> courts) {
         if ( courts == null ) {
             return null;
         }
 
-        List<GetCourtWithoutParentResponse> list = new ArrayList<GetCourtWithoutParentResponse>( courts.size() );
+        List<CourtWithoutParentResponse> list = new ArrayList<CourtWithoutParentResponse>( courts.size() );
         for ( Court court : courts ) {
             list.add( getCourtWithoutParentResponse( court ) );
         }
@@ -159,30 +161,30 @@ public class ResponseMapperImpl implements ResponseMapper {
     }
 
     @Override
-    public GetCourtDetailsResponse getCourtDetailsResponse(Court court) {
+    public CourtDetailsResponse getCourtDetailsResponse(Court court) {
         if ( court == null ) {
             return null;
         }
 
-        GetCourtDetailsResponse getCourtDetailsResponse = new GetCourtDetailsResponse();
+        CourtDetailsResponse courtDetailsResponse = new CourtDetailsResponse();
 
-        getCourtDetailsResponse.setActive( court.isActive() );
-        getCourtDetailsResponse.setDeleted( court.isDeleted() );
-        getCourtDetailsResponse.setId( court.getId() );
-        getCourtDetailsResponse.setName( court.getName() );
-        getCourtDetailsResponse.setParent( getCourtWithoutParentResponse( court.getParent() ) );
-        getCourtDetailsResponse.setSubs( getCourtWithoutParentListResponse( court.getSubs() ) );
+        courtDetailsResponse.setActive( court.isActive() );
+        courtDetailsResponse.setDeleted( court.isDeleted() );
+        courtDetailsResponse.setId( court.getId() );
+        courtDetailsResponse.setName( court.getName() );
+        courtDetailsResponse.setParent( getCourtWithoutParentResponse( court.getParent() ) );
+        courtDetailsResponse.setSubs( getCourtWithoutParentListResponse( court.getSubs() ) );
 
-        return getCourtDetailsResponse;
+        return courtDetailsResponse;
     }
 
     @Override
-    public List<GetCourtDetailsResponse> getCourtDetailsListResponse(List<Court> courts) {
+    public List<CourtDetailsResponse> getCourtDetailsListResponse(List<Court> courts) {
         if ( courts == null ) {
             return null;
         }
 
-        List<GetCourtDetailsResponse> list = new ArrayList<GetCourtDetailsResponse>( courts.size() );
+        List<CourtDetailsResponse> list = new ArrayList<CourtDetailsResponse>( courts.size() );
         for ( Court court : courts ) {
             list.add( getCourtDetailsResponse( court ) );
         }
@@ -191,29 +193,29 @@ public class ResponseMapperImpl implements ResponseMapper {
     }
 
     @Override
-    public GetFileResponse getFileResponse(File file) {
+    public FileResponse getFileResponse(File file) {
         if ( file == null ) {
             return null;
         }
 
-        GetFileResponse getFileResponse = new GetFileResponse();
+        FileResponse fileResponse = new FileResponse();
 
-        getFileResponse.setCourt( getCourtResponse( file.getCourt() ) );
-        getFileResponse.setCourtDetail( file.getCourtDetail() );
-        getFileResponse.setDescription( file.getDescription() );
-        getFileResponse.setId( file.getId() );
-        getFileResponse.setTitle( file.getTitle() );
+        fileResponse.setCourt( getCourtResponse( file.getCourt() ) );
+        fileResponse.setCourtDetail( file.getCourtDetail() );
+        fileResponse.setDescription( file.getDescription() );
+        fileResponse.setId( file.getId() );
+        fileResponse.setTitle( file.getTitle() );
 
-        return getFileResponse;
+        return fileResponse;
     }
 
     @Override
-    public List<GetFileResponse> getFileListResponse(List<File> files) {
+    public List<FileResponse> getFileListResponse(List<File> files) {
         if ( files == null ) {
             return null;
         }
 
-        List<GetFileResponse> list = new ArrayList<GetFileResponse>( files.size() );
+        List<FileResponse> list = new ArrayList<FileResponse>( files.size() );
         for ( File file : files ) {
             list.add( getFileResponse( file ) );
         }
@@ -222,28 +224,28 @@ public class ResponseMapperImpl implements ResponseMapper {
     }
 
     @Override
-    public GetFileWithoutCourtResponse getFileWithoutCourtResponse(File file) {
+    public FileWithoutCourtResponse getFileWithoutCourtResponse(File file) {
         if ( file == null ) {
             return null;
         }
 
-        GetFileWithoutCourtResponse getFileWithoutCourtResponse = new GetFileWithoutCourtResponse();
+        FileWithoutCourtResponse fileWithoutCourtResponse = new FileWithoutCourtResponse();
 
-        getFileWithoutCourtResponse.setCourtDetail( file.getCourtDetail() );
-        getFileWithoutCourtResponse.setDescription( file.getDescription() );
-        getFileWithoutCourtResponse.setId( file.getId() );
-        getFileWithoutCourtResponse.setTitle( file.getTitle() );
+        fileWithoutCourtResponse.setCourtDetail( file.getCourtDetail() );
+        fileWithoutCourtResponse.setDescription( file.getDescription() );
+        fileWithoutCourtResponse.setId( file.getId() );
+        fileWithoutCourtResponse.setTitle( file.getTitle() );
 
-        return getFileWithoutCourtResponse;
+        return fileWithoutCourtResponse;
     }
 
     @Override
-    public List<GetFileWithoutCourtResponse> getFileWithoutCourtListResponse(List<File> files) {
+    public List<FileWithoutCourtResponse> getFileWithoutCourtListResponse(List<File> files) {
         if ( files == null ) {
             return null;
         }
 
-        List<GetFileWithoutCourtResponse> list = new ArrayList<GetFileWithoutCourtResponse>( files.size() );
+        List<FileWithoutCourtResponse> list = new ArrayList<FileWithoutCourtResponse>( files.size() );
         for ( File file : files ) {
             list.add( getFileWithoutCourtResponse( file ) );
         }
@@ -252,29 +254,29 @@ public class ResponseMapperImpl implements ResponseMapper {
     }
 
     @Override
-    public GetLawyerResponse getLawyerResponse(Lawyer lawyer) {
+    public LawyerResponse getLawyerResponse(Lawyer lawyer) {
         if ( lawyer == null ) {
             return null;
         }
 
-        GetLawyerResponse getLawyerResponse = new GetLawyerResponse();
+        LawyerResponse lawyerResponse = new LawyerResponse();
 
-        getLawyerResponse.setFirstName( lawyer.getFirstName() );
-        getLawyerResponse.setId( lawyer.getId() );
-        getLawyerResponse.setLastName( lawyer.getLastName() );
-        getLawyerResponse.setPhone( lawyer.getPhone() );
-        getLawyerResponse.setTitle( lawyer.getTitle() );
+        lawyerResponse.setFirstName( lawyer.getFirstName() );
+        lawyerResponse.setId( lawyer.getId() );
+        lawyerResponse.setLastName( lawyer.getLastName() );
+        lawyerResponse.setPhone( lawyer.getPhone() );
+        lawyerResponse.setTitle( lawyer.getTitle() );
 
-        return getLawyerResponse;
+        return lawyerResponse;
     }
 
     @Override
-    public List<GetLawyerResponse> getLawyerListResponse(List<Lawyer> lawyers) {
+    public List<LawyerResponse> getLawyerListResponse(List<Lawyer> lawyers) {
         if ( lawyers == null ) {
             return null;
         }
 
-        List<GetLawyerResponse> list = new ArrayList<GetLawyerResponse>( lawyers.size() );
+        List<LawyerResponse> list = new ArrayList<LawyerResponse>( lawyers.size() );
         for ( Lawyer lawyer : lawyers ) {
             list.add( getLawyerResponse( lawyer ) );
         }
@@ -283,38 +285,38 @@ public class ResponseMapperImpl implements ResponseMapper {
     }
 
     @Override
-    public GetPlanResponse getPlanResponse(Plan plan) {
+    public PlanResponse getPlanResponse(Plan plan) {
         if ( plan == null ) {
             return null;
         }
 
-        GetPlanResponse getPlanResponse = new GetPlanResponse();
+        PlanResponse planResponse = new PlanResponse();
 
-        getPlanResponse.setAnnualPrice( plan.getAnnualPrice() );
+        planResponse.setAnnualPrice( plan.getAnnualPrice() );
         if ( plan.getClientQuota() != null ) {
-            getPlanResponse.setClientQuota( plan.getClientQuota() );
+            planResponse.setClientQuota( plan.getClientQuota() );
         }
-        getPlanResponse.setDescription( plan.getDescription() );
+        planResponse.setDescription( plan.getDescription() );
         if ( plan.getFileQuotaPerClient() != null ) {
-            getPlanResponse.setFileQuotaPerClient( plan.getFileQuotaPerClient() );
+            planResponse.setFileQuotaPerClient( plan.getFileQuotaPerClient() );
         }
-        getPlanResponse.setId( plan.getId() );
+        planResponse.setId( plan.getId() );
         if ( plan.getLawyerQuota() != null ) {
-            getPlanResponse.setLawyerQuota( plan.getLawyerQuota() );
+            planResponse.setLawyerQuota( plan.getLawyerQuota() );
         }
-        getPlanResponse.setMonthlyPrice( plan.getMonthlyPrice() );
-        getPlanResponse.setName( plan.getName() );
+        planResponse.setMonthlyPrice( plan.getMonthlyPrice() );
+        planResponse.setName( plan.getName() );
 
-        return getPlanResponse;
+        return planResponse;
     }
 
     @Override
-    public List<GetPlanResponse> getPlanListResponse(List<Plan> plans) {
+    public List<PlanResponse> getPlanListResponse(List<Plan> plans) {
         if ( plans == null ) {
             return null;
         }
 
-        List<GetPlanResponse> list = new ArrayList<GetPlanResponse>( plans.size() );
+        List<PlanResponse> list = new ArrayList<PlanResponse>( plans.size() );
         for ( Plan plan : plans ) {
             list.add( getPlanResponse( plan ) );
         }
@@ -323,32 +325,32 @@ public class ResponseMapperImpl implements ResponseMapper {
     }
 
     @Override
-    public GetSubscriptionResponse getSubscriptionResponse(Subscription subscription) {
+    public SubscriptionResponse getSubscriptionResponse(Subscription subscription) {
         if ( subscription == null ) {
             return null;
         }
 
-        GetSubscriptionResponse getSubscriptionResponse = new GetSubscriptionResponse();
+        SubscriptionResponse subscriptionResponse = new SubscriptionResponse();
 
-        getSubscriptionResponse.setAutoRenew( subscription.isAutoRenew() );
-        getSubscriptionResponse.setCompany( getCompanyResponse( subscription.getCompany() ) );
-        getSubscriptionResponse.setEndDate( subscription.getEndDate() );
-        getSubscriptionResponse.setFee( subscription.getFee() );
-        getSubscriptionResponse.setId( subscription.getId() );
-        getSubscriptionResponse.setPlan( getPlanResponse( subscription.getPlan() ) );
-        getSubscriptionResponse.setStartDate( subscription.getStartDate() );
-        getSubscriptionResponse.setType( subscription.getType() );
+        subscriptionResponse.setAutoRenew( subscription.isAutoRenew() );
+        subscriptionResponse.setCompany( getCompanyResponse( subscription.getCompany() ) );
+        subscriptionResponse.setEndDate( subscription.getEndDate() );
+        subscriptionResponse.setFee( subscription.getFee() );
+        subscriptionResponse.setId( subscription.getId() );
+        subscriptionResponse.setPlan( getPlanResponse( subscription.getPlan() ) );
+        subscriptionResponse.setStartDate( subscription.getStartDate() );
+        subscriptionResponse.setType( subscription.getType() );
 
-        return getSubscriptionResponse;
+        return subscriptionResponse;
     }
 
     @Override
-    public List<GetSubscriptionResponse> getSubscriptionListResponse(List<Subscription> subscriptions) {
+    public List<SubscriptionResponse> getSubscriptionListResponse(List<Subscription> subscriptions) {
         if ( subscriptions == null ) {
             return null;
         }
 
-        List<GetSubscriptionResponse> list = new ArrayList<GetSubscriptionResponse>( subscriptions.size() );
+        List<SubscriptionResponse> list = new ArrayList<SubscriptionResponse>( subscriptions.size() );
         for ( Subscription subscription : subscriptions ) {
             list.add( getSubscriptionResponse( subscription ) );
         }
@@ -357,31 +359,31 @@ public class ResponseMapperImpl implements ResponseMapper {
     }
 
     @Override
-    public GetSubscriptionWithoutPlanResponse getSubscriptionWithoutPlanResponse(Subscription subscription) {
+    public SubscriptionWithoutPlanResponse getSubscriptionWithoutPlanResponse(Subscription subscription) {
         if ( subscription == null ) {
             return null;
         }
 
-        GetSubscriptionWithoutPlanResponse getSubscriptionWithoutPlanResponse = new GetSubscriptionWithoutPlanResponse();
+        SubscriptionWithoutPlanResponse subscriptionWithoutPlanResponse = new SubscriptionWithoutPlanResponse();
 
-        getSubscriptionWithoutPlanResponse.setAutoRenew( subscription.isAutoRenew() );
-        getSubscriptionWithoutPlanResponse.setCompany( getCompanyResponse( subscription.getCompany() ) );
-        getSubscriptionWithoutPlanResponse.setEndDate( subscription.getEndDate() );
-        getSubscriptionWithoutPlanResponse.setFee( subscription.getFee() );
-        getSubscriptionWithoutPlanResponse.setId( subscription.getId() );
-        getSubscriptionWithoutPlanResponse.setStartDate( subscription.getStartDate() );
-        getSubscriptionWithoutPlanResponse.setType( subscription.getType() );
+        subscriptionWithoutPlanResponse.setAutoRenew( subscription.isAutoRenew() );
+        subscriptionWithoutPlanResponse.setCompany( getCompanyResponse( subscription.getCompany() ) );
+        subscriptionWithoutPlanResponse.setEndDate( subscription.getEndDate() );
+        subscriptionWithoutPlanResponse.setFee( subscription.getFee() );
+        subscriptionWithoutPlanResponse.setId( subscription.getId() );
+        subscriptionWithoutPlanResponse.setStartDate( subscription.getStartDate() );
+        subscriptionWithoutPlanResponse.setType( subscription.getType() );
 
-        return getSubscriptionWithoutPlanResponse;
+        return subscriptionWithoutPlanResponse;
     }
 
     @Override
-    public List<GetSubscriptionWithoutPlanResponse> getSubscriptionWithoutPlanListResponse(List<Subscription> subscriptions) {
+    public List<SubscriptionWithoutPlanResponse> getSubscriptionWithoutPlanListResponse(List<Subscription> subscriptions) {
         if ( subscriptions == null ) {
             return null;
         }
 
-        List<GetSubscriptionWithoutPlanResponse> list = new ArrayList<GetSubscriptionWithoutPlanResponse>( subscriptions.size() );
+        List<SubscriptionWithoutPlanResponse> list = new ArrayList<SubscriptionWithoutPlanResponse>( subscriptions.size() );
         for ( Subscription subscription : subscriptions ) {
             list.add( getSubscriptionWithoutPlanResponse( subscription ) );
         }
@@ -390,29 +392,29 @@ public class ResponseMapperImpl implements ResponseMapper {
     }
 
     @Override
-    public GetUpdateResponse getUpdateResponse(Update update) {
+    public UpdateResponse getUpdateResponse(Update update) {
         if ( update == null ) {
             return null;
         }
 
-        GetUpdateResponse getUpdateResponse = new GetUpdateResponse();
+        UpdateResponse updateResponse = new UpdateResponse();
 
-        getUpdateResponse.setContent( update.getContent() );
-        getUpdateResponse.setFile( getFileResponse( update.getFile() ) );
-        getUpdateResponse.setId( update.getId() );
-        getUpdateResponse.setLawyer( getLawyerResponse( update.getLawyer() ) );
-        getUpdateResponse.setState( update.getState() );
+        updateResponse.setContent( update.getContent() );
+        updateResponse.setFile( getFileResponse( update.getFile() ) );
+        updateResponse.setId( update.getId() );
+        updateResponse.setLawyer( getLawyerResponse( update.getLawyer() ) );
+        updateResponse.setState( update.getState() );
 
-        return getUpdateResponse;
+        return updateResponse;
     }
 
     @Override
-    public List<GetUpdateResponse> getUpdateListResponse(List<Update> updates) {
+    public List<UpdateResponse> getUpdateListResponse(List<Update> updates) {
         if ( updates == null ) {
             return null;
         }
 
-        List<GetUpdateResponse> list = new ArrayList<GetUpdateResponse>( updates.size() );
+        List<UpdateResponse> list = new ArrayList<UpdateResponse>( updates.size() );
         for ( Update update : updates ) {
             list.add( getUpdateResponse( update ) );
         }
@@ -421,28 +423,28 @@ public class ResponseMapperImpl implements ResponseMapper {
     }
 
     @Override
-    public GetUserResponse getUserResponse(User user) {
+    public UserResponse getUserResponse(User user) {
         if ( user == null ) {
             return null;
         }
 
-        GetUserResponse getUserResponse = new GetUserResponse();
+        UserResponse userResponse = new UserResponse();
 
-        getUserResponse.setEmail( user.getEmail() );
-        getUserResponse.setId( user.getId() );
-        getUserResponse.setRole( getRoleResponse( user.getRole() ) );
-        getUserResponse.setUsername( user.getUsername() );
+        userResponse.setEmail( user.getEmail() );
+        userResponse.setId( user.getId() );
+        userResponse.setRole( getRoleResponse( user.getRole() ) );
+        userResponse.setUsername( user.getUsername() );
 
-        return getUserResponse;
+        return userResponse;
     }
 
     @Override
-    public List<GetUserResponse> getUserListResponse(List<User> users) {
+    public List<UserResponse> getUserListResponse(List<User> users) {
         if ( users == null ) {
             return null;
         }
 
-        List<GetUserResponse> list = new ArrayList<GetUserResponse>( users.size() );
+        List<UserResponse> list = new ArrayList<UserResponse>( users.size() );
         for ( User user : users ) {
             list.add( getUserResponse( user ) );
         }
@@ -451,26 +453,26 @@ public class ResponseMapperImpl implements ResponseMapper {
     }
 
     @Override
-    public GetRoleResponse getRoleResponse(Role role) {
+    public RoleResponse getRoleResponse(Role role) {
         if ( role == null ) {
             return null;
         }
 
-        GetRoleResponse getRoleResponse = new GetRoleResponse();
+        RoleResponse roleResponse = new RoleResponse();
 
-        getRoleResponse.setId( role.getId() );
-        getRoleResponse.setName( role.getName() );
+        roleResponse.setId( role.getId() );
+        roleResponse.setName( role.getName() );
 
-        return getRoleResponse;
+        return roleResponse;
     }
 
     @Override
-    public List<GetRoleResponse> getRoleListResponse(List<Role> roles) {
+    public List<RoleResponse> getRoleListResponse(List<Role> roles) {
         if ( roles == null ) {
             return null;
         }
 
-        List<GetRoleResponse> list = new ArrayList<GetRoleResponse>( roles.size() );
+        List<RoleResponse> list = new ArrayList<RoleResponse>( roles.size() );
         for ( Role role : roles ) {
             list.add( getRoleResponse( role ) );
         }

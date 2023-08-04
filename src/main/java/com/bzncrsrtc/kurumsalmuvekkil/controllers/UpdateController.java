@@ -24,7 +24,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.mappers.ResponseMapper;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Update;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateUpdateRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateUpdateRequest;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetUpdateResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.UpdateResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.ResponseHandler;
 import com.bzncrsrtc.kurumsalmuvekkil.services.UpdateService;
 
@@ -50,7 +50,7 @@ public class UpdateController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		List<Update> updates = updateService.findAll(locale);
-		List<GetUpdateResponse> response = responseMapper.getUpdateListResponse(updates);
+		List<UpdateResponse> response = responseMapper.getUpdateListResponse(updates);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
@@ -60,7 +60,7 @@ public class UpdateController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		Update update = updateService.findById(id, locale);
-		GetUpdateResponse response = responseMapper.getUpdateResponse(update);
+		UpdateResponse response = responseMapper.getUpdateResponse(update);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}

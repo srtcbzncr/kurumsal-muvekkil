@@ -26,9 +26,9 @@ import com.bzncrsrtc.kurumsalmuvekkil.models.File;
 import com.bzncrsrtc.kurumsalmuvekkil.models.User;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateClientRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateClientRequest;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetClientResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetFileResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetUserResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.ClientResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.FileResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.UserResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.ResponseHandler;
 import com.bzncrsrtc.kurumsalmuvekkil.services.ClientService;
 
@@ -54,7 +54,7 @@ public class ClientController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		List<Client> clients = clientService.findAll(locale);
-		List<GetClientResponse> response = responseMapper.getClientListResponse(clients);
+		List<ClientResponse> response = responseMapper.getClientListResponse(clients);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
@@ -64,7 +64,7 @@ public class ClientController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		Client client = clientService.findById(id, locale);
-		GetClientResponse response = responseMapper.getClientResponse(client);
+		ClientResponse response = responseMapper.getClientResponse(client);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
@@ -107,7 +107,7 @@ public class ClientController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		User user = clientService.getUser(id, locale);
-		GetUserResponse response = responseMapper.getUserResponse(user);
+		UserResponse response = responseMapper.getUserResponse(user);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}

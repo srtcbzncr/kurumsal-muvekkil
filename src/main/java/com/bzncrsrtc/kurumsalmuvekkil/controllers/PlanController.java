@@ -25,8 +25,8 @@ import com.bzncrsrtc.kurumsalmuvekkil.models.Plan;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Subscription;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreatePlanRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdatePlanRequest;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetPlanResponse;
-import com.bzncrsrtc.kurumsalmuvekkil.responses.GetSubscriptionWithoutPlanResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.PlanResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.SubscriptionWithoutPlanResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.ResponseHandler;
 import com.bzncrsrtc.kurumsalmuvekkil.services.PlanService;
 
@@ -52,7 +52,7 @@ public class PlanController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		List<Plan> plans = planService.findAll(locale);
-		List<GetPlanResponse> response = responseMapper.getPlanListResponse(plans);
+		List<PlanResponse> response = responseMapper.getPlanListResponse(plans);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
@@ -62,7 +62,7 @@ public class PlanController {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		Plan plan = planService.findById(id, locale);
-		GetPlanResponse response = responseMapper.getPlanResponse(plan);
+		PlanResponse response = responseMapper.getPlanResponse(plan);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
