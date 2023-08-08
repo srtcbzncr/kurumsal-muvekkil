@@ -27,6 +27,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.models.Subscription;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreatePlanRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdatePlanRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.PlanResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.PlanStatisticsResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.SubscriptionWithoutPlanResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.ResponseHandler;
 import com.bzncrsrtc.kurumsalmuvekkil.services.PlanService;
@@ -46,6 +47,21 @@ public class PlanController {
 		this.planService = planService;
 		this.responseMapper = responseMapper;
 		this.requestMapper = requestMapper;
+	}
+	
+	@GetMapping("/stats")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Object> stats(@RequestHeader(name = "Accept-Language", required = false) String localeStr){
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		int allCount = planService.allCount(locale);
+		int activeCount = planService.activeCount(locale);
+		int passiveCount = planService.passiveCount(locale);
+		int deletedCount = planService.deletedCount(locale);
+		
+		PlanStatisticsResponse response = new PlanStatisticsResponse(allCount, activeCount, passiveCount, deletedCount);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}
 	
 	@GetMapping("/all")
@@ -125,6 +141,28 @@ public class PlanController {
 		Plan plan = requestMapper.fromUpdatePlanRequestToPlan(updatePlanRequest);
 		Plan savedPlan = planService.update(plan, locale);
 		PlanResponse response = responseMapper.getPlanResponse(savedPlan);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
+	}
+	
+	@PutMapping("/{id}/setActive")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Object> setActive(@PathVariable UUID id, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		Plan plan = planService.setActive(id, locale);
+		PlanResponse response = responseMapper.getPlanResponse(plan);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
+	}
+	
+	@PutMapping("/{id}/setPassive")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Object> setPassive(@PathVariable UUID id, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		Plan plan = planService.setPassive(id, locale);
+		PlanResponse response = responseMapper.getPlanResponse(plan);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
 	}

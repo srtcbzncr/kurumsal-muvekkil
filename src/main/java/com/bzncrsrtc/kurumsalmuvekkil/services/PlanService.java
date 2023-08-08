@@ -76,6 +76,32 @@ public class PlanService {
 		return planRepository.save(plan);
 	}
 	
+	public Plan setActive(UUID id, Locale locale) {
+		Optional<Plan> optionalPlan = planRepository.findByIdAndDeleted(id, false);
+		
+		if(optionalPlan.isEmpty()) {
+			throw new PlanNotFoundException(messageSource.getMessage("plan.not.found.message", null, locale));
+		}
+		
+		Plan plan = optionalPlan.get();
+		plan.setActive(true);
+		
+		return planRepository.save(plan);
+	}
+	
+	public Plan setPassive(UUID id, Locale locale) {
+		Optional<Plan> optionalPlan = planRepository.findByIdAndDeleted(id, false);
+		
+		if(optionalPlan.isEmpty()) {
+			throw new PlanNotFoundException(messageSource.getMessage("plan.not.found.message", null, locale));
+		}
+		
+		Plan plan = optionalPlan.get();
+		plan.setActive(false);
+		
+		return planRepository.save(plan);
+	}
+	
 	public void delete(UUID id, Locale locale) {
 		Optional<Plan> optionalPlan = planRepository.findByIdAndDeleted(id, false);
 		
@@ -87,5 +113,21 @@ public class PlanService {
 		plan.setDeleted(true);
 		plan.setDeletedAt(LocalDateTime.now());
 		planRepository.save(plan);
+	}
+	
+	public int allCount(Locale locale) {
+		return planRepository.countByDeleted(false);
+	}
+	
+	public int activeCount(Locale locale) {
+		return planRepository.countByActiveAndDeleted(true, false);
+	}
+	
+	public int passiveCount(Locale locale) {
+		return planRepository.countByActiveAndDeleted(false, false);
+	}
+	
+	public int deletedCount(Locale locale) {
+		return planRepository.countByDeleted(true);
 	}
 }

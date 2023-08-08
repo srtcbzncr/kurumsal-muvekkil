@@ -1,6 +1,9 @@
 package com.bzncrsrtc.kurumsalmuvekkil.integration;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -62,6 +65,64 @@ public class PlanControllerTest {
 	    String auth = username + ":" + password;
 	    byte[] encodedAuth = Base64.getEncoder().encode(auth.getBytes());
 	    return "Basic " + new String(encodedAuth);
+	}
+	
+	
+	/* stats endpoint */
+	
+	@Test
+	public void statsWithoutAuthHeaderShouldReturn401() throws Exception {
+		ResultActions response = mockMvc.perform(get("/plan/stats")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON));
+
+		response.andExpect(status().isUnauthorized())
+				.andExpect(jsonPath("$.status").value(401))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void statsWithClientRoleShouldReturn403() throws Exception {
+		ResultActions response = mockMvc.perform(get("/plan/stats")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("client")));
+
+		response.andExpect(status().isForbidden())
+				.andExpect(jsonPath("$.status").value(403))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void statsWithLawyerRoleShouldReturn403() throws Exception {
+		ResultActions response = mockMvc.perform(get("/plan/stats")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("lawyer")));
+
+		response.andExpect(status().isForbidden())
+				.andExpect(jsonPath("$.status").value(403))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void statsWithAdminRoleShouldReturn200() throws Exception {
+		ResultActions response = mockMvc.perform(get("/plan/stats")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+
+		response.andExpect(status().isOk())
+				.andExpect(jsonPath("$.status").value(200))
+				.andExpect(jsonPath("$.data").isNotEmpty())
+				.andExpect(jsonPath("$.data.allCount").value(2))
+				.andExpect(jsonPath("$.data.activeCount").value(1))
+				.andExpect(jsonPath("$.data.passiveCount").value(1))
+				.andExpect(jsonPath("$.data.deletedCount").value(1))
+				.andExpect(jsonPath("$.error").isEmpty());
 	}
 	
 	
@@ -430,5 +491,566 @@ public class PlanControllerTest {
 				.andExpect(jsonPath("$.data").isEmpty())
 				.andExpect(jsonPath("$.error").isNotEmpty());
 	}
+	
+	
+	/* create endpoint */
+	
+	@Test
+	public void createWithoutAuthHeaderShouldReturn401() throws Exception {
+		String request = "{ \"name\": \"New Plan\", \"description\": \"Description\", \"monthlyPrice\": 10, \"annualPrice\": 100, \"clientQuota\": 10, \"lawyerQuota\": 10, \"fileQuotaPerClient\" : 10 }";
+		
+		ResultActions response = mockMvc.perform(post("/plan")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(request)
+				.accept(MediaType.APPLICATION_JSON));
 
+		response.andExpect(status().isUnauthorized())
+				.andExpect(jsonPath("$.status").value(401))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void createWithClientRoleShouldReturn403() throws Exception {
+		String request = "{ \"name\": \"New Plan\", \"description\": \"Description\", \"monthlyPrice\": 10, \"annualPrice\": 100, \"clientQuota\": 10, \"lawyerQuota\": 10, \"fileQuotaPerClient\" : 10 }";
+		
+		ResultActions response = mockMvc.perform(post("/plan")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(request)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("client")));
+
+		response.andExpect(status().isForbidden())
+				.andExpect(jsonPath("$.status").value(403))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void createWithLawyerRoleShouldReturn403() throws Exception {
+		String request = "{ \"name\": \"New Plan\", \"description\": \"Description\", \"monthlyPrice\": 10, \"annualPrice\": 100, \"clientQuota\": 10, \"lawyerQuota\": 10, \"fileQuotaPerClient\" : 10 }";
+		
+		ResultActions response = mockMvc.perform(post("/plan")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(request)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("lawyer")));
+
+		response.andExpect(status().isForbidden())
+				.andExpect(jsonPath("$.status").value(403))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void createWithAdminRoleShouldReturn201() throws Exception {
+		String request = "{ \"name\": \"New Plan\", \"description\": \"Description\", \"monthlyPrice\": 10, \"annualPrice\": 100, \"clientQuota\": 10, \"lawyerQuota\": 10, \"fileQuotaPerClient\" : 10 }";
+		
+		ResultActions response = mockMvc.perform(post("/plan")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(request)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+
+		response.andExpect(status().isCreated())
+				.andExpect(jsonPath("$.status").value(201))
+				.andExpect(jsonPath("$.data").isNotEmpty())
+				.andExpect(jsonPath("$.error").isEmpty());
+	}
+	
+	@Test
+	public void createEmptyNameWithAdminRoleShouldReturn403() throws Exception {
+		String request = "{ \"name\": \"\", \"description\": \"Description\", \"monthlyPrice\": 10, \"annualPrice\": 100, \"clientQuota\": 10, \"lawyerQuota\": 10, \"fileQuotaPerClient\" : 10 }";
+		
+		ResultActions response = mockMvc.perform(post("/plan")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(request)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+
+		response.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.status").value(400))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void createEmptyDescriptionWithClientRoleShouldReturn403() throws Exception {
+		String request = "{ \"name\": \"New Plan\", \"description\": \"\", \"monthlyPrice\": 10, \"annualPrice\": 100, \"clientQuota\": 10, \"lawyerQuota\": 10, \"fileQuotaPerClient\" : 10 }";
+		
+		ResultActions response = mockMvc.perform(post("/plan")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(request)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+
+		response.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.status").value(400))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void createEmptyMonthlyPriceWithClientRoleShouldReturn403() throws Exception {
+		String request = "{ \"name\": \"New Plan\", \"description\": \"Description\", \"monthlyPrice\": , \"annualPrice\": 100, \"clientQuota\": 10, \"lawyerQuota\": 10, \"fileQuotaPerClient\" : 10 }";
+		
+		ResultActions response = mockMvc.perform(post("/plan")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(request)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+
+		response.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.status").value(400))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void createEmptyAnnualPriceWithClientRoleShouldReturn403() throws Exception {
+		String request = "{ \"name\": \"New Plan\", \"description\": \"Description\", \"monthlyPrice\": 10, \"annualPrice\": , \"clientQuota\": 10, \"lawyerQuota\": 10, \"fileQuotaPerClient\" : 10 }";
+		
+		ResultActions response = mockMvc.perform(post("/plan")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(request)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+
+		response.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.status").value(400))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void createEmptyClientQuotaWithClientRoleShouldReturn403() throws Exception {
+		String request = "{ \"name\": \"New Plan\", \"description\": \"Description\", \"monthlyPrice\": 10, \"annualPrice\": 100, \"clientQuota\": , \"lawyerQuota\": 10, \"fileQuotaPerClient\" : 10 }";
+		
+		ResultActions response = mockMvc.perform(post("/plan")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(request)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+
+		response.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.status").value(400))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+
+	@Test
+	public void createEmptyLawyerQuotaWithClientRoleShouldReturn403() throws Exception {
+		String request = "{ \"name\": \"New Plan\", \"description\": \"Description\", \"monthlyPrice\": 10, \"annualPrice\": 100, \"clientQuota\": 10, \"lawyerQuota\": , \"fileQuotaPerClient\" : 10 }";
+		
+		ResultActions response = mockMvc.perform(post("/plan")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(request)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+
+		response.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.status").value(400))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void createEmptyFileQuotaPerClientWithClientRoleShouldReturn403() throws Exception {
+		String request = "{ \"name\": \"New Plan\", \"description\": \"Description\", \"monthlyPrice\": 10, \"annualPrice\": 100, \"clientQuota\": 10, \"lawyerQuota\": 10, \"fileQuotaPerClient\" :  }";
+		
+		ResultActions response = mockMvc.perform(post("/plan")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(request)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+
+		response.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.status").value(400))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	
+	/* update endpoint */
+	
+	@Test
+	public void updateWithoutAuthHeaderShouldReturn401() throws Exception {
+		String request = "{ \"id\": \"" + activePlan.getId() + "\", \"name\": \"New Plan\", \"description\": \"Description\", \"monthlyPrice\": 10, \"annualPrice\": 100, \"clientQuota\": 10, \"lawyerQuota\": 10, \"fileQuotaPerClient\" : 10 }";
+		
+		ResultActions response = mockMvc.perform(put("/plan")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(request)
+				.accept(MediaType.APPLICATION_JSON));
+
+		response.andExpect(status().isUnauthorized())
+				.andExpect(jsonPath("$.status").value(401))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void updateWithClientRoleShouldReturn403() throws Exception {
+		String request = "{ \"id\": \"" + activePlan.getId() + "\", \"name\": \"New Plan\", \"description\": \"Description\", \"monthlyPrice\": 10, \"annualPrice\": 100, \"clientQuota\": 10, \"lawyerQuota\": 10, \"fileQuotaPerClient\" : 10 }";
+		
+		ResultActions response = mockMvc.perform(put("/plan")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(request)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("client")));
+
+		response.andExpect(status().isForbidden())
+				.andExpect(jsonPath("$.status").value(403))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void updateWithLawyerRoleShouldReturn403() throws Exception {
+		String request = "{ \"id\": \"" + activePlan.getId() + "\", \"name\": \"New Plan\", \"description\": \"Description\", \"monthlyPrice\": 10, \"annualPrice\": 100, \"clientQuota\": 10, \"lawyerQuota\": 10, \"fileQuotaPerClient\" : 10 }";
+		
+		ResultActions response = mockMvc.perform(put("/plan")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(request)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("lawyer")));
+
+		response.andExpect(status().isForbidden())
+				.andExpect(jsonPath("$.status").value(403))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void updateThereIsNoIdWithAdminRoleShouldReturn400() throws Exception {
+		String request = "{ \"name\": \"New Plan\", \"description\": \"Description\", \"monthlyPrice\": 10, \"annualPrice\": 100, \"clientQuota\": 10, \"lawyerQuota\": 10, \"fileQuotaPerClient\" : 10 }";
+		
+		ResultActions response = mockMvc.perform(put("/plan")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(request)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+
+		response.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.status").value(400))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void updateNotExistingPlanWithClientRoleShouldReturn404() throws Exception {
+		String request = "{ \"id\": \"" + UUID.randomUUID() + "\", \"name\": \"New Plan\", \"description\": \"Description\", \"monthlyPrice\": 10, \"annualPrice\": 100, \"clientQuota\": 10, \"lawyerQuota\": 10, \"fileQuotaPerClient\" : 10 }";
+		
+		ResultActions response = mockMvc.perform(put("/plan")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(request)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+
+		response.andExpect(status().isNotFound())
+				.andExpect(jsonPath("$.status").value(404))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void updateActivePlanWithAdminRoleShouldReturn200() throws Exception {
+		String request = "{ \"id\": \"" + activePlan.getId() + "\", \"name\": \"New Plan\", \"description\": \"Description\", \"monthlyPrice\": 10, \"annualPrice\": 100, \"clientQuota\": 10, \"lawyerQuota\": 10, \"fileQuotaPerClient\" : 10 }";
+		
+		ResultActions response = mockMvc.perform(put("/plan")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(request)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+
+		response.andExpect(status().isOk())
+				.andExpect(jsonPath("$.status").value(200))
+				.andExpect(jsonPath("$.data").isNotEmpty())
+				.andExpect(jsonPath("$.error").isEmpty());
+	}
+	
+	@Test
+	public void updatePassivePlanWithAdminRoleShouldReturn200() throws Exception {
+		String request = "{ \"id\": \"" + passivePlan.getId() + "\", \"name\": \"New Plan\", \"description\": \"Description\", \"monthlyPrice\": 10, \"annualPrice\": 100, \"clientQuota\": 10, \"lawyerQuota\": 10, \"fileQuotaPerClient\" : 10 }";
+		
+		ResultActions response = mockMvc.perform(put("/plan")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(request)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+
+		response.andExpect(status().isOk())
+				.andExpect(jsonPath("$.status").value(200))
+				.andExpect(jsonPath("$.data").isNotEmpty())
+				.andExpect(jsonPath("$.error").isEmpty());
+	}
+	
+	@Test
+	public void updateDeletedPlanWithAdminRoleShouldReturn404() throws Exception {
+		String request = "{ \"id\": \"" + deletedPlan.getId() + "\", \"name\": \"New Plan\", \"description\": \"Description\", \"monthlyPrice\": 10, \"annualPrice\": 100, \"clientQuota\": 10, \"lawyerQuota\": 10, \"fileQuotaPerClient\" : 10 }";
+		
+		ResultActions response = mockMvc.perform(put("/plan")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(request)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+
+		response.andExpect(status().isNotFound())
+				.andExpect(jsonPath("$.status").value(404))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	
+	/* setActive endpoint */
+	
+	@Test
+	public void setActiveWithoutAuthHeaderShouldReturn401() throws Exception {
+		ResultActions response = mockMvc.perform(put("/plan/" + passivePlan.getId() + "/setActive")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON));
+
+		response.andExpect(status().isUnauthorized())
+				.andExpect(jsonPath("$.status").value(401))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void setActiveWithClientRoleShouldReturn403() throws Exception {
+		ResultActions response = mockMvc.perform(put("/plan/" + passivePlan.getId() + "/setActive")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("client")));
+
+		response.andExpect(status().isForbidden())
+				.andExpect(jsonPath("$.status").value(403))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void setActiveWithLawyerRoleShouldReturn403() throws Exception {
+		ResultActions response = mockMvc.perform(put("/plan/" + passivePlan.getId() + "/setActive")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("lawyer")));
+
+		response.andExpect(status().isForbidden())
+				.andExpect(jsonPath("$.status").value(403))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void setActiveDeletedPlanWithAdminRole() throws Exception {
+		ResultActions response = mockMvc.perform(put("/plan/" + deletedPlan.getId() + "/setActive")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+
+		response.andExpect(status().isNotFound())
+				.andExpect(jsonPath("$.status").value(404))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void setActiveNotExistingPlanShouldReturn404() throws Exception {
+		ResultActions response = mockMvc.perform(put("/plan/" + UUID.randomUUID() + "/setActive")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+
+		response.andExpect(status().isNotFound())
+				.andExpect(jsonPath("$.status").value(404))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void setActiveWithAdminRoleShouldReturn200() throws Exception {
+		ResultActions response = mockMvc.perform(put("/plan/" + passivePlan.getId() + "/setActive")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+
+		response.andExpect(status().isOk())
+				.andExpect(jsonPath("$.status").value(200))
+				.andExpect(jsonPath("$.data").isNotEmpty())
+				.andExpect(jsonPath("$.error").isEmpty());
+	}
+	
+	
+	/* setPassive endpoint */
+	
+	@Test
+	public void setPassiveWithoutAuthHeaderShouldReturn401() throws Exception {
+		ResultActions response = mockMvc.perform(put("/plan/" + passivePlan.getId() + "/setPassive")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON));
+
+		response.andExpect(status().isUnauthorized())
+				.andExpect(jsonPath("$.status").value(401))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void setPassiveWithClientRoleShouldReturn403() throws Exception {
+		ResultActions response = mockMvc.perform(put("/plan/" + passivePlan.getId() + "/setPassive")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("client")));
+
+		response.andExpect(status().isForbidden())
+				.andExpect(jsonPath("$.status").value(403))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void setPassiveWithLawyerRoleShouldReturn403() throws Exception {
+		ResultActions response = mockMvc.perform(put("/plan/" + passivePlan.getId() + "/setPassive")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("lawyer")));
+
+		response.andExpect(status().isForbidden())
+				.andExpect(jsonPath("$.status").value(403))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void setPassiveDeletedPlanWithAdminRole() throws Exception {
+		ResultActions response = mockMvc.perform(put("/plan/" + deletedPlan.getId() + "/setPassive")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+
+		response.andExpect(status().isNotFound())
+				.andExpect(jsonPath("$.status").value(404))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void setPassiveNotExistingPlanShouldReturn404() throws Exception {
+		ResultActions response = mockMvc.perform(put("/plan/" + UUID.randomUUID() + "/setPassive")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+
+		response.andExpect(status().isNotFound())
+				.andExpect(jsonPath("$.status").value(404))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void setPassiveWithAdminRoleShouldReturn200() throws Exception {
+		ResultActions response = mockMvc.perform(put("/plan/" + passivePlan.getId() + "/setPassive")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+
+		response.andExpect(status().isOk())
+				.andExpect(jsonPath("$.status").value(200))
+				.andExpect(jsonPath("$.data").isNotEmpty())
+				.andExpect(jsonPath("$.error").isEmpty());
+	}
+	
+	
+	/* delete endpoint */
+	
+	@Test
+	public void deleteWithoutAuthHeaderShouldReturn401() throws Exception {
+		ResultActions response = mockMvc.perform(delete("/plan/" + activePlan.getId())
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON));
+
+		response.andExpect(status().isUnauthorized())
+				.andExpect(jsonPath("$.status").value(401))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void deleteWithClientRoleShouldReturn403() throws Exception {
+		ResultActions response = mockMvc.perform(delete("/plan/" + activePlan.getId())
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("client")));
+
+		response.andExpect(status().isForbidden())
+				.andExpect(jsonPath("$.status").value(403))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void deleteWithLawyerRoleShouldReturn403() throws Exception {
+		ResultActions response = mockMvc.perform(delete("/plan/" + activePlan.getId())
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("lawyer")));
+
+		response.andExpect(status().isForbidden())
+				.andExpect(jsonPath("$.status").value(403))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void deleteNotExistingPlanWithAdminRoleShouldReturn404() throws Exception {
+		ResultActions response = mockMvc.perform(delete("/plan/" + UUID.randomUUID())
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+
+		response.andExpect(status().isNotFound())
+				.andExpect(jsonPath("$.status").value(404))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void deleteActivePlanWithAdminRoleShouldReturn200() throws Exception {
+		ResultActions response = mockMvc.perform(delete("/plan/" + activePlan.getId())
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+
+		response.andExpect(status().isOk())
+				.andExpect(jsonPath("$.status").value(200))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isEmpty());
+	}
+	
+	@Test
+	public void deletePassivePlanWithAdminRoleShouldReturn200() throws Exception {
+		ResultActions response = mockMvc.perform(delete("/plan/" + passivePlan.getId())
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+
+		response.andExpect(status().isOk())
+				.andExpect(jsonPath("$.status").value(200))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isEmpty());
+	}
+	
+	@Test
+	public void deleteDeletedPlanWithAdminRoleShouldReturn404() throws Exception {
+		ResultActions response = mockMvc.perform(delete("/plan/" + deletedPlan.getId())
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+
+		response.andExpect(status().isNotFound())
+				.andExpect(jsonPath("$.status").value(404))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
 }
