@@ -1,7 +1,9 @@
 package com.bzncrsrtc.kurumsalmuvekkil.services;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,13 +28,39 @@ import com.bzncrsrtc.kurumsalmuvekkil.repositories.UserRepository;
 @Service
 public class UserService implements UserDetailsService {
 	
+	private RoleService roleService;
 	private UserRepository userRepository;
 	private MessageSource messageSource;
 	private Logger logger = LoggerFactory.getLogger(UserService.class);
 	
-	public UserService(UserRepository userRepository, MessageSource messageSource) {
+	public UserService(RoleService roleService, UserRepository userRepository, MessageSource messageSource) {
+		this.roleService = roleService;
 		this.userRepository = userRepository;
 		this.messageSource = messageSource;
+	}
+	
+	public List<User> findAllAdmins(Locale locale) {
+		UUID adminRoleId = roleService.findIdByName("ROLE_ADMIN", locale);
+		
+		return userRepository.findAllByRoleIdAndDeleted(adminRoleId, false);
+	}
+	
+	public List<User> findActiveAdmins(Locale locale) {
+		UUID adminRoleId = roleService.findIdByName("ROLE_ADMIN", locale);
+		
+		return userRepository.findAllByRoleIdAndDeletedAndActive(adminRoleId, false, true);
+	}
+	
+	public List<User> findPassiveAdmins(Locale locale) {
+		UUID adminRoleId = roleService.findIdByName("ROLE_ADMIN", locale);
+		
+		return userRepository.findAllByRoleIdAndDeletedAndActive(adminRoleId, false, false);
+	}
+	
+	public List<User> findDeletedAdmins(Locale locale) {
+		UUID adminRoleId = roleService.findIdByName("ROLE_ADMIN", locale);
+		
+		return userRepository.findAllByRoleIdAndDeleted(adminRoleId, true);
 	}
 	
 	public User create(User user, Locale locale) {
@@ -61,6 +89,30 @@ public class UserService implements UserDetailsService {
 		}
 		
 		userRepository.save(user);
+	}
+	
+	public int allAdminsCount(Locale locale) {
+		UUID adminRoleId = roleService.findIdByName("ROLE_ADMIN", locale);
+		
+		return userRepository.countByRoleIdAndDeleted(adminRoleId, false);
+	}
+	
+	public int activeAdminsCount(Locale locale) {
+		UUID adminRoleId = roleService.findIdByName("ROLE_ADMIN", locale);
+		
+		return userRepository.countByRoleIdAndActiveAndDeleted(adminRoleId, true, false);
+	}
+	
+	public int passiveAdminsCount(Locale locale) {
+		UUID adminRoleId = roleService.findIdByName("ROLE_ADMIN", locale);
+		
+		return userRepository.countByRoleIdAndActiveAndDeleted(adminRoleId, false, false);
+	}
+	
+	public int deletedAdminsCount(Locale locale) {
+		UUID adminRoleId = roleService.findIdByName("ROLE_ADMIN", locale);
+		
+		return userRepository.countByRoleIdAndDeleted(adminRoleId, true);
 	}
 	
 	@Override

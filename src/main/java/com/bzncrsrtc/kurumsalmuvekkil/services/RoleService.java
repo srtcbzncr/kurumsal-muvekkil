@@ -31,11 +31,31 @@ public class RoleService {
 		return roleRepository.findAll();
 	}
 	
+	public UUID findIdByName(String name, Locale locale) {
+		Optional<Role> role = roleRepository.findByName(name);
+		
+		if(role.isEmpty()) {
+			throw new RoleNotFoundException(messageSource.getMessage("role.not.found.message", null, locale));
+		}
+		
+		return role.get().getId();
+	}
+	
 	public Role findById(UUID id, Locale locale) {
 		Optional<Role> role = roleRepository.findById(id);
 		
 		if(role.isEmpty()) {
-			throw new RoleNotFoundException(messageSource.getMessage("role.not.found.message",null, locale));
+			throw new RoleNotFoundException(messageSource.getMessage("role.not.found.message", null, locale));
+		}
+		
+		return role.get();
+	}
+	
+	public Role findByName(String name, Locale locale) {
+		Optional<Role> role = roleRepository.findByName(name);
+		
+		if(role.isEmpty()) {
+			throw new RoleNotFoundException(messageSource.getMessage("role.not.found.message", null, locale));
 		}
 		
 		return role.get();

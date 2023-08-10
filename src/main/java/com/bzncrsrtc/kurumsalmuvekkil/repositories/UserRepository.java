@@ -18,7 +18,7 @@ public interface UserRepository extends JpaRepository<User, UUID>{
 	List<User> findAllByDeleted(boolean deleted);
 	List<User> findAllByActive(boolean active);
 	List<User> findAllByDeletedAndActive(boolean deleted, boolean active);
-	
+
 	List<User> findAllByRoleId(UUID roleId);
 	List<User> findAllByRoleIdAndDeleted(UUID roleId, boolean deleted);
 	List<User> findAllByRoleIdAndDeletedAndActive(UUID roleId, boolean deleted, boolean active);
@@ -28,4 +28,7 @@ public interface UserRepository extends JpaRepository<User, UUID>{
 	boolean existsByIdAndDeleted(UUID id, boolean deleted);	
 	boolean existsByUsernameAndDeletedAndIdNot(String username, boolean deleted, UUID id);
 	boolean existsByEmailAndDeletedAndIdNot(String email, boolean deleted, UUID id);
+	
+	int countByRoleIdAndDeleted(UUID roleId, boolean deleted);
+	int countByRoleIdAndActiveAndDeleted(UUID roleId, boolean active, boolean deleted); 
 }

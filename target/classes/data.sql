@@ -1,3 +1,12 @@
+INSERT INTO plans(id, name, description, monthly_price, annual_price, client_quota, lawyer_quota, file_quota_per_client, active, deleted)
+VALUES('83d2b297-66dd-40a9-aba2-c537b4749e02', 'Plan 1', 'Plan 1', 10, 100, 10, 10, 10, 'true', 'false');
+
+INSERT INTO plans(id, name, description, monthly_price, annual_price, client_quota, lawyer_quota, file_quota_per_client, active, deleted) 
+VALUES('f6dc6b55-e4cf-4bfc-bade-38ef7aff178c', 'Plan 2', 'Plan 2', 20, 200, 20, 20, 20, 'true', 'false');
+
+INSERT INTO plans(id, name, description, monthly_price, annual_price, client_quota, lawyer_quota, file_quota_per_client, active, deleted) 
+VALUES('d99ae73b-c262-402d-9708-3c7df8d2cce4', 'Plan 3', 'Plan 3', 30, 300, 30, 30, 30, 'true', 'false');
+
 INSERT INTO roles(id, name) 
 VALUES('d7386c89-c612-4230-98fb-ca419ecf183b', 'ROLE_ADMIN');
 
