@@ -6,6 +6,7 @@ import java.util.Locale;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,8 @@ import com.bzncrsrtc.kurumsalmuvekkil.responses.UserResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.UserStatisticsResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.services.UserService;
 
+
+@CrossOrigin
 @RestController
 @RequestMapping("/user")
 public class UserController {
