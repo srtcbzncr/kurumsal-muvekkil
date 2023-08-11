@@ -30,4 +30,7 @@ public interface LawyerRepository extends JpaRepository<Lawyer, UUID> {
 	boolean existsByPhoneAndDeleted(String phone, boolean deleted);
 	boolean existsByIdentificationNumberAndDeletedAndIdNot(String identificationNumber, boolean deleted, UUID id);
 	boolean existsByPhoneAndDeletedAndIdNot(String phone, boolean deleted, UUID id);
+	
+	int countByDeleted(boolean deleted);
+	int countByDeletedAndActive(boolean deleted, boolean active);
 }

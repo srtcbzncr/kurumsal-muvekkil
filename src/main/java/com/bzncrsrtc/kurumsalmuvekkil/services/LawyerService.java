@@ -39,12 +39,16 @@ public class LawyerService {
 		return lawyerRepository.findAll();
 	}
 	
-	public List<Lawyer> findAllDeleted(Locale locale){
-		return lawyerRepository.findAllByDeleted(true);
+	public List<Lawyer> findAllActive(Locale locale){
+		return lawyerRepository.findAllByDeletedAndActive(false, true);
 	}
 	
 	public List<Lawyer> findAllPassive(Locale locale){
 		return lawyerRepository.findAllByDeletedAndActive(false, false);
+	}
+	
+	public List<Lawyer> findAllDeleted(Locale locale){
+		return lawyerRepository.findAllByDeleted(true);
 	}
 	
 	public Lawyer findById(UUID id, Locale locale) {
@@ -112,6 +116,22 @@ public class LawyerService {
 		}
 		
 		return lawyer.get().getUser();
+	}
+	
+	public int allCount(Locale locale) {
+		return lawyerRepository.countByDeleted(false);
+	}
+	
+	public int activeCount(Locale locale) {
+		return lawyerRepository.countByDeletedAndActive(false, true);
+	}
+	
+	public int passiveCount(Locale locale) {
+		return lawyerRepository.countByDeletedAndActive(false, false);
+	}
+	
+	public int deletedCount(Locale locale) {
+		return lawyerRepository.countByDeleted(true);
 	}
 	
 }

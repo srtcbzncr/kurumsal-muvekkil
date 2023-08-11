@@ -20,6 +20,9 @@ INSERT INTO users(id, email, username, password, role_id, active, deleted, is_ne
 VALUES('e7f9ef2b-c8b9-4a52-937b-53cdb9d923ee', 'admin@gmail.com', 'admin', '123456', 'd7386c89-c612-4230-98fb-ca419ecf183b', 'true', 'false', 'true', 'false');
 
 INSERT INTO users(id, email, username, password, role_id, active, deleted, is_new, locked) 
+VALUES('fb0c653e-5789-41b3-928b-213c42af802e', 'admin2@gmail.com', 'admin2', '123456', 'd7386c89-c612-4230-98fb-ca419ecf183b', 'true', 'false', 'true', 'false');
+
+INSERT INTO users(id, email, username, password, role_id, active, deleted, is_new, locked) 
 VALUES('5af5b243-31fb-4ae2-a342-74c14ed16104', 'lawyer@gmail.com', 'lawyer', '123456', 'c1d900d3-799a-42bb-bd68-0fdb1bdacb45', 'true', 'false', 'true', 'false');
 
 INSERT INTO users(id, email, username, password, role_id, active, deleted, is_new, locked) 

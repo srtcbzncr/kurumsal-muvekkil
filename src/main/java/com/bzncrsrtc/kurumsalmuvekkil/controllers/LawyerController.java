@@ -27,6 +27,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.models.User;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateLawyerRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateLawyerRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.LawyerResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.LawyerStatisticsResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.UserResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.ResponseHandler;
 import com.bzncrsrtc.kurumsalmuvekkil.services.LawyerService;
@@ -48,12 +49,60 @@ public class LawyerController {
 		this.requestMapper = requestMapper;
 	}
 	
-	@GetMapping("")
+	@GetMapping("/stats")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Object> stats(@RequestHeader(name = "Accept-Language", required = false) String localeStr) {
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		int allCount = lawyerService.allCount(locale);
+		int activeCount = lawyerService.activeCount(locale);
+		int passiveCount = lawyerService.passiveCount(locale);
+		int deletedCount = lawyerService.deletedCount(locale);
+		
+		LawyerStatisticsResponse response = new LawyerStatisticsResponse(allCount, activeCount, passiveCount, deletedCount);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
+	}
+	
+	@GetMapping("/all")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Object> findAll(@RequestHeader(name = "Accept-Language", required = false) String localeStr){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		List<Lawyer> lawyers = lawyerService.findAll(locale);
+		List<LawyerResponse> response = responseMapper.getLawyerListResponse(lawyers);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
+	}
+	
+	@GetMapping("/active")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Object> findAllActive(@RequestHeader(name="Accept-Language", required = false) String localeStr) {
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		List<Lawyer> lawyers = lawyerService.findAllActive(locale);
+		List<LawyerResponse> response = responseMapper.getLawyerListResponse(lawyers);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
+	}
+	
+	@GetMapping("/passive")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Object> findAllPassive(@RequestHeader(name="Accept-Language", required = false) String localeStr) {
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		List<Lawyer> lawyers = lawyerService.findAllPassive(locale);
+		List<LawyerResponse> response = responseMapper.getLawyerListResponse(lawyers);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
+	}
+	
+	@GetMapping("/deleted")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Object> findAllDeleted(@RequestHeader(name="Accept-Language", required = false) String localeStr) {
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		List<Lawyer> lawyers = lawyerService.findAllDeleted(locale);
 		List<LawyerResponse> response = responseMapper.getLawyerListResponse(lawyers);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
