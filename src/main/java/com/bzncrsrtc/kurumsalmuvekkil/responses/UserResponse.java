@@ -10,6 +10,10 @@ public class UserResponse {
 	private UUID id;
 	private String email;
 	private String username;
+	private boolean isNew;
+	private boolean active;
+	private boolean deleted;
+	private boolean locked;
 	private RoleResponse role;
 	
 }

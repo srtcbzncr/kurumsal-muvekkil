@@ -1,5 +1,6 @@
 package com.bzncrsrtc.kurumsalmuvekkil.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -115,6 +116,46 @@ public class UserService implements UserDetailsService {
 		return userRepository.countByRoleIdAndDeleted(adminRoleId, true);
 	}
 	
+	public User setActive(UUID id, Locale locale) {
+		Optional<User> optionalUser = userRepository.findByIdAndDeleted(id, false);
+		
+		if(optionalUser.isEmpty()) {
+			throw new UserNotFoundException(messageSource.getMessage("user.not.found.message", null, locale));
+		}
+		
+		User user = optionalUser.get();
+		user.setActive(true);
+		
+		return userRepository.save(user);
+	}
+	
+	public User setPassive(UUID id, Locale locale) {
+		Optional<User> optionalUser = userRepository.findByIdAndDeleted(id, false);
+		
+		if(optionalUser.isEmpty()) {
+			throw new UserNotFoundException(messageSource.getMessage("user.not.found.message", null, locale));
+		}
+		
+		User user = optionalUser.get();
+		user.setActive(false);
+		
+		return userRepository.save(user);
+	}
+	
+	public void delete(UUID id, Locale locale) {
+		Optional<User> optionalUser = userRepository.findByIdAndDeleted(id, false);
+		
+		if(optionalUser.isEmpty()) {
+			throw new UserNotFoundException(messageSource.getMessage("user.not.found.message", null, locale));
+		}
+		
+		User user = optionalUser.get();
+		user.setDeleted(true);
+		user.setDeletedAt(LocalDateTime.now());
+		
+		userRepository.save(user);		
+	}
+	 
 	@Override
 	public UserDetails loadUserByUsername(String username){
 		Optional <User> user = userRepository.findByUsernameAndDeletedAndActive(username, false, true);

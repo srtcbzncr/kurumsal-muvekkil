@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 /*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-08-10T10:03:07+0300",
+    date = "2023-08-11T11:19:15+0300",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.33.0.v20230218-1114, environment: Java 17.0.6 (Eclipse Adoptium)"
 )
 */
@@ -439,8 +439,12 @@ public class ResponseMapperImpl implements ResponseMapper {
 
         UserResponse userResponse = new UserResponse();
 
+        userResponse.setActive( user.isActive() );
+        userResponse.setDeleted( user.isDeleted() );
         userResponse.setEmail( user.getEmail() );
         userResponse.setId( user.getId() );
+        userResponse.setLocked( user.isLocked() );
+        userResponse.setNew( user.isNew() );
         userResponse.setRole( getRoleResponse( user.getRole() ) );
         userResponse.setUsername( user.getUsername() );
 
