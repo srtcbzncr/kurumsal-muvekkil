@@ -1,13 +1,17 @@
 package com.bzncrsrtc.kurumsalmuvekkil.integration;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDateTime;
 import java.util.Base64;
+import java.util.UUID;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,6 +48,9 @@ public class LawyerControllerTest {
 	@Autowired
 	private CompanyRepository companyRepository;
 	
+	@Autowired
+	private UserRepository userRepository;
+	
 	Company company = new Company("Company");
 	
 	User activeLawyerUser = new User("activeLawyer@gmail.com", "activeLawyer", "123456");
@@ -58,6 +65,11 @@ public class LawyerControllerTest {
 	void setup() {
 		companyRepository.deleteAll();
 		lawyerRepository.deleteAll();
+		
+		passiveLawyerUser.setActive(false);
+		
+		deletedLawyerUser.setDeleted(true);
+		deletedLawyerUser.setDeletedAt(LocalDateTime.now());
 		
 		companyRepository.save(company);
 		
@@ -354,5 +366,168 @@ public class LawyerControllerTest {
 				.andExpect(jsonPath("$.data").isArray())
 				.andExpect(jsonPath("$.data", hasSize(1)))
 				.andExpect(jsonPath("$.error").isEmpty());
+	}
+	
+	
+	/* setActive endpoint */
+	
+	@Test
+	public void setActiveWithoutAuthHeaderShouldReturn401() throws Exception {
+		ResultActions response = mockMvc.perform(put("/lawyer/" + passiveLawyer.getId() + "/setActive")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON));
+		
+		response.andExpect(status().isUnauthorized())
+				.andExpect(jsonPath("$.status").value(401))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void setActiveWithClientRoleShouldReturn403() throws Exception {
+		ResultActions response = mockMvc.perform(put("/lawyer/" + passiveLawyer.getId() + "/setActive")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("client")));
+		
+		response.andExpect(status().isForbidden())
+				.andExpect(jsonPath("$.status").value(403))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void setActiveWithLawyerRoleShouldReturn403() throws Exception {
+		ResultActions response = mockMvc.perform(put("/lawyer/" + passiveLawyer.getId() + "/setActive")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("lawyer")));
+		
+		response.andExpect(status().isForbidden())
+				.andExpect(jsonPath("$.status").value(403))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void setActiveNotExistingLawyerShouldReturn404() throws Exception {
+		ResultActions response = mockMvc.perform(put("/lawyer/" + UUID.randomUUID() + "/setActive")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+		
+		response.andExpect(status().isNotFound())
+				.andExpect(jsonPath("$.status").value(404))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void setActiveDeletedLawyerWithAdminRoleShouldReturn404() throws Exception {
+		ResultActions response = mockMvc.perform(put("/lawyer/" + deletedLawyer.getId() + "/setActive")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+		
+		response.andExpect(status().isNotFound())
+				.andExpect(jsonPath("$.status").value(404))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void setActiveExistingLawyerWithAdminRoleShouldReturn200() throws Exception {
+		ResultActions response = mockMvc.perform(put("/lawyer/" + passiveLawyer.getId() + "/setActive")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+		
+		response.andExpect(status().isOk())
+				.andExpect(jsonPath("$.status").value(200))
+				.andExpect(jsonPath("$.data").isNotEmpty())
+				.andExpect(jsonPath("$.error").isEmpty());
+		
+		assertFalse(userRepository.findById(passiveLawyer.getUser().getId()).get().isActive());
+	}
+	
+	/* setPassive endpoint */
+	
+	@Test
+	public void setPassiveWithoutAuthHeaderShouldReturn401() throws Exception {
+		ResultActions response = mockMvc.perform(put("/lawyer/" + activeLawyer.getId() + "/setPassive")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON));
+		
+		response.andExpect(status().isUnauthorized())
+				.andExpect(jsonPath("$.status").value(401))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void setPassiveWithClientRoleShouldReturn403() throws Exception {
+		ResultActions response = mockMvc.perform(put("/lawyer/" + activeLawyer.getId() + "/setPassive")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("client")));
+		
+		response.andExpect(status().isForbidden())
+				.andExpect(jsonPath("$.status").value(403))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void setPassiveWithLawyerRoleShouldReturn403() throws Exception {
+		ResultActions response = mockMvc.perform(put("/lawyer/" + activeLawyer.getId() + "/setPassive")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("lawyer")));
+		
+		response.andExpect(status().isForbidden())
+				.andExpect(jsonPath("$.status").value(403))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void setPassiveNotExistingLawyerShouldReturn404() throws Exception {
+		ResultActions response = mockMvc.perform(put("/lawyer/" + UUID.randomUUID() + "/setPassive")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+		
+		response.andExpect(status().isNotFound())
+				.andExpect(jsonPath("$.status").value(404))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void setPassiveDeletedLawyerWithAdminRoleShouldReturn404() throws Exception {
+		ResultActions response = mockMvc.perform(put("/lawyer/" + deletedLawyer.getId() + "/setPassive")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+		
+		response.andExpect(status().isNotFound())
+				.andExpect(jsonPath("$.status").value(404))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void setPassiveExistingLawyerWithAdminRoleShouldReturn200() throws Exception {
+		ResultActions response = mockMvc.perform(put("/lawyer/" + activeLawyer.getId() + "/setPassive")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+		
+		response.andExpect(status().isOk())
+				.andExpect(jsonPath("$.status").value(200))
+				.andExpect(jsonPath("$.data").isNotEmpty())
+				.andExpect(jsonPath("$.error").isEmpty());
+		
+		assertTrue(userRepository.findById(passiveLawyer.getUser().getId()).get().isActive());
 	}
 }

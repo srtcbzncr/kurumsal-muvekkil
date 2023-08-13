@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 /*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-08-13T14:07:21+0300",
+    date = "2023-08-13T17:13:34+0300",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.33.0.v20230218-1114, environment: Java 17.0.6 (Eclipse Adoptium)"
 )
 */
@@ -268,6 +268,10 @@ public class ResponseMapperImpl implements ResponseMapper {
 
         LawyerResponse lawyerResponse = new LawyerResponse();
 
+        lawyerResponse.setCompanyName( lawyerCompanyName( lawyer ) );
+        lawyerResponse.setEmail( lawyerUserEmail( lawyer ) );
+        lawyerResponse.setActive( lawyer.isActive() );
+        lawyerResponse.setDeleted( lawyer.isDeleted() );
         lawyerResponse.setFirstName( lawyer.getFirstName() );
         lawyerResponse.setId( lawyer.getId() );
         lawyerResponse.setLastName( lawyer.getLastName() );
@@ -490,5 +494,35 @@ public class ResponseMapperImpl implements ResponseMapper {
         }
 
         return list;
+    }
+
+    private String lawyerCompanyName(Lawyer lawyer) {
+        if ( lawyer == null ) {
+            return null;
+        }
+        Company company = lawyer.getCompany();
+        if ( company == null ) {
+            return null;
+        }
+        String name = company.getName();
+        if ( name == null ) {
+            return null;
+        }
+        return name;
+    }
+
+    private String lawyerUserEmail(Lawyer lawyer) {
+        if ( lawyer == null ) {
+            return null;
+        }
+        User user = lawyer.getUser();
+        if ( user == null ) {
+            return null;
+        }
+        String email = user.getEmail();
+        if ( email == null ) {
+            return null;
+        }
+        return email;
     }
 }

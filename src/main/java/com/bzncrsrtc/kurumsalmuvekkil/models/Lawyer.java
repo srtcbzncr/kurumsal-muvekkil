@@ -41,7 +41,7 @@ public class Lawyer {
 	@NonNull
 	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="user_id", referencedColumnName="id")
-	private User user;
+	private User user; 
 	
 	@NonNull
 	@Column(name="identification_number", length=11, nullable=false)

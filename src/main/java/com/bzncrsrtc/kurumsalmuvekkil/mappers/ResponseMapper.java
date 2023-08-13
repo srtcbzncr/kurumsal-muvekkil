@@ -56,6 +56,8 @@ public interface ResponseMapper {
 	FileWithoutCourtResponse getFileWithoutCourtResponse(File file);
 	List<FileWithoutCourtResponse> getFileWithoutCourtListResponse(List<File> files);
 	
+	@Mapping(target = "companyName", source = "company.name")
+	@Mapping(target = "email", source = "user.email")
 	LawyerResponse getLawyerResponse(Lawyer lawyer);
 	List<LawyerResponse> getLawyerListResponse(List<Lawyer> lawyers);
 	

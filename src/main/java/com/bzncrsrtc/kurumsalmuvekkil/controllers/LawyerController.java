@@ -132,6 +132,28 @@ public class LawyerController {
 		return ResponseHandler.generateResponse(location, HttpStatus.CREATED, null);
 	}
 	
+	@PutMapping("/{id}/setActive")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Object> setActive(@PathVariable UUID id, @RequestHeader(name = "Authorization", required = false) String localeStr) {
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		Lawyer updatedLawyer = lawyerService.setActive(id, locale);
+		LawyerResponse response = responseMapper.getLawyerResponse(updatedLawyer);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
+	}
+	
+	@PutMapping("/{id}/setPassive")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Object> setPassive(@PathVariable UUID id, @RequestHeader(name = "Authorization", required = false) String localeStr) {
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		Lawyer updatedLawyer = lawyerService.setPassive(id, locale);
+		LawyerResponse response = responseMapper.getLawyerResponse(updatedLawyer);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
+	}
+	
 	@PutMapping("")
 	public ResponseEntity<Object> update(@Valid @RequestBody UpdateLawyerRequest updateLawyerRequest, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");

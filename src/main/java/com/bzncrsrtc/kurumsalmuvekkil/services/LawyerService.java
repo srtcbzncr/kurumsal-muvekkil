@@ -77,6 +77,42 @@ public class LawyerService {
 	}
 	
 	@Transactional
+	public Lawyer setActive(UUID id, Locale locale) {
+		Optional<Lawyer> optionalLawyer = lawyerRepository.findByIdAndDeleted(id, false);
+		
+		if(optionalLawyer.isEmpty()) {
+			throw new LawyerNotFoundException(messageSource.getMessage("lawyer.not.found.message", null, locale));
+		}
+		
+		Lawyer lawyer = optionalLawyer.get();
+		
+		userService.setActive(lawyer.getUser().getId(), locale);
+		
+		lawyer.setActive(true);
+		
+		return lawyerRepository.save(lawyer);
+		
+	}
+	
+	@Transactional
+	public Lawyer setPassive(UUID id, Locale locale) {
+		Optional<Lawyer> optionalLawyer = lawyerRepository.findByIdAndDeleted(id, false);
+		
+		if(optionalLawyer.isEmpty()) {
+			throw new LawyerNotFoundException(messageSource.getMessage("lawyer.not.found.message", null, locale));
+		}
+		
+		Lawyer lawyer = optionalLawyer.get();
+		
+		userService.setPassive(lawyer.getUser().getId(), locale);
+		
+		lawyer.setActive(false);
+		
+		return lawyerRepository.save(lawyer);
+		
+	}
+	
+	@Transactional
 	public void update(Lawyer lawyer, Locale locale) {
 		if(!lawyerRepository.existsByIdAndDeleted(lawyer.getId(), false)) {
 			throw new LawyerNotFoundException(messageSource.getMessage("lawyer.not.found.message", null, locale));
@@ -94,6 +130,7 @@ public class LawyerService {
 		lawyerRepository.save(lawyer);
 	}
 	
+	@Transactional
 	public void delete(UUID id, Locale locale) {
 		Optional<Lawyer> optionalLawyer = lawyerRepository.findByIdAndDeleted(id, false);
 		
@@ -102,6 +139,8 @@ public class LawyerService {
 		}
 		
 		Lawyer lawyer = optionalLawyer.get();
+		
+		userService.delete(lawyer.getUser().getId(), locale);
 		
 		lawyer.setDeleted(true);
 		lawyer.setDeletedAt(LocalDateTime.now());
