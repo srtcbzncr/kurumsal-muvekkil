@@ -17,8 +17,6 @@ public class CreateLawyerRequest {
 	@Valid
 	private CreateUserRequest user;
 	
-	private String title;
-	
 	@NotEmpty(message="identification.number.notNull}")
 	private String identificationNumber;
 	

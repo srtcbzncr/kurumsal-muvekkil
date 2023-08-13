@@ -20,9 +20,6 @@ public class UpdateLawyerRequest {
 	@Valid
 	private UpdateUserRequest user;
 	
-	@NotEmpty(message="{title.notNull}")
-	private String title;
-	
 	@NotEmpty(message="{identificationNumber.notNull}")
 	private String identificationNumber;
 	

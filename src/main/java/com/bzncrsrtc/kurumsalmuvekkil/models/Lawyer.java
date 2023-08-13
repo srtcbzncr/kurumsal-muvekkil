@@ -20,8 +20,13 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@RequiredArgsConstructor
 @Entity(name="lawyers")
 public class Lawyer {
 
@@ -29,26 +34,29 @@ public class Lawyer {
 	@GeneratedValue(strategy=GenerationType.UUID)
 	private UUID id;
 	
+	@NonNull
 	@ManyToOne()
 	private Company company;
 	
+	@NonNull
 	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="user_id", referencedColumnName="id")
 	private User user;
 	
-	@Column(name="title")
-	private String title;
-	
-	@Column(name="identification_number", length=11, unique=true)
+	@NonNull
+	@Column(name="identification_number", length=11, nullable=false)
 	private String identificationNumber;
 	
-	@Column(name="first_name")
+	@NonNull
+	@Column(name="first_name", nullable=false)
 	private String firstName;
 	
-	@Column(name="last_name")
+	@NonNull
+	@Column(name="last_name", nullable=false)
 	private String lastName;
 	
-	@Column(name="phone", unique=true)
+	@NonNull
+	@Column(name="phone", nullable=false)
 	private String phone;
 	
 	@ManyToMany()

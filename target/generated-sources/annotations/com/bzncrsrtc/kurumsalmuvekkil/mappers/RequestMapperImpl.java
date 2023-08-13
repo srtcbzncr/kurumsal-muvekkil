@@ -36,7 +36,7 @@ import org.springframework.stereotype.Component;
 /*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-08-10T10:03:20+0300",
+    date = "2023-08-13T14:07:47+0300",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.33.0.v20230218-1114, environment: Java 17.0.6 (Eclipse Adoptium)"
 )
 */
@@ -453,7 +453,6 @@ public class RequestMapperImpl implements RequestMapper {
         lawyer.setIdentificationNumber( createLawyerRequest.getIdentificationNumber() );
         lawyer.setLastName( createLawyerRequest.getLastName() );
         lawyer.setPhone( createLawyerRequest.getPhone() );
-        lawyer.setTitle( createLawyerRequest.getTitle() );
         lawyer.setUser( fromCreateUserRequestToUser( createLawyerRequest.getUser() ) );
 
         return lawyer;
@@ -472,7 +471,6 @@ public class RequestMapperImpl implements RequestMapper {
         lawyer.setIdentificationNumber( updateLawyerRequest.getIdentificationNumber() );
         lawyer.setLastName( updateLawyerRequest.getLastName() );
         lawyer.setPhone( updateLawyerRequest.getPhone() );
-        lawyer.setTitle( updateLawyerRequest.getTitle() );
         lawyer.setUser( fromUpdateUserRequestToUser( updateLawyerRequest.getUser() ) );
 
         return lawyer;
@@ -490,7 +488,6 @@ public class RequestMapperImpl implements RequestMapper {
         createLawyerRequest.setIdentificationNumber( lawyer.getIdentificationNumber() );
         createLawyerRequest.setLastName( lawyer.getLastName() );
         createLawyerRequest.setPhone( lawyer.getPhone() );
-        createLawyerRequest.setTitle( lawyer.getTitle() );
         createLawyerRequest.setUser( fromUserToCreateUserRequest( lawyer.getUser() ) );
 
         return createLawyerRequest;
@@ -509,7 +506,6 @@ public class RequestMapperImpl implements RequestMapper {
         updateLawyerRequest.setIdentificationNumber( lawyer.getIdentificationNumber() );
         updateLawyerRequest.setLastName( lawyer.getLastName() );
         updateLawyerRequest.setPhone( lawyer.getPhone() );
-        updateLawyerRequest.setTitle( lawyer.getTitle() );
         updateLawyerRequest.setUser( fromUserToUpdateUserRequest( lawyer.getUser() ) );
 
         return updateLawyerRequest;

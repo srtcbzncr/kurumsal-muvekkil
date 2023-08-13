@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 /*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-08-11T11:19:15+0300",
+    date = "2023-08-13T14:07:21+0300",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.33.0.v20230218-1114, environment: Java 17.0.6 (Eclipse Adoptium)"
 )
 */
@@ -272,7 +272,6 @@ public class ResponseMapperImpl implements ResponseMapper {
         lawyerResponse.setId( lawyer.getId() );
         lawyerResponse.setLastName( lawyer.getLastName() );
         lawyerResponse.setPhone( lawyer.getPhone() );
-        lawyerResponse.setTitle( lawyer.getTitle() );
 
         return lawyerResponse;
     }
