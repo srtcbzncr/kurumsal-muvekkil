@@ -11,6 +11,9 @@ public class ClientResponse {
 	private String identificationNumber;
 	private String firstName;
 	private String lastName;
+	private String email;
 	private String phone;
+	private boolean active;
+	private boolean deleted;
 	
 }

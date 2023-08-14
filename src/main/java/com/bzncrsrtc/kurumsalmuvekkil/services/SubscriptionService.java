@@ -29,15 +29,19 @@ public class SubscriptionService {
 	}
 	
 	public List<Subscription> findAll(Locale locale){
+		return subscriptionRepository.findAllByDeleted(false);
+	}
+	
+	public List<Subscription> findAllActive(Locale locale) {
+		return subscriptionRepository.findAllByDeletedAndActive(false, true);
+	}
+	
+	public List<Subscription> findAllPassive(Locale locale){
 		return subscriptionRepository.findAllByDeletedAndActive(false, true);
 	}
 	
 	public List<Subscription> findAllDeleted(Locale locale){
 		return subscriptionRepository.findAllByDeleted(true);
-	}
-	
-	public List<Subscription> findAllPassive(Locale locale){
-		return subscriptionRepository.findAllByDeletedAndActive(false, true);
 	}
 	
 	public Subscription findById(UUID id, Locale locale) {
@@ -59,6 +63,34 @@ public class SubscriptionService {
 		return savedSubscription;
 	}
 	
+	public Subscription setActive(UUID id, Locale locale) {
+		Optional<Subscription> optionalSubscription = subscriptionRepository.findByIdAndDeleted(id, false);
+		
+		if(optionalSubscription.isEmpty()) {
+			throw new SubscriptionNotFoundException(messageSource.getMessage("subscription.not.found.message", null, locale));
+		}
+		
+		Subscription subscription = optionalSubscription.get();
+		
+		subscription.setActive(true);
+		
+		return subscriptionRepository.save(subscription);
+	}
+	
+	public Subscription setPassive(UUID id, Locale locale) {
+		Optional<Subscription> optionalSubscription = subscriptionRepository.findByIdAndDeleted(id, false);
+		
+		if(optionalSubscription.isEmpty()) {
+			throw new SubscriptionNotFoundException(messageSource.getMessage("subscription.not.found.message", null, locale));
+		}
+		
+		Subscription subscription = optionalSubscription.get();
+		
+		subscription.setActive(false);
+		
+		return subscriptionRepository.save(subscription);
+	}
+	
 	public void update(Subscription subscription, Locale locale) {
 		if(!subscriptionRepository.existsByIdAndDeleted(subscription.getId(), false)) {
 			throw new SubscriptionNotFoundException(messageSource.getMessage("subscription.not.found.message", null, locale));
@@ -77,6 +109,23 @@ public class SubscriptionService {
 		Subscription subscription = optionalSubscription.get();
 		subscription.setDeleted(true);
 		subscription.setDeletedAt(LocalDateTime.now());
+		
+		subscriptionRepository.save(subscription);
 	}
 	
+	public int allCount(Locale locale) {
+		return subscriptionRepository.countByDeleted(false);
+	}
+	
+	public int activeCount(Locale locale) {
+		return subscriptionRepository.countByDeletedAndActive(false, true);
+	}
+	
+	public int passiveCount(Locale locale) {
+		return subscriptionRepository.countByDeletedAndActive(false, false);
+	}
+	
+	public int deletedCount(Locale locale) {
+		return subscriptionRepository.countByDeleted(true);
+	}
 }

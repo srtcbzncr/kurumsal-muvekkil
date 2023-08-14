@@ -20,8 +20,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @Entity(name="subscriptions")
 public class Subscription {
 	
@@ -29,23 +33,27 @@ public class Subscription {
 	@GeneratedValue(strategy=GenerationType.UUID)
 	private UUID id;
 	
+	@NonNull
 	@ManyToOne()
 	@JoinColumn(name="company_id", referencedColumnName="id")
 	private Company company;
 	
+	@NonNull
 	@ManyToOne()
 	@JoinColumn(name="plan_id", referencedColumnName="id")
 	private Plan plan;
 	
+	@NonNull
 	@Column(name="type")
 	@Enumerated(EnumType.STRING)
 	private SubscriptionType type;
 	
+	@NonNull
 	@Column(name="fee")
 	private BigDecimal fee;
 	
 	@Column(name="start_date")
-	private LocalDate startDate = LocalDate.now();
+	private LocalDate startDate;
 	
 	@Column(name="end_date")
 	private LocalDate endDate;
@@ -69,5 +77,15 @@ public class Subscription {
 	
 	@Column(name="deleted_at")
 	private LocalDateTime deletedAt;
+	
+	public Subscription(Company company, Plan plan, SubscriptionType type) {
+		this.company = company;
+		this.plan = plan;
+		this.type = type;
+		this.fee = type == SubscriptionType.MONTHLY ? plan.getMonthlyPrice() : plan.getAnnualPrice();
+		this.startDate = LocalDate.now();
+		this.endDate = type == SubscriptionType.MONTHLY ? this.startDate.plusMonths(1) : this.startDate.plusYears(1);
+		
+	}
 
 }

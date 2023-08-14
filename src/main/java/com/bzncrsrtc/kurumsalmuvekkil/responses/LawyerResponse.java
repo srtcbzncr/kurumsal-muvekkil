@@ -9,6 +9,7 @@ public class LawyerResponse {
 
 	private UUID id;
 	private String companyName;
+	private String identificationNumber;
 	private String firstName;
 	private String lastName;
 	private String email;

@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 /*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-08-14T11:15:19+0300",
+    date = "2023-08-14T16:58:58+0300",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.33.0.v20230218-1114, environment: Java 17.0.6 (Eclipse Adoptium)"
 )
 */
@@ -46,6 +46,9 @@ public class ResponseMapperImpl implements ResponseMapper {
 
         ClientResponse clientResponse = new ClientResponse();
 
+        clientResponse.setEmail( clientUserEmail( client ) );
+        clientResponse.setActive( client.isActive() );
+        clientResponse.setDeleted( client.isDeleted() );
         clientResponse.setFirstName( client.getFirstName() );
         clientResponse.setId( client.getId() );
         clientResponse.setIdentificationNumber( client.getIdentificationNumber() );
@@ -274,6 +277,7 @@ public class ResponseMapperImpl implements ResponseMapper {
         lawyerResponse.setDeleted( lawyer.isDeleted() );
         lawyerResponse.setFirstName( lawyer.getFirstName() );
         lawyerResponse.setId( lawyer.getId() );
+        lawyerResponse.setIdentificationNumber( lawyer.getIdentificationNumber() );
         lawyerResponse.setLastName( lawyer.getLastName() );
         lawyerResponse.setPhone( lawyer.getPhone() );
 
@@ -344,8 +348,10 @@ public class ResponseMapperImpl implements ResponseMapper {
 
         SubscriptionResponse subscriptionResponse = new SubscriptionResponse();
 
+        subscriptionResponse.setActive( subscription.isActive() );
         subscriptionResponse.setAutoRenew( subscription.isAutoRenew() );
         subscriptionResponse.setCompany( getCompanyResponse( subscription.getCompany() ) );
+        subscriptionResponse.setDeleted( subscription.isDeleted() );
         subscriptionResponse.setEndDate( subscription.getEndDate() );
         subscriptionResponse.setFee( subscription.getFee() );
         subscriptionResponse.setId( subscription.getId() );
@@ -494,6 +500,21 @@ public class ResponseMapperImpl implements ResponseMapper {
         }
 
         return list;
+    }
+
+    private String clientUserEmail(Client client) {
+        if ( client == null ) {
+            return null;
+        }
+        User user = client.getUser();
+        if ( user == null ) {
+            return null;
+        }
+        String email = user.getEmail();
+        if ( email == null ) {
+            return null;
+        }
+        return email;
     }
 
     private String lawyerCompanyName(Lawyer lawyer) {

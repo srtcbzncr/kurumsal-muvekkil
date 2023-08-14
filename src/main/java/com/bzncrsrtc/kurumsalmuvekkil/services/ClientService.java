@@ -86,7 +86,9 @@ public class ClientService {
 		
 		userService.setActive(client.getUser().getId(), locale);
 		
-		return client;
+		client.setActive(true);
+		
+		return clientRepository.save(client);
 	}
 	
 	@Transactional
@@ -101,7 +103,9 @@ public class ClientService {
 		
 		userService.setPassive(client.getUser().getId(), locale);
 		
-		return client;
+		client.setActive(false);
+		
+		return clientRepository.save(client);
 	}
  	
 	@Transactional

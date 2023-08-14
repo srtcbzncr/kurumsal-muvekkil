@@ -32,7 +32,8 @@ import com.bzncrsrtc.kurumsalmuvekkil.responses.UserResponse;
 
 @Mapper(componentModel = "spring")
 public interface ResponseMapper {
-
+	
+	@Mapping(target = "email", source = "user.email")
 	ClientResponse getClientResponse(Client client);
 	List<ClientResponse> getClientListResponse(List<Client> clients);
 	

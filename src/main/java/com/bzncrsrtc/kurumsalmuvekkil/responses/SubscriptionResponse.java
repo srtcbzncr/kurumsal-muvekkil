@@ -19,5 +19,7 @@ public class SubscriptionResponse {
 	private LocalDate startDate;
 	private LocalDate endDate;
 	private boolean autoRenew;
+	private boolean active;
+	private boolean deleted;
 	
 }

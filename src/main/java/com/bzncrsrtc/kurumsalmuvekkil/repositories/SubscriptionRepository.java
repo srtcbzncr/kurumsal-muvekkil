@@ -32,4 +32,7 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, UUID
 	
 	boolean existsByIdAndDeleted(UUID id, boolean deleted);
 	boolean existsByCompanyIdAndDeleted(UUID companyId, boolean deleted);
+	
+	int countByDeleted(boolean deleted);
+	int countByDeletedAndActive(boolean deleted, boolean active);
 }

@@ -150,7 +150,7 @@ public class ClientController {
 	public ResponseEntity<Object> setPassive(@PathVariable UUID id, @RequestHeader(name = "Accept-Language", required = false) String localeStr) {
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
-		Client client = clientService.setActive(id, locale);
+		Client client = clientService.setPassive(id, locale);
 		ClientResponse response = responseMapper.getClientResponse(client);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);		
