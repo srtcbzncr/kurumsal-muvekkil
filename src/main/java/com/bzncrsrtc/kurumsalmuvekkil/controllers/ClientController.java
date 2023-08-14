@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +28,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.models.User;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateClientRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateClientRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.ClientResponse;
+import com.bzncrsrtc.kurumsalmuvekkil.responses.ClientStatisticsResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.FileResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.UserResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.ResponseHandler;
@@ -49,11 +51,60 @@ public class ClientController {
 		this.requestMapper = requestMapper;
 	}
 	
-	@GetMapping("")
+	@GetMapping("/stats")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Object> stats(@RequestHeader(name = "Accept-Language", required = false) String localeStr) {
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		int allCount = clientService.allCount(locale);
+		int activeCount = clientService.activeCount(locale);
+		int passiveCount = clientService.passiveCount(locale);
+		int deletedCount = clientService.deletedCount(locale);
+		
+		ClientStatisticsResponse response = new ClientStatisticsResponse(allCount, activeCount, passiveCount, deletedCount);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
+	}
+	
+	@GetMapping("/all")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Object> findAll(@RequestHeader(name = "Accept-Language", required = false) String localeStr){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		
 		List<Client> clients = clientService.findAll(locale);
+		List<ClientResponse> response = responseMapper.getClientListResponse(clients);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
+	}
+	
+	@GetMapping("/active")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Object> findAllActive(@RequestHeader(name = "Accept-Language", required = false) String localeStr){
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		List<Client> clients = clientService.findAllActive(locale);
+		List<ClientResponse> response = responseMapper.getClientListResponse(clients);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
+	}
+	
+	@GetMapping("/passive")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Object> findAllPassive(@RequestHeader(name = "Accept-Language", required = false) String localeStr){
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		List<Client> clients = clientService.findAllPassive(locale);
+		List<ClientResponse> response = responseMapper.getClientListResponse(clients);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
+	}
+	
+	@GetMapping("/deleted")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Object> findAllDeleted(@RequestHeader(name = "Accept-Language", required = false) String localeStr){
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		List<Client> clients = clientService.findAllDeleted(locale);
 		List<ClientResponse> response = responseMapper.getClientListResponse(clients);
 		
 		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);
@@ -83,6 +134,28 @@ public class ClientController {
 		return ResponseHandler.generateResponse(location, HttpStatus.CREATED, null);
 	}
 	
+	@PutMapping("/{id}/setActive")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Object> setActive(@PathVariable UUID id, @RequestHeader(name = "Accept-Language", required = false) String localeStr) {
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		Client client = clientService.setActive(id, locale);
+		ClientResponse response = responseMapper.getClientResponse(client);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);		
+	}
+	
+	@PutMapping("/{id}/setPassive")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Object> setPassive(@PathVariable UUID id, @RequestHeader(name = "Accept-Language", required = false) String localeStr) {
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		Client client = clientService.setActive(id, locale);
+		ClientResponse response = responseMapper.getClientResponse(client);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.OK, null);		
+	}
+	
 	@PutMapping("")
 	public ResponseEntity<Object> update(@Valid @RequestBody UpdateClientRequest updateClientRequest, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
@@ -94,6 +167,7 @@ public class ClientController {
 	}
 	
 	@DeleteMapping("/{id}")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<Object> delete(@PathVariable UUID id, @RequestHeader(name = "Accept-Language", required = false) String localeStr){
 		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
 		

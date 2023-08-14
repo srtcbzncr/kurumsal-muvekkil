@@ -32,7 +32,8 @@ public class Client {
 	@GeneratedValue(strategy=GenerationType.UUID)
 	private UUID id;
 	
-	@OneToOne(cascade=CascadeType.REMOVE)
+	@NonNull
+	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="user_id", referencedColumnName="id")
 	private User user;
 	

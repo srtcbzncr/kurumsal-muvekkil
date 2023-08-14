@@ -34,15 +34,19 @@ public class ClientService {
 	}
 	
 	public List<Client> findAll(Locale locale){
-		return clientRepository.findAllByDeletedAndActive(false, true);
+		return clientRepository.findAllByDeleted(false);
 	}
 	
-	public List<Client> findAllDeleted(Locale locale){
-		return clientRepository.findAllByDeleted(true);
+	public List<Client> findAllActive(Locale locale) {
+		return clientRepository.findAllByDeletedAndActive(false, true);
 	}
 	
 	public List<Client> findAllPassive(Locale locale){
 		return clientRepository.findAllByDeletedAndActive(false, false);
+	}
+	
+	public List<Client> findAllDeleted(Locale locale){
+		return clientRepository.findAllByDeleted(true);
 	}
 	
 	public Client findById(UUID id, Locale locale) {
@@ -71,6 +75,36 @@ public class ClientService {
 	}
 	
 	@Transactional
+	public Client setActive(UUID id, Locale locale) {
+		Optional<Client> optionalClient = clientRepository.findByIdAndDeleted(id, false);
+		
+		if(optionalClient.isEmpty()) {
+			throw new ClientNotFoundException(messageSource.getMessage("client.not.found.message", null, locale));
+		}
+		
+		Client client = optionalClient.get();
+		
+		userService.setActive(client.getUser().getId(), locale);
+		
+		return client;
+	}
+	
+	@Transactional
+	public Client setPassive(UUID id, Locale locale) {
+		Optional<Client> optionalClient = clientRepository.findByIdAndDeleted(id, false);
+		
+		if(optionalClient.isEmpty()) {
+			throw new ClientNotFoundException(messageSource.getMessage("client.not.found.message", null, locale));
+		}
+		
+		Client client = optionalClient.get();
+		
+		userService.setPassive(client.getUser().getId(), locale);
+		
+		return client;
+	}
+ 	
+	@Transactional
 	public void update(Client client, Locale locale) {
 		if(!clientRepository.existsByIdAndDeleted(client.getId(), false)) {
 			throw new ClientNotFoundException(messageSource.getMessage("client.not.found.message", null, locale));
@@ -97,8 +131,11 @@ public class ClientService {
 		
 		Client client = optionalClient.get();
 		
+		userService.delete(client.getUser().getId(), locale);
+		
 		client.setDeleted(true);
 		client.setDeletedAt(LocalDateTime.now());
+		
 		clientRepository.save(client);
 	}
 	
@@ -110,5 +147,21 @@ public class ClientService {
 		}
 		
 		return client.get().getUser();
+	}
+	
+	public int allCount(Locale locale) {
+		return clientRepository.countByDeleted(false);
+	}
+	
+	public int activeCount(Locale locale) {
+		return clientRepository.countByDeletedAndActive(false, true);
+	}
+	
+	public int passiveCount(Locale locale) {
+		return clientRepository.countByDeletedAndActive(false, false);
+	}
+	
+	public int deletedCount(Locale locale) {
+		return clientRepository.countByDeleted(true);
 	}
 }

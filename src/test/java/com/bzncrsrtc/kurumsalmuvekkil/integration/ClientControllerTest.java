@@ -26,11 +26,9 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import com.bzncrsrtc.kurumsalmuvekkil.models.Company;
-import com.bzncrsrtc.kurumsalmuvekkil.models.Lawyer;
+import com.bzncrsrtc.kurumsalmuvekkil.models.Client;
 import com.bzncrsrtc.kurumsalmuvekkil.models.User;
-import com.bzncrsrtc.kurumsalmuvekkil.repositories.CompanyRepository;
-import com.bzncrsrtc.kurumsalmuvekkil.repositories.LawyerRepository;
+import com.bzncrsrtc.kurumsalmuvekkil.repositories.ClientRepository;
 import com.bzncrsrtc.kurumsalmuvekkil.repositories.UserRepository;
 
 @SpringBootTest
@@ -38,50 +36,42 @@ import com.bzncrsrtc.kurumsalmuvekkil.repositories.UserRepository;
 @ActiveProfiles("test")
 @Sql({ "classpath:init-data.sql" })
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class LawyerControllerTest {
-
+public class ClientControllerTest {
+	
 	@Autowired
 	private MockMvc mockMvc;
 	
 	@Autowired
-	private LawyerRepository lawyerRepository;
-	
-	@Autowired
-	private CompanyRepository companyRepository;
+	private ClientRepository clientRepository;
 	
 	@Autowired
 	private UserRepository userRepository;
 	
-	Company company = new Company("Company");
+	// Users
+	User activeClientUser = new User("activeClient@gmail.com", "activeClient", "123456");
+	User passiveClientUser = new User("passiveClient@gmail.com", "passiveClient", "123456");
+	User deletedClientUser = new User("deletedClient@gmail.com", "deletedClient", "123456");
 	
-	User activeLawyerUser = new User("activeLawyer@gmail.com", "activeLawyer", "123456");
-	User passiveLawyerUser = new User("passiveLawyer@gmail.com", "passiveLawyer", "123456");
-	User deletedLawyerUser = new User("deletedLawyer@gmail.com", "deletedLawyer", "123456");
-	
-	Lawyer activeLawyer = new Lawyer(company, activeLawyerUser, "11111111111", "active", "lawyer", "5555555555");
-	Lawyer passiveLawyer = new Lawyer(company, passiveLawyerUser, "22222222222", "passive", "lawyer", "6666666666");
-	Lawyer deletedLawyer = new Lawyer(company, deletedLawyerUser, "33333333333", "deleted", "lawyer", "7777777777");
+	// Clients
+	Client activeClient = new Client(activeClientUser, "11111111111", "active", "client", "5555555555");
+	Client passiveClient = new Client(passiveClientUser, "22222222222", "passive", "client", "6666666666");
+	Client deletedClient = new Client(deletedClientUser, "33333333333", "deleted", "client", "7777777777");
 	
 	@BeforeEach
-	void setup() {
-		companyRepository.deleteAll();
-		lawyerRepository.deleteAll();
+	public void setup() {
+		clientRepository.deleteAll();
 		
-		passiveLawyerUser.setActive(false);
+		clientRepository.save(activeClient);
 		
-		deletedLawyerUser.setDeleted(true);
-		deletedLawyerUser.setDeletedAt(LocalDateTime.now());
+		passiveClientUser.setActive(false);
+		passiveClient.setActive(false);
+		clientRepository.save(passiveClient);
 		
-		companyRepository.save(company);
-		
-		lawyerRepository.save(activeLawyer);
-		
-		passiveLawyer.setActive(false);
-		lawyerRepository.save(passiveLawyer);
-		
-		deletedLawyer.setDeleted(true);
-		deletedLawyer.setDeletedAt(LocalDateTime.now());
-		lawyerRepository.save(deletedLawyer);
+		deletedClientUser.setDeleted(true);
+		deletedClientUser.setDeletedAt(LocalDateTime.now());
+		deletedClient.setDeleted(true);
+		deletedClient.setDeletedAt(LocalDateTime.now());
+		clientRepository.save(deletedClient);
 	}
 	
 	private String getAuthorizationHeader(String username) {		
@@ -91,12 +81,11 @@ public class LawyerControllerTest {
 	    return "Basic " + new String(encodedAuth);
 	}
 	
-	
 	/* stats endpoint */
 	
 	@Test
 	public void statsWithoutAuthHeaderShouldReturn401() throws Exception {
-		ResultActions response = mockMvc.perform(get("/lawyer/stats")
+		ResultActions response = mockMvc.perform(get("/client/stats")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON));
 		
@@ -108,7 +97,7 @@ public class LawyerControllerTest {
 	
 	@Test
 	public void statsWithClientRoleShouldReturn403() throws Exception {
-		ResultActions response = mockMvc.perform(get("/lawyer/stats")
+		ResultActions response = mockMvc.perform(get("/client/stats")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuthorizationHeader("client")));
@@ -121,7 +110,7 @@ public class LawyerControllerTest {
 	
 	@Test
 	public void statsWithLawyerRoleShouldReturn403() throws Exception {
-		ResultActions response = mockMvc.perform(get("/lawyer/stats")
+		ResultActions response = mockMvc.perform(get("/client/stats")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuthorizationHeader("lawyer")));
@@ -134,7 +123,7 @@ public class LawyerControllerTest {
 	
 	@Test
 	public void statsWithAdminRoleShouldReturn200() throws Exception {
-		ResultActions response = mockMvc.perform(get("/lawyer/stats")
+		ResultActions response = mockMvc.perform(get("/client/stats")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuthorizationHeader("admin")));
@@ -154,7 +143,7 @@ public class LawyerControllerTest {
 	
 	@Test
 	public void findAllWithoutAuthHeaderShouldReturn401() throws Exception {
-		ResultActions response = mockMvc.perform(get("/lawyer/all")
+		ResultActions response = mockMvc.perform(get("/client/all")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON));
 		
@@ -166,7 +155,7 @@ public class LawyerControllerTest {
 	
 	@Test
 	public void findAllWithClientRoleShouldReturn403() throws Exception {
-		ResultActions response = mockMvc.perform(get("/lawyer/all")
+		ResultActions response = mockMvc.perform(get("/client/all")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuthorizationHeader("client")));
@@ -179,7 +168,7 @@ public class LawyerControllerTest {
 	
 	@Test
 	public void findAllWithLawyerRoleShouldReturn403() throws Exception {
-		ResultActions response = mockMvc.perform(get("/lawyer/all")
+		ResultActions response = mockMvc.perform(get("/client/all")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuthorizationHeader("lawyer")));
@@ -192,10 +181,12 @@ public class LawyerControllerTest {
 	
 	@Test
 	public void findAllWithAdminRoleShouldReturn200() throws Exception {
-		ResultActions response = mockMvc.perform(get("/lawyer/all")
+		ResultActions response = mockMvc.perform(get("/client/all")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuthorizationHeader("admin")));
+		
+		System.out.println(response);
 		
 		response.andExpect(status().isOk())
 				.andExpect(jsonPath("$.status").value(200))
@@ -209,7 +200,7 @@ public class LawyerControllerTest {
 	
 	@Test
 	public void findAllActiveWithoutAuthHeaderShouldReturn401() throws Exception {
-		ResultActions response = mockMvc.perform(get("/lawyer/active")
+		ResultActions response = mockMvc.perform(get("/client/active")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON));
 		
@@ -221,7 +212,7 @@ public class LawyerControllerTest {
 	
 	@Test
 	public void findAllActiveWithClientRoleShouldReturn403() throws Exception {
-		ResultActions response = mockMvc.perform(get("/lawyer/active")
+		ResultActions response = mockMvc.perform(get("/client/active")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuthorizationHeader("client")));
@@ -234,7 +225,7 @@ public class LawyerControllerTest {
 	
 	@Test
 	public void findAllActiveWithLawyerRoleShouldReturn403() throws Exception {
-		ResultActions response = mockMvc.perform(get("/lawyer/active")
+		ResultActions response = mockMvc.perform(get("/client/active")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuthorizationHeader("lawyer")));
@@ -246,8 +237,8 @@ public class LawyerControllerTest {
 	}
 	
 	@Test
-	public void findAllActiveWithAdminRoleShouldReturn403() throws Exception {
-		ResultActions response = mockMvc.perform(get("/lawyer/active")
+	public void findAllActiveWithAdminRoleShouldReturn200() throws Exception {
+		ResultActions response = mockMvc.perform(get("/client/active")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuthorizationHeader("admin")));
@@ -264,7 +255,7 @@ public class LawyerControllerTest {
 	
 	@Test
 	public void findAllPassiveWithoutAuthHeaderShouldReturn401() throws Exception {
-		ResultActions response = mockMvc.perform(get("/lawyer/passive")
+		ResultActions response = mockMvc.perform(get("/client/passive")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON));
 		
@@ -276,7 +267,7 @@ public class LawyerControllerTest {
 	
 	@Test
 	public void findAllPassiveWithClientRoleShouldReturn403() throws Exception {
-		ResultActions response = mockMvc.perform(get("/lawyer/passive")
+		ResultActions response = mockMvc.perform(get("/client/passive")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuthorizationHeader("client")));
@@ -289,7 +280,7 @@ public class LawyerControllerTest {
 	
 	@Test
 	public void findAllPassiveWithLawyerRoleShouldReturn403() throws Exception {
-		ResultActions response = mockMvc.perform(get("/lawyer/passive")
+		ResultActions response = mockMvc.perform(get("/client/passive")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuthorizationHeader("lawyer")));
@@ -301,8 +292,8 @@ public class LawyerControllerTest {
 	}
 	
 	@Test
-	public void findAllPassiveWithAdminRoleShouldReturn403() throws Exception {
-		ResultActions response = mockMvc.perform(get("/lawyer/passive")
+	public void findAllPassiveWithAdminRoleShouldReturn200() throws Exception {
+		ResultActions response = mockMvc.perform(get("/client/passive")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuthorizationHeader("admin")));
@@ -319,7 +310,7 @@ public class LawyerControllerTest {
 	
 	@Test
 	public void findAllDeletedWithoutAuthHeaderShouldReturn401() throws Exception {
-		ResultActions response = mockMvc.perform(get("/lawyer/deleted")
+		ResultActions response = mockMvc.perform(get("/client/deleted")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON));
 		
@@ -331,7 +322,7 @@ public class LawyerControllerTest {
 	
 	@Test
 	public void findAllDeletedWithClientRoleShouldReturn403() throws Exception {
-		ResultActions response = mockMvc.perform(get("/lawyer/deleted")
+		ResultActions response = mockMvc.perform(get("/client/deleted")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuthorizationHeader("client")));
@@ -344,7 +335,7 @@ public class LawyerControllerTest {
 	
 	@Test
 	public void findAllDeletedWithLawyerRoleShouldReturn403() throws Exception {
-		ResultActions response = mockMvc.perform(get("/lawyer/deleted")
+		ResultActions response = mockMvc.perform(get("/client/deleted")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuthorizationHeader("lawyer")));
@@ -356,8 +347,8 @@ public class LawyerControllerTest {
 	}
 	
 	@Test
-	public void findAllDeletedWithAdminRoleShouldReturn403() throws Exception {
-		ResultActions response = mockMvc.perform(get("/lawyer/deleted")
+	public void findAllDeletedWithAdminRoleShouldReturn200() throws Exception {
+		ResultActions response = mockMvc.perform(get("/client/deleted")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuthorizationHeader("admin")));
@@ -374,7 +365,7 @@ public class LawyerControllerTest {
 	
 	@Test
 	public void setActiveWithoutAuthHeaderShouldReturn401() throws Exception {
-		ResultActions response = mockMvc.perform(put("/lawyer/" + passiveLawyer.getId() + "/setActive")
+		ResultActions response = mockMvc.perform(put("/client/" + passiveClient.getId() + "/setActive")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON));
 		
@@ -386,7 +377,7 @@ public class LawyerControllerTest {
 	
 	@Test
 	public void setActiveWithClientRoleShouldReturn403() throws Exception {
-		ResultActions response = mockMvc.perform(put("/lawyer/" + passiveLawyer.getId() + "/setActive")
+		ResultActions response = mockMvc.perform(put("/client/" + passiveClient.getId() + "/setActive")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuthorizationHeader("client")));
@@ -399,7 +390,7 @@ public class LawyerControllerTest {
 	
 	@Test
 	public void setActiveWithLawyerRoleShouldReturn403() throws Exception {
-		ResultActions response = mockMvc.perform(put("/lawyer/" + passiveLawyer.getId() + "/setActive")
+		ResultActions response = mockMvc.perform(put("/client/" + passiveClient.getId() + "/setActive")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuthorizationHeader("lawyer")));
@@ -411,8 +402,8 @@ public class LawyerControllerTest {
 	}
 	
 	@Test
-	public void setActiveNotExistingLawyerShouldReturn404() throws Exception {
-		ResultActions response = mockMvc.perform(put("/lawyer/" + UUID.randomUUID() + "/setActive")
+	public void setActiveNotExistingClientWithAdminRoleShouldReturn403() throws Exception {
+		ResultActions response = mockMvc.perform(put("/client/" + UUID.randomUUID() + "/setActive")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuthorizationHeader("admin")));
@@ -424,8 +415,8 @@ public class LawyerControllerTest {
 	}
 	
 	@Test
-	public void setActiveDeletedLawyerWithAdminRoleShouldReturn404() throws Exception {
-		ResultActions response = mockMvc.perform(put("/lawyer/" + deletedLawyer.getId() + "/setActive")
+	public void setActiveDeletedClientWithAdminRoleShouldReturn403() throws Exception {
+		ResultActions response = mockMvc.perform(put("/client/" + deletedClient.getId() + "/setActive")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuthorizationHeader("admin")));
@@ -437,8 +428,8 @@ public class LawyerControllerTest {
 	}
 	
 	@Test
-	public void setActiveExistingLawyerWithAdminRoleShouldReturn200() throws Exception {
-		ResultActions response = mockMvc.perform(put("/lawyer/" + passiveLawyer.getId() + "/setActive")
+	public void setActiveWithAdminRoleShouldReturn200() throws Exception {
+		ResultActions response = mockMvc.perform(put("/client/" + passiveClient.getId() + "/setActive")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuthorizationHeader("admin")));
@@ -448,14 +439,15 @@ public class LawyerControllerTest {
 				.andExpect(jsonPath("$.data").isNotEmpty())
 				.andExpect(jsonPath("$.error").isEmpty());
 		
-		assertTrue(userRepository.findById(passiveLawyer.getUser().getId()).get().isActive());
+		assertTrue(userRepository.findById(passiveClient.getUser().getId()).get().isActive());
 	}
+	
 	
 	/* setPassive endpoint */
 	
 	@Test
 	public void setPassiveWithoutAuthHeaderShouldReturn401() throws Exception {
-		ResultActions response = mockMvc.perform(put("/lawyer/" + activeLawyer.getId() + "/setPassive")
+		ResultActions response = mockMvc.perform(put("/client/" + activeClient.getId() + "/setPassive")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON));
 		
@@ -467,7 +459,7 @@ public class LawyerControllerTest {
 	
 	@Test
 	public void setPassiveWithClientRoleShouldReturn403() throws Exception {
-		ResultActions response = mockMvc.perform(put("/lawyer/" + activeLawyer.getId() + "/setPassive")
+		ResultActions response = mockMvc.perform(put("/client/" + activeClient.getId() + "/setPassive")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuthorizationHeader("client")));
@@ -480,7 +472,7 @@ public class LawyerControllerTest {
 	
 	@Test
 	public void setPassiveWithLawyerRoleShouldReturn403() throws Exception {
-		ResultActions response = mockMvc.perform(put("/lawyer/" + activeLawyer.getId() + "/setPassive")
+		ResultActions response = mockMvc.perform(put("/client/" + activeClient.getId() + "/setPassive")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuthorizationHeader("lawyer")));
@@ -492,8 +484,8 @@ public class LawyerControllerTest {
 	}
 	
 	@Test
-	public void setPassiveNotExistingLawyerShouldReturn404() throws Exception {
-		ResultActions response = mockMvc.perform(put("/lawyer/" + UUID.randomUUID() + "/setPassive")
+	public void setPassiveNotExistingClientWithAdminRoleShouldReturn403() throws Exception {
+		ResultActions response = mockMvc.perform(put("/client/" + UUID.randomUUID() + "/setPassive")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuthorizationHeader("admin")));
@@ -505,8 +497,8 @@ public class LawyerControllerTest {
 	}
 	
 	@Test
-	public void setPassiveDeletedLawyerWithAdminRoleShouldReturn404() throws Exception {
-		ResultActions response = mockMvc.perform(put("/lawyer/" + deletedLawyer.getId() + "/setPassive")
+	public void setPassiveDeletedClientWithAdminRoleShouldReturn403() throws Exception {
+		ResultActions response = mockMvc.perform(put("/client/" + deletedClient.getId() + "/setPassive")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuthorizationHeader("admin")));
@@ -518,8 +510,8 @@ public class LawyerControllerTest {
 	}
 	
 	@Test
-	public void setPassiveExistingLawyerWithAdminRoleShouldReturn200() throws Exception {
-		ResultActions response = mockMvc.perform(put("/lawyer/" + activeLawyer.getId() + "/setPassive")
+	public void setPassiveWithAdminRoleShouldReturn200() throws Exception {
+		ResultActions response = mockMvc.perform(put("/client/" + activeClient.getId() + "/setPassive")
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuthorizationHeader("admin")));
@@ -529,7 +521,7 @@ public class LawyerControllerTest {
 				.andExpect(jsonPath("$.data").isNotEmpty())
 				.andExpect(jsonPath("$.error").isEmpty());
 		
-		assertFalse(userRepository.findById(passiveLawyer.getUser().getId()).get().isActive());
+		assertFalse(userRepository.findById(passiveClient.getUser().getId()).get().isActive());
 	}
 	
 	
@@ -537,7 +529,7 @@ public class LawyerControllerTest {
 	
 	@Test
 	public void deleteWithoutAuthHeaderShouldReturn401() throws Exception {
-		ResultActions response = mockMvc.perform(delete("/lawyer/" + activeLawyer.getId())
+		ResultActions response = mockMvc.perform(delete("/client/" + activeClient.getId())
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON));
 		
@@ -545,11 +537,12 @@ public class LawyerControllerTest {
 				.andExpect(jsonPath("$.status").value(401))
 				.andExpect(jsonPath("$.data").isEmpty())
 				.andExpect(jsonPath("$.error").isNotEmpty());
+		
 	}
 	
 	@Test
 	public void deleteWithClientRoleShouldReturn403() throws Exception {
-		ResultActions response = mockMvc.perform(delete("/lawyer/" + activeLawyer.getId())
+		ResultActions response = mockMvc.perform(delete("/client/" + activeClient.getId())
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuthorizationHeader("client")));
@@ -562,7 +555,7 @@ public class LawyerControllerTest {
 	
 	@Test
 	public void deleteWithLawyerRoleShouldReturn403() throws Exception {
-		ResultActions response = mockMvc.perform(delete("/lawyer/" + activeLawyer.getId())
+		ResultActions response = mockMvc.perform(delete("/client/" + activeClient.getId())
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuthorizationHeader("lawyer")));
@@ -574,8 +567,8 @@ public class LawyerControllerTest {
 	}
 	
 	@Test
-	public void deleteNotExistingLawyerWithAdminRoleShouldReturn404() throws Exception {
-		ResultActions response = mockMvc.perform(delete("/lawyer/" + UUID.randomUUID())
+	public void deleteNotExistingClientWithAdminRoleShouldReturn404() throws Exception {
+		ResultActions response = mockMvc.perform(delete("/client/" + UUID.randomUUID())
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuthorizationHeader("admin")));
@@ -587,8 +580,8 @@ public class LawyerControllerTest {
 	}
 	
 	@Test
-	public void deleteDeletedLawyerWithAdminRoleShouldReturn404() throws Exception {
-		ResultActions response = mockMvc.perform(delete("/lawyer/" + deletedLawyer.getId())
+	public void deleteDeletedClientWithAdminRoleShouldReturn404() throws Exception {
+		ResultActions response = mockMvc.perform(delete("/client/" + deletedClient.getId())
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuthorizationHeader("admin")));
@@ -597,11 +590,11 @@ public class LawyerControllerTest {
 				.andExpect(jsonPath("$.status").value(404))
 				.andExpect(jsonPath("$.data").isEmpty())
 				.andExpect(jsonPath("$.error").isNotEmpty());
-	}
+	}	
 	
 	@Test
-	public void deleteExistingLawyerWithAdminRoleShouldReturn200() throws Exception {
-		ResultActions response = mockMvc.perform(delete("/lawyer/" + activeLawyer.getId())
+	public void deleteWithAdminRoleShouldReturn200() throws Exception {
+		ResultActions response = mockMvc.perform(delete("/client/" + activeClient.getId())
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuthorizationHeader("admin")));
@@ -611,6 +604,7 @@ public class LawyerControllerTest {
 				.andExpect(jsonPath("$.data").isEmpty())
 				.andExpect(jsonPath("$.error").isEmpty());
 		
-		assertTrue(userRepository.findById(activeLawyer.getUser().getId()).get().isDeleted());
+		assertTrue(userRepository.findById(activeClient.getUser().getId()).get().isDeleted());
 	}
+
 }
