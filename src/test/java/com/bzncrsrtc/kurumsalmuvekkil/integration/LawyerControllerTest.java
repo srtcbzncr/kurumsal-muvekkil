@@ -447,7 +447,7 @@ public class LawyerControllerTest {
 				.andExpect(jsonPath("$.data").isNotEmpty())
 				.andExpect(jsonPath("$.error").isEmpty());
 		
-		assertFalse(userRepository.findById(passiveLawyer.getUser().getId()).get().isActive());
+		assertTrue(userRepository.findById(passiveLawyer.getUser().getId()).get().isActive());
 	}
 	
 	/* setPassive endpoint */
@@ -528,6 +528,6 @@ public class LawyerControllerTest {
 				.andExpect(jsonPath("$.data").isNotEmpty())
 				.andExpect(jsonPath("$.error").isEmpty());
 		
-		assertTrue(userRepository.findById(passiveLawyer.getUser().getId()).get().isActive());
+		assertFalse(userRepository.findById(passiveLawyer.getUser().getId()).get().isActive());
 	}
 }
