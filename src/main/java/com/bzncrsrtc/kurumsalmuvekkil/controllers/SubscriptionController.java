@@ -37,9 +37,9 @@ import jakarta.validation.Valid;
 @RequestMapping("/subscription")
 public class SubscriptionController {
 
-	private SubscriptionService subscriptionService;
-	private ResponseMapper responseMapper;
-	private RequestMapper requestMapper;
+	private final SubscriptionService subscriptionService;
+	private final ResponseMapper responseMapper;
+	private final RequestMapper requestMapper;
 	
 	public SubscriptionController(SubscriptionService subscriptionService, ResponseMapper responseMapper, RequestMapper requestMapper) {
 		this.subscriptionService = subscriptionService;
