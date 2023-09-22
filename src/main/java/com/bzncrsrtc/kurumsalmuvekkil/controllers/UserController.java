@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,10 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bzncrsrtc.kurumsalmuvekkil.mappers.RequestMapper;
 import com.bzncrsrtc.kurumsalmuvekkil.mappers.ResponseMapper;
 import com.bzncrsrtc.kurumsalmuvekkil.models.User;
+import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateAdminRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.ResponseHandler;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.UserResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.responses.UserStatisticsResponse;
 import com.bzncrsrtc.kurumsalmuvekkil.services.UserService;
+
+import jakarta.validation.Valid;
 
 
 @CrossOrigin
@@ -130,6 +135,18 @@ public class UserController {
 		userService.delete(id, locale);
 		
 		return ResponseHandler.generateResponse(null, HttpStatus.OK, null);
+	}
+	
+	@PostMapping("")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Object> createAdmin (@Valid @RequestBody CreateAdminRequest createAdminRequest, @RequestHeader(name = "Accept-Language", required = false) String localeStr) {
+		Locale locale = (localeStr != null && localeStr.equals("en")) ? new Locale("en") : new Locale("tr");
+		
+		User user = requestMapper.fromCreateUserRequestToUser(createAdminRequest);
+		User savedUser = userService.createAdmin(user, locale);
+		UserResponse response = responseMapper.getUserResponse(savedUser);
+		
+		return ResponseHandler.generateResponse(response, HttpStatus.CREATED, null);
 	}
 
 }

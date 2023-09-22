@@ -1,6 +1,7 @@
 package com.bzncrsrtc.kurumsalmuvekkil.mappers;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import com.bzncrsrtc.kurumsalmuvekkil.models.Client;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Company;
@@ -21,7 +22,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.requests.CreatePlanRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateRoleRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateSubscriptionRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateUpdateRequest;
-import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateUserRequest;
+import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateAdminRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.ParentCourtRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateClientRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateCompanyRequest;
@@ -60,9 +61,9 @@ public interface RequestMapper {
 	CreateRoleRequest fromRoleToCreateRoleRequest(Role role);
 	UpdateRoleRequest fromRoleToUpdateRoleRequest(Role role);
 	
-	User fromCreateUserRequestToUser(CreateUserRequest createUserRequest);
+	User fromCreateUserRequestToUser(CreateAdminRequest createUserRequest);
 	User fromUpdateUserRequestToUser(UpdateUserRequest updateUserRequest);
-	CreateUserRequest fromUserToCreateUserRequest(User user);
+	CreateAdminRequest fromUserToCreateUserRequest(User user);
 	UpdateUserRequest fromUserToUpdateUserRequest(User user);
 	
 	Client fromCreateClientRequestToClient(CreateClientRequest createClientRequest);

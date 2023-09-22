@@ -24,6 +24,6 @@ public class CreateClientRequest {
 	private String phone;
 	
 	@Valid
-	private CreateUserRequest user;
+	private CreateAdminRequest user;
 	
 }

@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import com.bzncrsrtc.kurumsalmuvekkil.exceptions.EmailAlreadyUsedException;
 import com.bzncrsrtc.kurumsalmuvekkil.exceptions.UserNotFoundException;
 import com.bzncrsrtc.kurumsalmuvekkil.exceptions.UsernameAlreadyUsedException;
+import com.bzncrsrtc.kurumsalmuvekkil.models.Role;
 import com.bzncrsrtc.kurumsalmuvekkil.models.User;
 import com.bzncrsrtc.kurumsalmuvekkil.repositories.UserRepository;
 
@@ -72,6 +73,22 @@ public class UserService implements UserDetailsService {
 		if(userRepository.existsByUsernameAndDeleted(user.getUsername(), false)) {
 			throw new UsernameAlreadyUsedException(messageSource.getMessage("username.already.used.message", null, locale));
 		}
+		
+		return userRepository.save(user);
+	}
+	
+	public User createAdmin(User user, Locale locale) {
+		if(userRepository.existsByEmailAndDeleted(user.getEmail(), false)) {
+			throw new EmailAlreadyUsedException(messageSource.getMessage("email.already.used.message", null, locale));
+		}
+		
+		if(userRepository.existsByUsernameAndDeleted(user.getUsername(), false)) {
+			throw new UsernameAlreadyUsedException(messageSource.getMessage("username.already.used.message", null, locale));
+		}
+		
+		Role role = roleService.findByName("ROLE_ADMIN", locale);
+		
+		user.setRole(role);
 		
 		return userRepository.save(user);
 	}

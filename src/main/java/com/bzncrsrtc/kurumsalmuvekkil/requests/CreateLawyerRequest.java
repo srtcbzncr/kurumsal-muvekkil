@@ -15,7 +15,7 @@ public class CreateLawyerRequest {
 	private UUID companyId;
 	
 	@Valid
-	private CreateUserRequest user;
+	private CreateAdminRequest user;
 	
 	@NotEmpty(message="identification.number.notNull}")
 	private String identificationNumber;

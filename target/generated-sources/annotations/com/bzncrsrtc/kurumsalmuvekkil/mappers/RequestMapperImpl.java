@@ -10,6 +10,7 @@ import com.bzncrsrtc.kurumsalmuvekkil.models.Role;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Subscription;
 import com.bzncrsrtc.kurumsalmuvekkil.models.Update;
 import com.bzncrsrtc.kurumsalmuvekkil.models.User;
+import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateAdminRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateClientRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateCompanyRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateCourtRequest;
@@ -19,7 +20,6 @@ import com.bzncrsrtc.kurumsalmuvekkil.requests.CreatePlanRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateRoleRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateSubscriptionRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateUpdateRequest;
-import com.bzncrsrtc.kurumsalmuvekkil.requests.CreateUserRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.ParentCourtRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateClientRequest;
 import com.bzncrsrtc.kurumsalmuvekkil.requests.UpdateCompanyRequest;
@@ -36,7 +36,7 @@ import org.springframework.stereotype.Component;
 /*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-09-07T19:55:18+0300",
+    date = "2023-09-21T16:02:41+0300",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.33.0.v20230218-1114, environment: Java 17.0.6 (Eclipse Adoptium)"
 )
 */
@@ -310,7 +310,7 @@ public class RequestMapperImpl implements RequestMapper {
     }
 
     @Override
-    public User fromCreateUserRequestToUser(CreateUserRequest createUserRequest) {
+    public User fromCreateUserRequestToUser(CreateAdminRequest createUserRequest) {
         if ( createUserRequest == null ) {
             return null;
         }
@@ -341,18 +341,18 @@ public class RequestMapperImpl implements RequestMapper {
     }
 
     @Override
-    public CreateUserRequest fromUserToCreateUserRequest(User user) {
+    public CreateAdminRequest fromUserToCreateUserRequest(User user) {
         if ( user == null ) {
             return null;
         }
 
-        CreateUserRequest createUserRequest = new CreateUserRequest();
+        CreateAdminRequest createAdminRequest = new CreateAdminRequest();
 
-        createUserRequest.setEmail( user.getEmail() );
-        createUserRequest.setPassword( user.getPassword() );
-        createUserRequest.setUsername( user.getUsername() );
+        createAdminRequest.setEmail( user.getEmail() );
+        createAdminRequest.setPassword( user.getPassword() );
+        createAdminRequest.setUsername( user.getUsername() );
 
-        return createUserRequest;
+        return createAdminRequest;
     }
 
     @Override

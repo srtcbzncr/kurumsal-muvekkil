@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 @Data
-public class CreateUserRequest {
+public class CreateAdminRequest {
 
 	@NotEmpty(message="{email.notNull}")
 	@Email(message="{email.invalidFormat}")
@@ -18,8 +18,5 @@ public class CreateUserRequest {
 	
 	@NotEmpty(message="{password.notNull}")
 	private String password;
-	
-	@NotEmpty(message="{role.notNull}")
-	private UUID role_id;
 	
 }

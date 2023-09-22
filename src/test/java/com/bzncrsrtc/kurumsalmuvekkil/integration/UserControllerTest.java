@@ -3,6 +3,7 @@ package com.bzncrsrtc.kurumsalmuvekkil.integration;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -622,6 +623,149 @@ public class UserControllerTest {
 				.andExpect(jsonPath("$.status").value(403))
 				.andExpect(jsonPath("$.data").isEmpty())
 				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	
+	/* createAdmin endpoint */
+	
+	@Test
+	public void createAdminWithoutAuthHeaderShouldReturn401() throws Exception {
+		ResultActions response = mockMvc.perform(post("/user")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON));
+		
+		response.andExpect(status().isUnauthorized())
+				.andExpect(jsonPath("$.status").value(401))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void createAdminWithClientRoleShouldReturn403() throws Exception {
+		String request = "{ \"username\": \"username\", \"email\": \"email@email.com\", \"password\": \"password\" }";
+		
+		ResultActions response = mockMvc.perform(post("/user")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(request)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("client")));
+		
+		response.andExpect(status().isForbidden())
+				.andExpect(jsonPath("$.status").value(403))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void createAdminWithLawyerRoleShouldReturn403() throws Exception {
+		String request = "{ \"username\": \"username\", \"email\": \"email@email.com\", \"password\": \"password\" }";
+		
+		ResultActions response = mockMvc.perform(post("/user")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(request)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("lawyer")));
+		
+		response.andExpect(status().isForbidden())
+				.andExpect(jsonPath("$.status").value(403))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void createAdminWithAdminRoleMissingUsernameShouldReturn400() throws Exception {
+		String request = "{ \"email\": \"email@email.com\", \"password\": \"password\" }";
+		
+		ResultActions response = mockMvc.perform(post("/user")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(request)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+		
+		response.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.status").value(400))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void createAdminWithAdminRoleMissingEmailShouldReturn400() throws Exception {
+		String request = "{ \"username\": \"username\", \"password\": \"password\" }";
+		
+		ResultActions response = mockMvc.perform(post("/user")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(request)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+		
+		response.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.status").value(400))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void createAdminWithAdminRoleMissingPasswordShouldReturn400() throws Exception {
+		String request = "{ \"username\": \"username\", \"email\": \"email@email.com\" }";
+		
+		ResultActions response = mockMvc.perform(post("/user")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(request)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+		
+		response.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.status").value(400))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void createAdminWithAdminRoleAlreadyUsedUsernameShouldReturn409() throws Exception {
+		String request = "{ \"username\": \"admin\", \"email\": \"email@email.com\", \"password\": \"password\" }";
+		
+		ResultActions response = mockMvc.perform(post("/user")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(request)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+		
+		response.andExpect(status().isConflict())
+				.andExpect(jsonPath("$.status").value(409))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void createAdminWithAdminRoleAlreadyUsedEmailShouldReturn409() throws Exception {
+		String request = "{ \"username\": \"username\", \"email\": \"admin@gmail.com\", \"password\": \"password\" }";
+		
+		ResultActions response = mockMvc.perform(post("/user")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(request)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+		
+		response.andExpect(status().isConflict())
+				.andExpect(jsonPath("$.status").value(409))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void createAdminWithAdminRoleShouldReturn201() throws Exception {
+		String request = "{ \"username\": \"username\", \"email\": \"email@email.com\", \"password\": \"password\" }";
+		
+		ResultActions response = mockMvc.perform(post("/user")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(request)
+				.accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", getAuthorizationHeader("admin")));
+		
+		response.andExpect(status().isCreated())
+				.andExpect(jsonPath("$.status").value(201))
+				.andExpect(jsonPath("$.data").isNotEmpty())
+				.andExpect(jsonPath("$.error").isEmpty());
 	}
 	
 }
