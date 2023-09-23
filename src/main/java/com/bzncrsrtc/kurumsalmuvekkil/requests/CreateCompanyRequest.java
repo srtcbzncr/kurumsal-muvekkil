@@ -9,4 +9,7 @@ public class CreateCompanyRequest {
 	@NotEmpty(message="{name.notNull}")
 	private String name;
 	
+	@NotEmpty(message="{taxNo.notNull}")
+	private String taxNo;
+	
 }

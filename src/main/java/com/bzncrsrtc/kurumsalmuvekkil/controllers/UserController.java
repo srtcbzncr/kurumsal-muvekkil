@@ -1,5 +1,6 @@
 package com.bzncrsrtc.kurumsalmuvekkil.controllers;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.bzncrsrtc.kurumsalmuvekkil.mappers.RequestMapper;
 import com.bzncrsrtc.kurumsalmuvekkil.mappers.ResponseMapper;
@@ -144,9 +146,11 @@ public class UserController {
 		
 		User user = requestMapper.fromCreateUserRequestToUser(createAdminRequest);
 		User savedUser = userService.createAdmin(user, locale);
-		UserResponse response = responseMapper.getUserResponse(savedUser);
+		URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/{id}")
+                .buildAndExpand(savedUser.getId()).toUri();
 		
-		return ResponseHandler.generateResponse(response, HttpStatus.CREATED, null);
+		return ResponseHandler.generateResponse(location, HttpStatus.CREATED, null);
 	}
 
 }

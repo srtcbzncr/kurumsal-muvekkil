@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 /*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-09-07T19:55:18+0300",
+    date = "2023-09-23T18:39:23+0300",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.33.0.v20230218-1114, environment: Java 17.0.6 (Eclipse Adoptium)"
 )
 */
@@ -84,6 +84,7 @@ public class ResponseMapperImpl implements ResponseMapper {
         companyResponse.setDeleted( company.isDeleted() );
         companyResponse.setId( company.getId() );
         companyResponse.setName( company.getName() );
+        companyResponse.setTaxNo( company.getTaxNo() );
 
         companyResponse.setLawyerCount( company.getLawyers() != null && company.getLawyers().size() > 0 ? company.getLawyers().stream().filter(c -> c.isActive() == true && c.isDeleted() == false).collect(java.util.stream.Collectors.toList()).size() : 0 );
         companyResponse.setPlan( company.getSubscriptions() != null && company.getSubscriptions().size() > 0 ? company.getSubscriptions().get(0).getPlan().getName() : null );

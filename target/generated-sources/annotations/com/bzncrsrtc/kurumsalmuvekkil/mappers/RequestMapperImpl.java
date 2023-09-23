@@ -36,7 +36,7 @@ import org.springframework.stereotype.Component;
 /*
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-09-21T16:02:41+0300",
+    date = "2023-09-23T18:11:11+0300",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.33.0.v20230218-1114, environment: Java 17.0.6 (Eclipse Adoptium)"
 )
 */
@@ -52,6 +52,7 @@ public class RequestMapperImpl implements RequestMapper {
         Company company = new Company();
 
         company.setName( createCompanyRequest.getName() );
+        company.setTaxNo( createCompanyRequest.getTaxNo() );
 
         return company;
     }
@@ -79,6 +80,7 @@ public class RequestMapperImpl implements RequestMapper {
         CreateCompanyRequest createCompanyRequest = new CreateCompanyRequest();
 
         createCompanyRequest.setName( company.getName() );
+        createCompanyRequest.setTaxNo( company.getTaxNo() );
 
         return createCompanyRequest;
     }

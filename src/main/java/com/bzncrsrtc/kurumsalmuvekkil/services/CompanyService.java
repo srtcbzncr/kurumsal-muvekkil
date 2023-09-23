@@ -80,6 +80,10 @@ public class CompanyService {
 			throw new CompanyExistsException(messageSource.getMessage("company.exists.message", null, locale));
 		}
 		
+		if(companyRepository.existsByTaxNoAndDeleted(company.getTaxNo(), false)) {
+			throw new CompanyExistsException(messageSource.getMessage("company.exists.message", null, locale));
+		}
+		
 		Company savedCompany = companyRepository.save(company);
 		return savedCompany;
 	}
@@ -90,6 +94,10 @@ public class CompanyService {
 		}
 		
 		if(companyRepository.existsByIdNotAndNameAndDeleted(company.getId(), company.getName(), false)) {
+			throw new CompanyExistsException(messageSource.getMessage("company.exists.message", null, locale));
+		}
+		
+		if(companyRepository.existsByIdNotAndTaxNoAndDeleted(company.getId(), company.getTaxNo(), false)) {
 			throw new CompanyExistsException(messageSource.getMessage("company.exists.message", null, locale));
 		}
 		

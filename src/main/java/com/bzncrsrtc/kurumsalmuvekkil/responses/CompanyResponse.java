@@ -10,6 +10,7 @@ public class CompanyResponse {
 
 	private UUID id;
 	private String name;
+	private String taxNo;
 	private int lawyerCount;
 	private String plan;
 	private boolean active;

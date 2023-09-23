@@ -54,7 +54,7 @@ public class SubscriptionControllerTest {
 	private PlanRepository planRepository;
 	
 	// Company
-	Company company = new Company("Company");
+	Company company = new Company("Company", "111");
 	
 	// Plan
 	Plan plan = new Plan("Plan", "Plan", new BigDecimal(10), new BigDecimal(100), 10, 10, 10);

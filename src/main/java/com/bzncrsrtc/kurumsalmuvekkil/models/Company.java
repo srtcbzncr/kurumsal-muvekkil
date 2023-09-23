@@ -33,6 +33,10 @@ public class Company {
 	@Column(name="name")
 	private String name;
 	
+	@NonNull
+	@Column(name="tax_no")
+	private String taxNo;
+	
 	@OneToMany(mappedBy="company", cascade=CascadeType.ALL)
 	private List<Subscription> subscriptions;
 	

@@ -52,7 +52,7 @@ public class LawyerControllerTest {
 	@Autowired
 	private UserRepository userRepository;
 	
-	Company company = new Company("Company");
+	Company company = new Company("Company", "111");
 	
 	User activeLawyerUser = new User("activeLawyer@gmail.com", "activeLawyer", "123456");
 	User passiveLawyerUser = new User("passiveLawyer@gmail.com", "passiveLawyer", "123456");

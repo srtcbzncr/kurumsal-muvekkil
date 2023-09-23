@@ -42,10 +42,10 @@ public class CompanyControllerTest {
 	private CompanyRepository companyRepository;
 
 	// Companies
-	Company activeCompany1 = new Company("Active Company 1");
-	Company activeCompany2 = new Company("Active Company 2");
-	Company passiveCompany = new Company("Passive Company");
-	Company deletedCompany = new Company("Deleted Company");
+	Company activeCompany1 = new Company("Active Company 1", "111");
+	Company activeCompany2 = new Company("Active Company 2", "222");
+	Company passiveCompany = new Company("Passive Company", "333");
+	Company deletedCompany = new Company("Deleted Company", "444");
 
 	@BeforeEach
 	public void setup() {
@@ -522,7 +522,7 @@ public class CompanyControllerTest {
 	
 	@Test
 	public void createWithoutAuthHeaderShouldReturn401() throws Exception {
-		String request = "{ \"name\": \"New Company\" }";
+		String request = "{ \"name\": \"New Company\", \"taxNo\": \"999\" }";
 		
 		ResultActions response = mockMvc.perform(post("/company")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -537,7 +537,7 @@ public class CompanyControllerTest {
 	
 	@Test 
 	public void createWithAdminRoleShouldReturn201() throws Exception {
-		String request = "{ \"name\": \"New Company\" }";
+		String request = "{ \"name\": \"New Company\", \"taxNo\": \"999\" }";
 		
 		ResultActions response = mockMvc.perform(post("/company")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -553,7 +553,7 @@ public class CompanyControllerTest {
 	
 	@Test
 	public void createEmptyNameWithAdminRoleShouldReturn400() throws Exception {
-		String request = "{ \"name\": \"\" }";
+		String request = "{ \"name\": \"\", \"taxNo\": \"999\" }";
 		
 		ResultActions response = mockMvc.perform(post("/company")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -568,8 +568,40 @@ public class CompanyControllerTest {
 	}
 	
 	@Test
-	public void createAlreadyExistCompanyWithAdminRoleShouldReturn409() throws Exception {
-		String request = "{ \"name\": \"Active Company 1\" }";
+	public void createEmptyTaxNoWithAdminRoleShouldReturn400() throws Exception {
+		String request = "{ \"name\": \"Company 1\", \"taxNo\": \"\" }";
+		
+		ResultActions response = mockMvc.perform(post("/company")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(request)
+                .accept(MediaType.APPLICATION_JSON)
+                .header("Authorization", getAuthorizationHeader("admin")));
+		
+		response.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.status").value(400))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void createAlreadyExistCompanyNameWithAdminRoleShouldReturn409() throws Exception {
+		String request = "{ \"name\": \"Active Company 1\", \"taxNo\": \"999\" }";
+		
+		ResultActions response = mockMvc.perform(post("/company")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(request)
+                .accept(MediaType.APPLICATION_JSON)
+                .header("Authorization", getAuthorizationHeader("admin")));
+		
+		response.andExpect(status().isConflict())
+				.andExpect(jsonPath("$.status").value(409))
+				.andExpect(jsonPath("$.data").isEmpty())
+				.andExpect(jsonPath("$.error").isNotEmpty());
+	}
+	
+	@Test
+	public void createAlreadyExistCompanyTaxNoWithAdminRoleShouldReturn409() throws Exception {
+		String request = "{ \"name\": \"Active Company 15\", \"taxNo\": \"111\" }";
 		
 		ResultActions response = mockMvc.perform(post("/company")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -601,7 +633,7 @@ public class CompanyControllerTest {
 	
 	@Test
 	public void createWithClientRoleShouldReturn403() throws Exception {
-		String request = "{ \"name\": \"New Company\" }";
+		String request = "{ \"name\": \"New Company\", \"taxNo\": \"999\" }";
 		
 		ResultActions response = mockMvc.perform(post("/company")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -617,7 +649,7 @@ public class CompanyControllerTest {
 	
 	@Test
 	public void createWithLawyerRoleShouldReturn403() throws Exception {
-		String request = "{ \"name\": \"New Court\" }";
+		String request = "{ \"name\": \"New Court\", \"taxNo\": \"999\" }";
 		
 		ResultActions response = mockMvc.perform(post("/company")
                 .contentType(MediaType.APPLICATION_JSON)
